@@ -1,0 +1,12 @@
+{
+  "name": "천하동시 — 전략 삼국지 동무",
+  "short_name": "천하동시",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#120e0a",
+  "theme_color": "#120e0a",
+  "lang": "ko",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
