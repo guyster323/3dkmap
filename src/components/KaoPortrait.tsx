@@ -2,10 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import { FACTION_BANNER } from "@/lib/eiketsu";
+import { ATLAS, kaoCell } from "@/lib/atlas";
 import type { Character } from "@/lib/types";
 import { PortraitFrame } from "@/components/WoodPanel";
 
-/** 64×80 흉상. 영걸전 kao 칸 비율. 생성 이미지가 아니라 팔레트 도트. */
+/** 64×80 흉상. 영걸전 FACEDAT 칸 비율. */
 export function KaoPortrait({
   character,
   size = 80,
@@ -22,6 +23,16 @@ export function KaoPortrait({
     const ctx = c.getContext("2d");
     if (!ctx) return;
     ctx.imageSmoothingEnabled = false;
+    const cell = kaoCell(character.id);
+    if (cell) {
+      const img = new Image();
+      img.src = ATLAS.kao;
+      img.onload = () => {
+        ctx.clearRect(0, 0, 64, 80);
+        ctx.drawImage(img, cell.sx, cell.sy, 64, 80, 0, 0, 64, 80);
+      };
+      return;
+    }
     drawKao(ctx, character);
   }, [character]);
 

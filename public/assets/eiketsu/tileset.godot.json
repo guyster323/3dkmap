@@ -1,0 +1,12 @@
+{
+  "resource_type": "TileSet",
+  "tile_size": [16, 16],
+  "margin": 0,
+  "separation": 0,
+  "texture": "res://assets/eiketsu/tileset.png",
+  "tiles": {
+    "plain": 0, "plain2": 1, "forest": 2, "mountain": 3,
+    "water0": 4, "water1": 5, "waste": 6, "wall": 7,
+    "gate": 8, "keep": 9, "camp": 10, "palisade": 11, "cursor": 12
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "frames": {},
+  "meta": {
+    "app": "https://www.aseprite.org/",
+    "size": {"w": 64, "h": 512},
+    "scale": "1",
+    "frameTags": [{"name": "idle", "from": 0, "to": 1, "direction": "forward"}],
+    "slices": [],
+    "grid": {"tileWidth": 32, "tileHeight": 64}
+  }
+}
