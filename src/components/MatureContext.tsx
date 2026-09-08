@@ -32,10 +32,8 @@ export function MatureToggle({ className = "" }: { className?: string }) {
     <button
       type="button"
       onClick={() => setMature(!mature)}
-      className={`rounded-full border px-3 py-1 text-[11px] tracking-wide ${
-        mature
-          ? "border-cinnabar/60 bg-cinnabar/15 text-paper"
-          : "border-paper/15 text-ash"
+      className={`px-3 py-1 font-serif text-[11px] ${
+        mature ? "gold-btn" : "wood-inlay text-gold"
       } ${className}`}
     >
       {mature ? "본편 수위 열림" : "가족용 요약"}

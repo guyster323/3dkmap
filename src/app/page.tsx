@@ -25,28 +25,30 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="flex flex-1 flex-col px-4 py-8 md:px-10 md:py-12">
-      <p className="text-[11px] tracking-[0.35em] text-cinnabar">STRATEGIC SANGOKUSHI</p>
-      <h1 className="seal mt-3 text-4xl leading-tight md:text-6xl">천하동시</h1>
+    <main className="flex flex-1 flex-col gap-3 p-2">
+      <section className="wood-panel p-6">
+      <p className="text-[11px] tracking-[0.35em] text-gold">STRATEGIC SANGOKUSHI</p>
+      <h1 className="seal mt-3 text-4xl leading-tight text-gold md:text-6xl">천하동시</h1>
       <p className="mt-3 max-w-xl text-sm leading-relaxed text-paper-2 md:text-base">
         책을 펼친 그 순간, 중원만 움직이지 않습니다. 하북·강동·서량, 그리고 당신이 서 있는
-        한반도까지 — 같은 시계로 살아 있는 천하를 봅니다.
+        한반도까지 — 같은 시각의 전장을 조조전 격자로 봅니다.
       </p>
+      </section>
 
-      <div className="mt-8 grid gap-3 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-2">
         <Link
           href="/scan"
-          className="group rounded-2xl border border-cinnabar/40 bg-cinnabar/10 p-6 transition hover:bg-cinnabar/20"
+          className="wood-panel p-6 hover:brightness-110"
         >
-          <p className="text-[11px] tracking-widest text-cinnabar">시작 하나</p>
-          <h2 className="mt-2 font-serif text-2xl">책 스캔</h2>
-          <p className="mt-2 text-sm text-ash">
+          <p className="text-[11px] tracking-widest text-gold">시작 하나</p>
+          <h2 className="mt-2 font-serif text-2xl text-gold">책 스캔</h2>
+          <p className="mt-2 text-sm text-paper-2">
             표지·권두·회차 제목을 카메라에 비추면 권과 에피소드를 찾습니다. 만화 그림은 저장하지 않습니다.
           </p>
         </Link>
         <Link
           href="/volumes"
-          className="rounded-2xl border border-paper/15 bg-ink-2 p-6 transition hover:border-gold/40"
+          className="wood-panel p-6 hover:brightness-110"
         >
           <p className="text-[11px] tracking-widest text-gold">시작 둘</p>
           <h2 className="mt-2 font-serif text-2xl">권·제목 고르기</h2>
@@ -77,7 +79,7 @@ export default function HomePage() {
             <Link
               key={v.number}
               href={`/volumes/${v.number}`}
-              className="rounded-xl border border-paper/10 bg-ink-2 px-3 py-3 hover:border-cinnabar/40"
+              className="wood-panel px-3 py-3 hover:brightness-110"
             >
               <p className="text-[10px] text-cinnabar">{v.number}권</p>
               <p className="font-serif">{v.title}</p>

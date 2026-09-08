@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { HistoricalMap } from "@/components/HistoricalMap";
+import { TileMap } from "@/components/TileMap";
 import { getAllEpisodes, getEvents, getPlace } from "@/lib/content";
 import { REGION_LABEL } from "@/lib/types";
 
@@ -25,8 +25,8 @@ export default async function PlacePage({ params }: { params: Promise<{ id: stri
       <p className="mt-1 text-sm text-ash">오늘날 {p.modernName}</p>
       {p.note && <p className="mt-3 max-w-xl text-sm text-paper-2">{p.note}</p>}
 
-      <div className="mt-5 h-64">
-        <HistoricalMap places={[p]} liveEvents={evs} selectedId={p.id} />
+      <div className="mt-5">
+        <TileMap places={[p]} liveEvents={evs} selectedId={p.id} />
       </div>
 
       <section className="mt-8">

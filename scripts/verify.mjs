@@ -36,10 +36,9 @@ async function run(viewport, label) {
   await page.getByRole("link", { name: "도원결의" }).first().click();
   await check(`${label} plot`, await page.getByRole("heading", { name: "도원결의" }).isVisible());
   await page.getByRole("link", { name: "같은 시각 천하 보기" }).click();
-  await check(`${label} world`, await seen(page, page.getByText("WORLDVIEW")));
-  await check(`${label} ticker`, await seen(page, page.getByText("같은 시각 다른 땅")));
-  await page.getByRole("button", { name: "일시정지" }).click();
-  await check(`${label} pause`, await page.getByRole("button", { name: "재생" }).isVisible());
+  await check(`${label} world`, await seen(page, page.getByText("전투맵")));
+  await check(`${label} frozen`, await seen(page, page.getByText("시계 정지")));
+  await check(`${label} tiles`, await page.locator("canvas").first().isVisible());
   await page.getByRole("button", { name: "가족용 요약" }).click();
   await check(`${label} mature`, await page.getByRole("button", { name: "본편 수위 열림" }).isVisible());
 

@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { MatureToggle, useMature } from "@/components/MatureContext";
 import { SourceChips } from "@/components/SourceChips";
+import { KaoPortrait } from "@/components/KaoPortrait";
 import { getCharactersByIds, getEpisode, getPlacesByIds, getVolume } from "@/lib/content";
 import { formatEra } from "@/lib/clock";
 import { FACTION_LABEL } from "@/lib/types";
@@ -50,11 +51,11 @@ export default function EpisodePage() {
       <div className="mt-5 flex flex-wrap gap-2">
         <Link
           href={`/world?episode=${episode.id}`}
-          className="rounded-full bg-cinnabar px-4 py-2 text-sm"
+          className="gold-btn px-4 py-2 text-sm"
         >
           같은 시각 천하 보기
         </Link>
-        <Link href="/me" className="rounded-full border border-paper/20 px-4 py-2 text-sm">
+        <Link href="/me" className="wood-inlay px-4 py-2 text-sm text-gold">
           내 위치의 동시대
         </Link>
       </div>
@@ -75,9 +76,9 @@ export default function EpisodePage() {
             <li key={c.id}>
               <Link
                 href={`/characters/${c.id}`}
-                className="flex gap-3 rounded-xl border border-paper/10 bg-ink-2 p-3 hover:border-gold/40"
+                className="wood-panel flex gap-3 p-3 hover:brightness-110"
               >
-                <Portrait name={c.nameKo} src={c.portrait} />
+                <KaoPortrait character={c} size={64} caption="" />
                 <div>
                   <p className="font-serif">
                     {c.nameKo}{" "}
@@ -109,20 +110,5 @@ export default function EpisodePage() {
         </ul>
       </section>
     </main>
-  );
-}
-
-function Portrait({ name, src }: { name: string; src?: string }) {
-  return (
-    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-paper/10 bg-ink-3">
-      {src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={name} className="h-full w-full object-cover" />
-      ) : (
-        <span className="flex h-full items-center justify-center font-serif text-lg text-gold">
-          {name.slice(0, 1)}
-        </span>
-      )}
-    </div>
   );
 }

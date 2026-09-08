@@ -15,7 +15,7 @@ export default function VolumesPage() {
           <li key={v.number}>
             <Link
               href={`/volumes/${v.number}`}
-              className="block h-full rounded-xl border border-paper/10 bg-ink-2 p-3 hover:border-cinnabar/40"
+              className="wood-panel block h-full p-3 hover:brightness-110"
             >
               <div className="flex items-baseline justify-between">
                 <span className="text-[10px] text-cinnabar">{String(v.number).padStart(2, "0")}</span>
