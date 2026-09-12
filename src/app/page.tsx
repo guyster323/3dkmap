@@ -56,8 +56,11 @@ export default function HomePage() {
           STRATEGIC SANGOKUSHI
         </p>
         <h1 className="seal mt-3 text-4xl leading-tight md:text-6xl" style={{ color: "var(--color-eik-gold)" }}>
-          천하동시
+          Pixel Times
         </h1>
+        <p className="eik-src mt-2" style={{ color: "var(--color-eik-gold-dim)" }}>
+          픽셀 타임즈 · 전략 삼국지 동무
+        </p>
         <p className="eik-body mt-3 max-w-xl">
           책을 펼친 그 순간, 중원만 움직이지 않습니다. 하북·강동·서량, 그리고 당신이 서 있는
           한반도까지 — 같은 시각의 전장을 조조전 격자로 봅니다.

@@ -19,7 +19,10 @@ export function TreeDock({ openId, onOpen, children, collapsed = false }: TreeDo
   };
 
   return (
-    <div className="eik-win flex min-w-0 flex-col overflow-hidden" style={{ width: collapsed ? 48 : "var(--pt-tree-w)" }}>
+    <div
+      className="eik-win flex min-w-0 max-w-[calc(100vw-1rem)] flex-col overflow-hidden"
+      style={{ width: collapsed ? 48 : "min(var(--pt-tree-w), calc(100vw - 1rem))" }}
+    >
       {TREE_IDS.map((id) => {
         const expanded = !collapsed && open === id;
         return (
@@ -35,7 +38,7 @@ export function TreeDock({ openId, onOpen, children, collapsed = false }: TreeDo
               {TREE_LABEL[id]}
             </button>
             {expanded ? (
-              <div id={`pt-tree-${id}`} className="scroll-thin max-h-[40vh] overflow-y-auto px-2 pb-2">
+              <div id={`pt-tree-${id}`} className="scroll-thin max-h-[28vh] overflow-y-auto px-2 pb-2 md:max-h-[40vh]">
                 {children[id]}
               </div>
             ) : null}

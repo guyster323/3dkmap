@@ -76,6 +76,26 @@ export function firstEpisodeOfVolume(n: number): Episode | undefined {
   return getEpisodesByVolume(n)[0];
 }
 
+export function episodesAround(id: string): {
+  list: Episode[];
+  index: number;
+  prev?: Episode;
+  next?: Episode;
+  nextVolume?: Episode;
+} {
+  const ep = getEpisode(id);
+  if (!ep) return { list: [], index: -1 };
+  const list = getEpisodesByVolume(ep.volume);
+  const index = list.findIndex((e) => e.id === id);
+  return {
+    list,
+    index,
+    prev: index > 0 ? list[index - 1] : undefined,
+    next: index >= 0 && index < list.length - 1 ? list[index + 1] : undefined,
+    nextVolume: firstEpisodeOfVolume(ep.volume + 1),
+  };
+}
+
 export function episodeNearestYear(year: number): Episode | undefined {
   const all = getAllEpisodes();
   if (!all.length) return undefined;

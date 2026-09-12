@@ -19,7 +19,9 @@ export function EpisodeStepper({
   const gold = { color: "var(--color-eik-gold)" } as const;
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <p className="sr-only">시계 정지</p>
+      <p className="eik-src" style={{ color: "var(--color-eik-gold)" }}>
+        시계 정지
+      </p>
       <button type="button" className={btn} style={gold} disabled={!hasPrevEpisode} onClick={onPrevEpisode} aria-label="이전 장">
         ◀
       </button>

@@ -18,10 +18,10 @@ const notoSerif = Noto_Serif_KR({
 });
 
 export const metadata: Metadata = {
-  title: "천하동시 — 전략 삼국지 동무",
+  title: "Pixel Times — 전략 삼국지 동무",
   description:
     "요코야마 미츠테루 전략 삼국지를 펼친 그 시각, 중원·강동·한반도에서 동시에 일어나던 일을 전쟁상황실처럼 본다.",
-  applicationName: "천하동시",
+  applicationName: "Pixel Times",
   manifest: "/manifest.webmanifest",
 };
 

@@ -4,3 +4,4 @@ export { TreeNode } from "./TreeNode";
 export { VolumeTitleplate } from "./VolumeTitleplate";
 export { VolumeTimeline } from "./VolumeTimeline";
 export { EpisodeStepper } from "./EpisodeStepper";
+export { BookTree, RegionTree, EventTree, PeopleTree } from "./WorldTrees";

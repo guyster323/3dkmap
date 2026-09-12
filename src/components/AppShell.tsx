@@ -51,17 +51,25 @@ function NavGlyph({ href, active }: { href: string; active: boolean }) {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
+  const worldHome = path === "/world";
 
   return (
     <MatureProvider>
-      <div className="mx-auto flex min-h-dvh w-full max-w-[1400px] overflow-x-hidden">
+      <div
+        className={
+          worldHome
+            ? "flex min-h-dvh w-full overflow-x-hidden"
+            : "mx-auto flex min-h-dvh w-full max-w-[1400px] overflow-x-hidden"
+        }
+      >
+        {!worldHome ? (
         <aside className="eik-win sticky top-0 m-2 hidden h-[calc(100dvh-1rem)] w-52 shrink-0 flex-col overflow-hidden md:flex">
           <Link
             href="/"
             className="seal block border-b px-4 py-4 text-lg"
             style={{ borderColor: "var(--color-eik-gold-dim)", color: "var(--color-eik-gold)" }}
           >
-            천하동시
+            Pixel Times
           </Link>
           <p className="eik-src px-4 pt-3 leading-relaxed" style={{ color: "var(--color-eik-text-dim)" }}>
             전략 삼국지 동무
@@ -95,11 +103,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             본문은 연의·정사·삼국사기.
           </p>
         </aside>
+        ) : null}
 
-        <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] md:pb-2 md:pr-2 md:pt-2">
+        <div
+          className={
+            worldHome
+              ? "flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden"
+              : "flex min-w-0 flex-1 flex-col overflow-x-hidden pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] md:pb-2 md:pr-2 md:pt-2"
+          }
+        >
           {children}
         </div>
 
+        {!worldHome ? (
         <nav
           className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 md:hidden"
           style={{
@@ -129,6 +145,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
+        ) : null}
       </div>
     </MatureProvider>
   );

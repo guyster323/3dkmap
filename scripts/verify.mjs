@@ -55,7 +55,7 @@ async function run(viewport, label) {
   const wide = viewport.width >= 1024;
 
   await goto(page, "/");
-  await check(`${label} home title`, await page.getByRole("heading", { name: "천하동시" }).isVisible());
+  await check(`${label} home title`, await page.getByRole("heading", { name: "Pixel Times" }).isVisible());
   await check(`${label} scan start`, await page.getByRole("menuitem", { name: /책 스캔/ }).isVisible());
   await page.getByRole("menuitem", { name: "권·제목 고르기" }).click();
   await check(`${label} volumes`, await seen(page, page.getByRole("heading", { name: "목차" })));
@@ -89,7 +89,11 @@ async function run(viewport, label) {
   await check(`${label} world`, await seen(page, page.getByText("전역도")));
   await check(`${label} frozen`, await seen(page, page.getByText("시계 정지")));
   await check(`${label} tiles`, await page.locator("canvas").first().isVisible());
-  await check(`${label} prev event`, await seen(page, page.getByRole("button", { name: "◀ 이전 사건" })));
+  await check(`${label} prev episode`, await seen(page, page.getByRole("button", { name: "이전 장" })));
+  await check(`${label} tree book`, await seen(page, page.getByRole("button", { name: "전략 삼국지 책" })));
+  await check(`${label} tree region`, await seen(page, page.getByRole("button", { name: "주요 지역" })));
+  await check(`${label} tree event`, await seen(page, page.getByRole("button", { name: "주요 사건" })));
+  await check(`${label} tree people`, await seen(page, page.getByRole("button", { name: "주요 인물" })));
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await check(`${label} chip samguk`, await seen(page, page.locator("li").filter({ hasText: /^삼국사기/ })));
   await page.getByRole("button", { name: "본편 수위" }).click();
@@ -97,9 +101,35 @@ async function run(viewport, label) {
     `${label} mature`,
     (await page.getByRole("button", { name: "본편 수위" }).getAttribute("aria-pressed")) === "true",
   );
-  const koreaStrip = page.locator("button[aria-pressed]").filter({ hasText: "한반도" }).first();
+  await page.getByRole("button", { name: "주요 지역" }).click();
+  const koreaStrip = page.getByRole("button", { name: "한반도" }).first();
   await koreaStrip.click();
   await check(`${label} region filter`, (await koreaStrip.getAttribute("aria-pressed")) === "true");
+
+  await page.getByRole("button", { name: "전략 삼국지 책" }).click();
+  const vol1 = page.getByRole("button", { name: "1권 도원결의" }).first();
+  await vol1.scrollIntoViewIfNeeded();
+  await vol1.click();
+  const e04 = page.getByRole("button", { name: "4장 도원결의" }).first();
+  await e04.click();
+  try {
+    await page.waitForURL(/episode=v01-e04/, { timeout: 8000 });
+  } catch {
+    /* fall through */
+  }
+  await check(`${label} episode select`, /episode=v01-e04/.test(page.url()), page.url());
+  await check(
+    `${label} next episode disabled`,
+    await page.getByRole("button", { name: "다음 장" }).isDisabled(),
+  );
+  await page.getByRole("button", { name: "다음 권" }).click();
+  try {
+    await page.waitForURL(/episode=v02-e01/, { timeout: 8000 });
+  } catch {
+    /* fall through */
+  }
+  await check(`${label} volume advance`, /episode=v02-e01/.test(page.url()), page.url());
+  await check(`${label} no playback`, (await page.getByRole("button", { name: /재생|플레이/ }).count()) === 0);
 
   if (wide) {
     const node = page.getByRole("button", { name: "낙양", exact: true });

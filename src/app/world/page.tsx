@@ -1,17 +1,34 @@
 "use client";
 
 import { useMemo, useState, Suspense } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { StrategicMapCanvas } from "@/components/StrategicMapCanvas";
-import { EikWindow, SourceBadge } from "@/components/eiketsu";
-import { DirectRecord, MatureToggle, useMature } from "@/components/MatureContext";
+import { SourceBadge } from "@/components/eiketsu";
+import { DirectRecord, MatureToggle, useMature, notifyPrefs } from "@/components/MatureContext";
+import {
+  BookTree,
+  EpisodeStepper,
+  EventTree,
+  PeopleTree,
+  RegionTree,
+  TreeDock,
+  VolumeTimeline,
+  VolumeTitleplate,
+} from "@/components/pixel-times";
 import { STRATEGIC_EDGES, STRATEGIC_NODES, STRATEGIC_TERRITORIES } from "@/data/terrain";
-import { episodeNearestYear, eventsOverlapping, firstEpisodeOfVolume, getEpisode, getEvents, getPlace, getVolume } from "@/lib/content";
-import { absDaysToEra, eraToAbsDays, eventIsLive, formatEra } from "@/lib/clock";
+import type { TreeId } from "@/data/pixel-times";
+import {
+  episodeNearestYear,
+  episodesAround,
+  eventsOverlapping,
+  firstEpisodeOfVolume,
+  getEpisode,
+  getPlace,
+  getVolume,
+} from "@/lib/content";
+import { eraToAbsDays, eventIsLive, formatEra } from "@/lib/clock";
+import { savePrefs } from "@/lib/prefs";
 import { REGION_LABEL, type Episode, type RegionId, type WorldEvent } from "@/lib/types";
-
-const STRIPS: RegionId[] = ["zhongyuan", "hebei", "jiangdong", "shu", "xiliang", "korea"];
 
 function WorldInner() {
   const sp = useSearchParams();
@@ -31,13 +48,11 @@ function WorldInner() {
 function StrategicWorld({ episode }: { episode: Episode }) {
   const router = useRouter();
   const volume = getVolume(episode.volume);
-  const marks = useMemo(
-    () => [...new Set(getEvents().map((e) => eraToAbsDays(e.timeStart)))].sort((a, b) => a - b),
-    [],
-  );
-  const [clock, setClock] = useState(() => eraToAbsDays(episode.timeStart));
+  const around = episodesAround(episode.id);
+  const clock = eraToAbsDays(episode.timeStart);
   const [selectedPlace, setSelectedPlace] = useState<string | undefined>(episode.placeIds[0]);
   const [regionFilter, setRegionFilter] = useState<RegionId | null>(null);
+  const [openTree, setOpenTree] = useState<TreeId | null>("book");
   const { mature } = useMature();
 
   const liveAll = useMemo(
@@ -47,23 +62,12 @@ function StrategicWorld({ episode }: { episode: Episode }) {
   const live = regionFilter ? liveAll.filter((e) => e.region === regionFilter) : liveAll;
   const highlight = liveAll.map((e) => e.placeId).filter((pid): pid is string => Boolean(pid));
 
-  const prevMark = [...marks].reverse().find((m) => m < clock);
-  const nextMark = marks.find((m) => m > clock);
-
-  const step = (mark?: number) => {
-    if (mark == null) return;
-    setClock(mark);
-    const ev = getEvents().find((e) => eraToAbsDays(e.timeStart) === mark);
-    if (ev?.placeId) setSelectedPlace(ev.placeId);
-  };
-
-  const pickRegion = (r: RegionId) => {
-    const next = regionFilter === r ? null : r;
-    setRegionFilter(next);
-    if (next) {
-      const ev = liveAll.filter((e) => e.region === next).sort((a, b) => b.importance - a.importance)[0];
-      if (ev?.placeId) setSelectedPlace(ev.placeId);
-    }
+  const goEpisode = (id: string) => {
+    const next = getEpisode(id);
+    if (!next) return;
+    savePrefs({ lastEpisodeId: next.id, lastVolume: next.volume });
+    notifyPrefs();
+    router.push(`/world?episode=${next.id}`);
   };
 
   const openPlace = (placeId: string) => {
@@ -71,110 +75,109 @@ function StrategicWorld({ episode }: { episode: Episode }) {
     router.push(`/world/${placeId}?episode=${episode.id}`);
   };
 
+  const focusPlace = (placeId: string) => {
+    setSelectedPlace(placeId);
+  };
+
   return (
-    <main className="flex min-h-0 min-w-0 flex-1 flex-col gap-2 overflow-x-hidden p-2 md:p-0">
-      <EikWindow>
-        <div className="flex flex-wrap items-end justify-between gap-2">
-          <div className="min-w-0">
-            <p className="eik-src tracking-widest" style={{ color: "var(--color-eik-gold)" }}>
-              전역도
-            </p>
-            <h1 className="eik-era mt-1 break-keep" style={{ color: "var(--color-eik-gold)" }}>
-              {formatEra(absDaysToEra(clock))}
-            </h1>
-            <p className="eik-src mt-1">
-              {volume ? `${volume.number}권 ${volume.title}` : ""} · {episode.title}
-              <span className="ml-2" style={{ color: "var(--color-eik-gold)" }}>
-                시계 정지
-              </span>
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              disabled={prevMark == null}
-              onClick={() => step(prevMark)}
-              className="eik-win eik-win--flat min-h-[44px] min-w-[44px] px-3 py-2 eik-src disabled:opacity-40"
-              style={{ color: "var(--color-eik-gold)" }}
-            >
-              ◀ 이전 사건
-            </button>
-            <button
-              type="button"
-              disabled={nextMark == null}
-              onClick={() => step(nextMark)}
-              className="eik-win eik-win--flat min-h-[44px] min-w-[44px] px-3 py-2 eik-src disabled:opacity-40"
-              style={{ color: "var(--color-eik-gold)" }}
-            >
-              다음 사건 ▶
-            </button>
-            <MatureToggle />
-          </div>
-        </div>
-        <p className="eik-body mt-2">
-          {episode.plotFamily.slice(0, 80)}
-          {episode.plotFamily.length > 80 ? "…" : ""}
-          <Link href={`/episodes/${episode.id}`} className="ml-2" style={{ color: "var(--color-eik-gold)" }}>
-            줄거리
-          </Link>
-        </p>
-      </EikWindow>
-
-      <div className="grid min-h-0 min-w-0 flex-1 gap-2 lg:grid-cols-[minmax(0,1.5fr)_minmax(260px,0.85fr)]">
-        <div className="flex min-h-[300px] min-w-0 flex-col gap-2">
-          <StrategicMapCanvas
-            nodes={STRATEGIC_NODES}
-            edges={STRATEGIC_EDGES}
-            territories={STRATEGIC_TERRITORIES}
-            selectedPlaceId={selectedPlace}
-            highlight={highlight}
-            onSelect={openPlace}
-          />
-          <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-6">
-            {STRIPS.map((r) => {
-              const ev = liveAll.filter((e) => e.region === r).sort((a, b) => b.importance - a.importance)[0];
-              const on = regionFilter === r;
-              return (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => pickRegion(r)}
-                  aria-pressed={on}
-                  className="eik-win eik-win--flat min-h-[44px] px-2 py-1.5 text-left"
-                  style={on ? { boxShadow: "inset 0 0 0 1px #f0dc8a" } : undefined}
-                >
-                  <p className="eik-src" style={{ color: "var(--color-eik-gold)" }}>
-                    {REGION_LABEL[r]}
-                  </p>
-                  <p className="line-clamp-2 font-serif text-[11px] leading-snug break-keep">
-                    {ev ? ev.headline.split(" — ")[1] ?? ev.headline : "—"}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <EikWindow title="그 시각 사건" className="flex max-h-[70vh] min-w-0 flex-col lg:max-h-none">
-          <ul className="scroll-thin flex-1 space-y-2 overflow-y-auto">
-            {live.map((ev) => (
-              <EventRow
-                key={ev.id}
-                ev={ev}
-                mature={mature}
-                active={ev.placeId === selectedPlace}
-                onPick={() => ev.placeId && openPlace(ev.placeId)}
+    <main className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden">
+      <header className="relative z-20 min-w-0 p-2 md:absolute md:inset-x-0 md:top-0">
+        <div className="eik-win min-w-0 px-3 py-2">
+          <div className="flex min-w-0 flex-wrap items-end justify-between gap-2">
+            <div className="min-w-0">
+              <p className="eik-src tracking-widest" style={{ color: "var(--color-eik-gold)" }}>
+                전역도
+              </p>
+              {volume ? <VolumeTitleplate volume={volume} /> : null}
+              <p className="eik-src mt-1" style={{ color: "var(--color-eik-text-dim)" }}>
+                {formatEra(episode.timeStart)} · {episode.title}
+              </p>
+            </div>
+            <div className="flex min-w-0 flex-wrap items-center gap-2">
+              <EpisodeStepper
+                hasPrevEpisode={Boolean(around.prev)}
+                hasNextEpisode={Boolean(around.next)}
+                hasNextVolume={Boolean(around.nextVolume)}
+                onPrevEpisode={() => around.prev && goEpisode(around.prev.id)}
+                onNextEpisode={() => around.next && goEpisode(around.next.id)}
+                onNextVolume={() => around.nextVolume && goEpisode(around.nextVolume.id)}
               />
-            ))}
-            {!live.length && (
-              <li className="eik-body" style={{ color: "var(--color-eik-text-dim)" }}>
-                이 순간에 매핑된 동시 사건이 없습니다.
-              </li>
-            )}
-          </ul>
-        </EikWindow>
+              <MatureToggle />
+            </div>
+          </div>
+          {around.list.length > 0 ? (
+            <div className="mt-2 min-w-0">
+              <VolumeTimeline episodes={around.list} activeId={episode.id} onSelect={goEpisode} />
+            </div>
+          ) : null}
+        </div>
+      </header>
+
+      <div className="relative z-20 min-w-0 px-2 pb-2 md:absolute md:left-2 md:top-36 md:z-30 md:max-h-[70%] md:overflow-y-auto md:pb-0">
+        <TreeDock openId={openTree} onOpen={setOpenTree}>
+          {{
+            book: <BookTree current={episode} onPickEpisode={goEpisode} />,
+            region: (
+              <RegionTree
+                filter={regionFilter}
+                onFilter={setRegionFilter}
+                onFocusPlace={focusPlace}
+              />
+            ),
+            event: <EventTree events={live} onPick={(pid) => pid && focusPlace(pid)} />,
+            people: <PeopleTree />,
+          }}
+        </TreeDock>
+      </div>
+
+      <div className="relative min-w-0 w-full">
+        <StrategicMapCanvas
+          nodes={STRATEGIC_NODES}
+          edges={STRATEGIC_EDGES}
+          territories={STRATEGIC_TERRITORIES}
+          selectedPlaceId={selectedPlace}
+          highlight={highlight}
+          onSelect={openPlace}
+        />
+        <EikChronicle live={live} mature={mature} selectedPlace={selectedPlace} onPick={focusPlace} />
       </div>
     </main>
+  );
+}
+
+function EikChronicle({
+  live,
+  mature,
+  selectedPlace,
+  onPick,
+}: {
+  live: WorldEvent[];
+  mature: boolean;
+  selectedPlace?: string;
+  onPick: (placeId: string) => void;
+}) {
+  return (
+    <aside className="pointer-events-auto relative z-10 mx-2 mb-2 mt-2 max-h-[28vh] min-w-0 overflow-hidden lg:absolute lg:bottom-2 lg:right-2 lg:z-10 lg:mx-0 lg:mb-0 lg:mt-0 lg:w-[min(280px,calc(100vw-1rem))]">
+      <div className="eik-win flex max-h-[36vh] min-w-0 flex-col overflow-hidden">
+        <p className="eik-nameplate m-2">그 시각 사건</p>
+        <ul className="scroll-thin min-w-0 flex-1 space-y-2 overflow-y-auto px-2 pb-2">
+          {live.map((ev) => (
+            <EventRow
+              key={ev.id}
+              ev={ev}
+              mature={mature}
+              active={ev.placeId === selectedPlace}
+              onPick={() => ev.placeId && onPick(ev.placeId)}
+            />
+          ))}
+          {!live.length && (
+            <li className="eik-body" style={{ color: "var(--color-eik-text-dim)" }}>
+              이 순간에 매핑된 동시 사건이 없습니다.
+            </li>
+          )}
+        </ul>
+      </div>
+    </aside>
   );
 }
 
