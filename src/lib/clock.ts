@@ -10,7 +10,9 @@ const SEASON_MONTH: Record<NonNullable<EraDate["season"]>, number> = {
 export function eraToAbsDays(d: EraDate): number {
   const month = d.month ?? (d.season ? SEASON_MONTH[d.season] : 6);
   const day = d.day ?? 15;
-  return d.year * 360 + (month - 1) * 30 + day;
+  // 1-indexed month/day into a 360-day year. Using `day` (not day-1) used to
+  // round-trip 15 → 16 because absDaysToEra does `(rem % 30) + 1`.
+  return d.year * 360 + (month - 1) * 30 + (day - 1);
 }
 
 export function absDaysToEra(abs: number): EraDate {
