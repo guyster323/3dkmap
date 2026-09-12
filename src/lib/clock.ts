@@ -24,7 +24,13 @@ export function absDaysToEra(abs: number): EraDate {
 }
 
 export function nianhaoFor(year: number): string {
-  if (year >= 220) return "황초·장무 무렵";
+  if (year >= 263) return "염흥 원년 무렵";
+  if (year >= 258) return `경요 ${year - 257}년`;
+  if (year >= 238) return `연희 ${year - 237}년`;
+  if (year >= 223) return `건흥 ${year - 222}년`;
+  if (year === 222) return "장무 2년";
+  if (year === 221) return "장무 원년";
+  if (year === 220) return "연강·황초 원년";
   if (year >= 196) return `건안 ${year - 195}년`;
   if (year === 195) return "흥평 2년";
   if (year === 194) return "흥평 원년";
@@ -60,18 +66,5 @@ export function formatEraShort(d: EraDate): string {
 }
 
 export function eventIsLive(ev: WorldEvent, clock: number): boolean {
-  return eraToAbsDays(ev.timeStart) <= clock && clock < eraToAbsDays(ev.timeEnd);
+  return eraToAbsDays(ev.timeStart) <= clock && clock <= eraToAbsDays(ev.timeEnd);
 }
-
-export function eventJustFired(ev: WorldEvent, prev: number, next: number): boolean {
-  const s = eraToAbsDays(ev.timeStart);
-  return prev < s && next >= s;
-}
-
-export function clampClock(clock: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, clock));
-}
-
-/** Real seconds → historical days. Default 1s = 1 day. */
-export const DEFAULT_DAYS_PER_SECOND = 1;
-export const FAST_DAYS_PER_SECOND = 10;

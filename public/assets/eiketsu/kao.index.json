@@ -1,0 +1,276 @@
+{
+  "cellW": 64,
+  "cellH": 80,
+  "cols": 8,
+  "rowCount": 9,
+  "cells": {
+    "liu-bei": {
+      "col": 0,
+      "row": 0
+    },
+    "guan-yu": {
+      "col": 1,
+      "row": 0
+    },
+    "zhang-fei": {
+      "col": 2,
+      "row": 0
+    },
+    "cao-cao": {
+      "col": 3,
+      "row": 0
+    },
+    "dong-zhuo": {
+      "col": 4,
+      "row": 0
+    },
+    "lu-bu": {
+      "col": 5,
+      "row": 0
+    },
+    "sun-jian": {
+      "col": 6,
+      "row": 0
+    },
+    "sun-ce": {
+      "col": 7,
+      "row": 0
+    },
+    "yuan-shao": {
+      "col": 0,
+      "row": 1
+    },
+    "yuan-shu": {
+      "col": 1,
+      "row": 1
+    },
+    "he-jin": {
+      "col": 2,
+      "row": 1
+    },
+    "emperor-ling": {
+      "col": 3,
+      "row": 1
+    },
+    "emperor-shao": {
+      "col": 4,
+      "row": 1
+    },
+    "emperor-xian": {
+      "col": 5,
+      "row": 1
+    },
+    "zhang-jiao": {
+      "col": 6,
+      "row": 1
+    },
+    "liu-yan": {
+      "col": 7,
+      "row": 1
+    },
+    "liu-biao": {
+      "col": 0,
+      "row": 2
+    },
+    "tao-qian": {
+      "col": 1,
+      "row": 2
+    },
+    "wang-yun": {
+      "col": 2,
+      "row": 2
+    },
+    "diaochan": {
+      "col": 3,
+      "row": 2
+    },
+    "gongsun-zan": {
+      "col": 4,
+      "row": 2
+    },
+    "chen-gong": {
+      "col": 5,
+      "row": 2
+    },
+    "hua-xiong": {
+      "col": 6,
+      "row": 2
+    },
+    "gogukcheon": {
+      "col": 7,
+      "row": 2
+    },
+    "eulpaso": {
+      "col": 0,
+      "row": 3
+    },
+    "onjo-line": {
+      "col": 1,
+      "row": 3
+    },
+    "sun-quan": {
+      "col": 2,
+      "row": 3
+    },
+    "zhou-yu": {
+      "col": 3,
+      "row": 3
+    },
+    "zhang-zhao": {
+      "col": 4,
+      "row": 3
+    },
+    "lu-su": {
+      "col": 5,
+      "row": 3
+    },
+    "zhuge-liang": {
+      "col": 6,
+      "row": 3
+    },
+    "zhao-yun": {
+      "col": 7,
+      "row": 3
+    },
+    "pang-tong": {
+      "col": 0,
+      "row": 4
+    },
+    "xu-shu": {
+      "col": 1,
+      "row": 4
+    },
+    "xun-yu": {
+      "col": 2,
+      "row": 4
+    },
+    "yan-liang": {
+      "col": 3,
+      "row": 4
+    },
+    "cao-ren": {
+      "col": 4,
+      "row": 4
+    },
+    "ma-chao": {
+      "col": 5,
+      "row": 4
+    },
+    "han-sui": {
+      "col": 6,
+      "row": 4
+    },
+    "zhang-lu": {
+      "col": 7,
+      "row": 4
+    },
+    "liu-zhang": {
+      "col": 0,
+      "row": 5
+    },
+    "zhang-liao": {
+      "col": 1,
+      "row": 5
+    },
+    "gan-ning": {
+      "col": 2,
+      "row": 5
+    },
+    "lu-meng": {
+      "col": 3,
+      "row": 5
+    },
+    "lu-xun": {
+      "col": 4,
+      "row": 5
+    },
+    "huang-zhong": {
+      "col": 5,
+      "row": 5
+    },
+    "wei-yan": {
+      "col": 6,
+      "row": 5
+    },
+    "fa-zheng": {
+      "col": 7,
+      "row": 5
+    },
+    "sima-yi": {
+      "col": 0,
+      "row": 6
+    },
+    "jiang-wei": {
+      "col": 1,
+      "row": 6
+    },
+    "ma-su": {
+      "col": 2,
+      "row": 6
+    },
+    "meng-huo": {
+      "col": 3,
+      "row": 6
+    },
+    "cao-pi": {
+      "col": 4,
+      "row": 6
+    },
+    "liu-shan": {
+      "col": 5,
+      "row": 6
+    },
+    "zhang-he": {
+      "col": 6,
+      "row": 6
+    },
+    "xiahou-yuan": {
+      "col": 7,
+      "row": 6
+    },
+    "lady-sun": {
+      "col": 0,
+      "row": 7
+    },
+    "hao-zhao": {
+      "col": 1,
+      "row": 7
+    },
+    "deng-ai": {
+      "col": 2,
+      "row": 7
+    },
+    "yan-yan": {
+      "col": 3,
+      "row": 7
+    },
+    "huang-gai": {
+      "col": 4,
+      "row": 7
+    },
+    "taishi-ci": {
+      "col": 5,
+      "row": 7
+    },
+    "liu-yao": {
+      "col": 6,
+      "row": 7
+    },
+    "sansang": {
+      "col": 7,
+      "row": 7
+    },
+    "dongcheon": {
+      "col": 0,
+      "row": 8
+    },
+    "gongsun-kang": {
+      "col": 1,
+      "row": 8
+    },
+    "guan-qiu-jian": {
+      "col": 2,
+      "row": 8
+    }
+  }
+}

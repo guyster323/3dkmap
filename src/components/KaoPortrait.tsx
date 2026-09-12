@@ -4,9 +4,8 @@ import { useEffect, useRef } from "react";
 import { FACTION_BANNER } from "@/lib/eiketsu";
 import { ATLAS, kaoCell } from "@/lib/atlas";
 import type { Character } from "@/lib/types";
-import { PortraitFrame } from "@/components/WoodPanel";
 
-/** 64×80 흉상. 영걸전 FACEDAT 칸 비율. */
+/** 64×80 흉상. kao.png + kaoCell(). 시트에 없으면 초상 사진 또는 낙관. */
 export function KaoPortrait({
   character,
   size = 80,
@@ -17,35 +16,59 @@ export function KaoPortrait({
   caption?: string;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const cell = kaoCell(character.id);
+  const height = Math.round((size * 80) / 64);
+  const portrait = character.portrait;
+
   useEffect(() => {
+    const blit = kaoCell(character.id);
+    if (!blit && portrait) return;
     const c = ref.current;
     if (!c) return;
     const ctx = c.getContext("2d");
     if (!ctx) return;
     ctx.imageSmoothingEnabled = false;
-    const cell = kaoCell(character.id);
-    if (cell) {
+    if (blit) {
       const img = new Image();
       img.src = ATLAS.kao;
       img.onload = () => {
         ctx.clearRect(0, 0, 64, 80);
-        ctx.drawImage(img, cell.sx, cell.sy, 64, 80, 0, 0, 64, 80);
+        ctx.drawImage(img, blit.sx, blit.sy, 64, 80, 0, 0, 64, 80);
       };
       return;
     }
-    drawKao(ctx, character);
-  }, [character]);
+    drawSeal(ctx, character);
+  }, [character, portrait]);
 
   return (
-    <PortraitFrame caption={caption ?? `${character.nameKo} ${character.nameHanja}`}>
-      <canvas
-        ref={ref}
-        width={64}
-        height={80}
-        className="pixelated block"
-        style={{ width: size, height: Math.round((size * 80) / 64) }}
-      />
-    </PortraitFrame>
+    <figure className="w-fit max-w-full">
+      <div className="pixelated overflow-hidden" style={{ width: size, height }}>
+        {!cell && character.portrait ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={character.portrait}
+            alt=""
+            width={size}
+            height={height}
+            className="block object-cover object-top"
+            style={{ width: size, height }}
+          />
+        ) : (
+          <canvas
+            ref={ref}
+            width={64}
+            height={80}
+            className="pixelated block"
+            style={{ width: size, height }}
+          />
+        )}
+      </div>
+      {caption ? (
+        <figcaption className="eik-src mt-1 text-center" style={{ color: "var(--color-eik-gold)" }}>
+          {caption}
+        </figcaption>
+      ) : null}
+    </figure>
   );
 }
 
@@ -54,42 +77,23 @@ function p(ctx: CanvasRenderingContext2D, x: number, y: number, color: string, w
   ctx.fillRect(x, y, w, h);
 }
 
-function drawKao(ctx: CanvasRenderingContext2D, ch: Character) {
+function drawSeal(ctx: CanvasRenderingContext2D, ch: Character) {
   const banner = FACTION_BANNER[ch.faction];
-  ctx.fillStyle = "#1a120c";
+  ctx.fillStyle = "#060a14";
   ctx.fillRect(0, 0, 64, 80);
-  p(ctx, 8, 48, banner, 48, 32);
-  p(ctx, 18, 14, "#ead9b6", 28, 36);
-  p(ctx, 16, 8, "#1a120c", 32, 10);
-  if (ch.id === "guan-yu") {
-    p(ctx, 22, 44, "#6b2a2a", 20, 18);
-    p(ctx, 20, 22, "#c23b22", 4, 2);
-    p(ctx, 40, 22, "#c23b22", 4, 2);
-  } else if (ch.id === "zhang-fei") {
-    p(ctx, 20, 40, "#1a120c", 24, 10);
-    p(ctx, 24, 20, "#1a120c", 3, 3);
-    p(ctx, 37, 20, "#1a120c", 3, 3);
-  } else if (ch.id === "cao-cao") {
-    p(ctx, 18, 10, "#3a2818", 28, 8);
-    p(ctx, 28, 22, "#1a120c", 8, 2);
-  } else if (ch.id === "lu-bu") {
-    p(ctx, 14, 6, banner, 36, 12);
-    p(ctx, 12, 8, "#c9a227", 4, 8);
-    p(ctx, 48, 8, "#c9a227", 4, 8);
-  } else if (ch.id === "dong-zhuo") {
-    p(ctx, 16, 10, "#3a2818", 32, 14);
-    p(ctx, 22, 42, "#5a3a22", 20, 8);
-  } else if (ch.id === "sun-jian") {
-    p(ctx, 16, 6, "#6b4a2a", 32, 12);
-    p(ctx, 28, 4, "#c9a227", 8, 4);
-  } else if (ch.id === "gogukcheon") {
-    p(ctx, 18, 6, "#3d8b7a", 28, 10);
-    p(ctx, 14, 8, "#c9a227", 6, 10);
-    p(ctx, 44, 8, "#c9a227", 6, 10);
-  } else {
-    p(ctx, 20, 10, "#3a2818", 24, 8);
-  }
-  p(ctx, 26, 28, "#1a120c", 3, 3);
-  p(ctx, 36, 28, "#1a120c", 3, 3);
-  p(ctx, 30, 36, "#8a2a18", 4, 2);
+  p(ctx, 4, 6, "#0a1226", 56, 68);
+  p(ctx, 6, 8, banner, 52, 6);
+  p(ctx, 8, 18, "#14224a", 48, 50);
+  ctx.strokeStyle = "#d8b74a";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(10, 22, 44, 42);
+  const glyph = (ch.nameHanja || ch.nameKo).slice(0, 1);
+  ctx.fillStyle = "#f0ead8";
+  ctx.font = "28px 'Noto Serif KR', serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(glyph, 32, 44);
+  ctx.fillStyle = "#d8b74a";
+  ctx.font = "8px 'Noto Serif KR', serif";
+  ctx.fillText(ch.nameKo.slice(0, 2), 32, 68);
 }

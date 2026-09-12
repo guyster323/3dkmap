@@ -1,0 +1,688 @@
+{
+  "cellW": 32,
+  "cellH": 64,
+  "cols": 4,
+  "rowCount": 136,
+  "rows": [
+    {
+      "kind": "infantry",
+      "faction": "han",
+      "row": 0
+    },
+    {
+      "kind": "infantry",
+      "faction": "yellow",
+      "row": 1
+    },
+    {
+      "kind": "infantry",
+      "faction": "dong",
+      "row": 2
+    },
+    {
+      "kind": "infantry",
+      "faction": "cao",
+      "row": 3
+    },
+    {
+      "kind": "infantry",
+      "faction": "liu",
+      "row": 4
+    },
+    {
+      "kind": "infantry",
+      "faction": "sun",
+      "row": 5
+    },
+    {
+      "kind": "infantry",
+      "faction": "yuan-shao",
+      "row": 6
+    },
+    {
+      "kind": "infantry",
+      "faction": "yuan-shu",
+      "row": 7
+    },
+    {
+      "kind": "infantry",
+      "faction": "lu-bu",
+      "row": 8
+    },
+    {
+      "kind": "infantry",
+      "faction": "gongsun",
+      "row": 9
+    },
+    {
+      "kind": "infantry",
+      "faction": "tao",
+      "row": 10
+    },
+    {
+      "kind": "infantry",
+      "faction": "goguryeo",
+      "row": 11
+    },
+    {
+      "kind": "infantry",
+      "faction": "mahan",
+      "row": 12
+    },
+    {
+      "kind": "infantry",
+      "faction": "jinhan",
+      "row": 13
+    },
+    {
+      "kind": "infantry",
+      "faction": "byeonhan",
+      "row": 14
+    },
+    {
+      "kind": "infantry",
+      "faction": "lelange",
+      "row": 15
+    },
+    {
+      "kind": "infantry",
+      "faction": "other",
+      "row": 16
+    },
+    {
+      "kind": "spear",
+      "faction": "han",
+      "row": 17
+    },
+    {
+      "kind": "spear",
+      "faction": "yellow",
+      "row": 18
+    },
+    {
+      "kind": "spear",
+      "faction": "dong",
+      "row": 19
+    },
+    {
+      "kind": "spear",
+      "faction": "cao",
+      "row": 20
+    },
+    {
+      "kind": "spear",
+      "faction": "liu",
+      "row": 21
+    },
+    {
+      "kind": "spear",
+      "faction": "sun",
+      "row": 22
+    },
+    {
+      "kind": "spear",
+      "faction": "yuan-shao",
+      "row": 23
+    },
+    {
+      "kind": "spear",
+      "faction": "yuan-shu",
+      "row": 24
+    },
+    {
+      "kind": "spear",
+      "faction": "lu-bu",
+      "row": 25
+    },
+    {
+      "kind": "spear",
+      "faction": "gongsun",
+      "row": 26
+    },
+    {
+      "kind": "spear",
+      "faction": "tao",
+      "row": 27
+    },
+    {
+      "kind": "spear",
+      "faction": "goguryeo",
+      "row": 28
+    },
+    {
+      "kind": "spear",
+      "faction": "mahan",
+      "row": 29
+    },
+    {
+      "kind": "spear",
+      "faction": "jinhan",
+      "row": 30
+    },
+    {
+      "kind": "spear",
+      "faction": "byeonhan",
+      "row": 31
+    },
+    {
+      "kind": "spear",
+      "faction": "lelange",
+      "row": 32
+    },
+    {
+      "kind": "spear",
+      "faction": "other",
+      "row": 33
+    },
+    {
+      "kind": "cavalry",
+      "faction": "han",
+      "row": 34
+    },
+    {
+      "kind": "cavalry",
+      "faction": "yellow",
+      "row": 35
+    },
+    {
+      "kind": "cavalry",
+      "faction": "dong",
+      "row": 36
+    },
+    {
+      "kind": "cavalry",
+      "faction": "cao",
+      "row": 37
+    },
+    {
+      "kind": "cavalry",
+      "faction": "liu",
+      "row": 38
+    },
+    {
+      "kind": "cavalry",
+      "faction": "sun",
+      "row": 39
+    },
+    {
+      "kind": "cavalry",
+      "faction": "yuan-shao",
+      "row": 40
+    },
+    {
+      "kind": "cavalry",
+      "faction": "yuan-shu",
+      "row": 41
+    },
+    {
+      "kind": "cavalry",
+      "faction": "lu-bu",
+      "row": 42
+    },
+    {
+      "kind": "cavalry",
+      "faction": "gongsun",
+      "row": 43
+    },
+    {
+      "kind": "cavalry",
+      "faction": "tao",
+      "row": 44
+    },
+    {
+      "kind": "cavalry",
+      "faction": "goguryeo",
+      "row": 45
+    },
+    {
+      "kind": "cavalry",
+      "faction": "mahan",
+      "row": 46
+    },
+    {
+      "kind": "cavalry",
+      "faction": "jinhan",
+      "row": 47
+    },
+    {
+      "kind": "cavalry",
+      "faction": "byeonhan",
+      "row": 48
+    },
+    {
+      "kind": "cavalry",
+      "faction": "lelange",
+      "row": 49
+    },
+    {
+      "kind": "cavalry",
+      "faction": "other",
+      "row": 50
+    },
+    {
+      "kind": "archer",
+      "faction": "han",
+      "row": 51
+    },
+    {
+      "kind": "archer",
+      "faction": "yellow",
+      "row": 52
+    },
+    {
+      "kind": "archer",
+      "faction": "dong",
+      "row": 53
+    },
+    {
+      "kind": "archer",
+      "faction": "cao",
+      "row": 54
+    },
+    {
+      "kind": "archer",
+      "faction": "liu",
+      "row": 55
+    },
+    {
+      "kind": "archer",
+      "faction": "sun",
+      "row": 56
+    },
+    {
+      "kind": "archer",
+      "faction": "yuan-shao",
+      "row": 57
+    },
+    {
+      "kind": "archer",
+      "faction": "yuan-shu",
+      "row": 58
+    },
+    {
+      "kind": "archer",
+      "faction": "lu-bu",
+      "row": 59
+    },
+    {
+      "kind": "archer",
+      "faction": "gongsun",
+      "row": 60
+    },
+    {
+      "kind": "archer",
+      "faction": "tao",
+      "row": 61
+    },
+    {
+      "kind": "archer",
+      "faction": "goguryeo",
+      "row": 62
+    },
+    {
+      "kind": "archer",
+      "faction": "mahan",
+      "row": 63
+    },
+    {
+      "kind": "archer",
+      "faction": "jinhan",
+      "row": 64
+    },
+    {
+      "kind": "archer",
+      "faction": "byeonhan",
+      "row": 65
+    },
+    {
+      "kind": "archer",
+      "faction": "lelange",
+      "row": 66
+    },
+    {
+      "kind": "archer",
+      "faction": "other",
+      "row": 67
+    },
+    {
+      "kind": "crossbow",
+      "faction": "han",
+      "row": 68
+    },
+    {
+      "kind": "crossbow",
+      "faction": "yellow",
+      "row": 69
+    },
+    {
+      "kind": "crossbow",
+      "faction": "dong",
+      "row": 70
+    },
+    {
+      "kind": "crossbow",
+      "faction": "cao",
+      "row": 71
+    },
+    {
+      "kind": "crossbow",
+      "faction": "liu",
+      "row": 72
+    },
+    {
+      "kind": "crossbow",
+      "faction": "sun",
+      "row": 73
+    },
+    {
+      "kind": "crossbow",
+      "faction": "yuan-shao",
+      "row": 74
+    },
+    {
+      "kind": "crossbow",
+      "faction": "yuan-shu",
+      "row": 75
+    },
+    {
+      "kind": "crossbow",
+      "faction": "lu-bu",
+      "row": 76
+    },
+    {
+      "kind": "crossbow",
+      "faction": "gongsun",
+      "row": 77
+    },
+    {
+      "kind": "crossbow",
+      "faction": "tao",
+      "row": 78
+    },
+    {
+      "kind": "crossbow",
+      "faction": "goguryeo",
+      "row": 79
+    },
+    {
+      "kind": "crossbow",
+      "faction": "mahan",
+      "row": 80
+    },
+    {
+      "kind": "crossbow",
+      "faction": "jinhan",
+      "row": 81
+    },
+    {
+      "kind": "crossbow",
+      "faction": "byeonhan",
+      "row": 82
+    },
+    {
+      "kind": "crossbow",
+      "faction": "lelange",
+      "row": 83
+    },
+    {
+      "kind": "crossbow",
+      "faction": "other",
+      "row": 84
+    },
+    {
+      "kind": "navy",
+      "faction": "han",
+      "row": 85
+    },
+    {
+      "kind": "navy",
+      "faction": "yellow",
+      "row": 86
+    },
+    {
+      "kind": "navy",
+      "faction": "dong",
+      "row": 87
+    },
+    {
+      "kind": "navy",
+      "faction": "cao",
+      "row": 88
+    },
+    {
+      "kind": "navy",
+      "faction": "liu",
+      "row": 89
+    },
+    {
+      "kind": "navy",
+      "faction": "sun",
+      "row": 90
+    },
+    {
+      "kind": "navy",
+      "faction": "yuan-shao",
+      "row": 91
+    },
+    {
+      "kind": "navy",
+      "faction": "yuan-shu",
+      "row": 92
+    },
+    {
+      "kind": "navy",
+      "faction": "lu-bu",
+      "row": 93
+    },
+    {
+      "kind": "navy",
+      "faction": "gongsun",
+      "row": 94
+    },
+    {
+      "kind": "navy",
+      "faction": "tao",
+      "row": 95
+    },
+    {
+      "kind": "navy",
+      "faction": "goguryeo",
+      "row": 96
+    },
+    {
+      "kind": "navy",
+      "faction": "mahan",
+      "row": 97
+    },
+    {
+      "kind": "navy",
+      "faction": "jinhan",
+      "row": 98
+    },
+    {
+      "kind": "navy",
+      "faction": "byeonhan",
+      "row": 99
+    },
+    {
+      "kind": "navy",
+      "faction": "lelange",
+      "row": 100
+    },
+    {
+      "kind": "navy",
+      "faction": "other",
+      "row": 101
+    },
+    {
+      "kind": "strategist",
+      "faction": "han",
+      "row": 102
+    },
+    {
+      "kind": "strategist",
+      "faction": "yellow",
+      "row": 103
+    },
+    {
+      "kind": "strategist",
+      "faction": "dong",
+      "row": 104
+    },
+    {
+      "kind": "strategist",
+      "faction": "cao",
+      "row": 105
+    },
+    {
+      "kind": "strategist",
+      "faction": "liu",
+      "row": 106
+    },
+    {
+      "kind": "strategist",
+      "faction": "sun",
+      "row": 107
+    },
+    {
+      "kind": "strategist",
+      "faction": "yuan-shao",
+      "row": 108
+    },
+    {
+      "kind": "strategist",
+      "faction": "yuan-shu",
+      "row": 109
+    },
+    {
+      "kind": "strategist",
+      "faction": "lu-bu",
+      "row": 110
+    },
+    {
+      "kind": "strategist",
+      "faction": "gongsun",
+      "row": 111
+    },
+    {
+      "kind": "strategist",
+      "faction": "tao",
+      "row": 112
+    },
+    {
+      "kind": "strategist",
+      "faction": "goguryeo",
+      "row": 113
+    },
+    {
+      "kind": "strategist",
+      "faction": "mahan",
+      "row": 114
+    },
+    {
+      "kind": "strategist",
+      "faction": "jinhan",
+      "row": 115
+    },
+    {
+      "kind": "strategist",
+      "faction": "byeonhan",
+      "row": 116
+    },
+    {
+      "kind": "strategist",
+      "faction": "lelange",
+      "row": 117
+    },
+    {
+      "kind": "strategist",
+      "faction": "other",
+      "row": 118
+    },
+    {
+      "kind": "lord",
+      "faction": "han",
+      "row": 119
+    },
+    {
+      "kind": "lord",
+      "faction": "yellow",
+      "row": 120
+    },
+    {
+      "kind": "lord",
+      "faction": "dong",
+      "row": 121
+    },
+    {
+      "kind": "lord",
+      "faction": "cao",
+      "row": 122
+    },
+    {
+      "kind": "lord",
+      "faction": "liu",
+      "row": 123
+    },
+    {
+      "kind": "lord",
+      "faction": "sun",
+      "row": 124
+    },
+    {
+      "kind": "lord",
+      "faction": "yuan-shao",
+      "row": 125
+    },
+    {
+      "kind": "lord",
+      "faction": "yuan-shu",
+      "row": 126
+    },
+    {
+      "kind": "lord",
+      "faction": "lu-bu",
+      "row": 127
+    },
+    {
+      "kind": "lord",
+      "faction": "gongsun",
+      "row": 128
+    },
+    {
+      "kind": "lord",
+      "faction": "tao",
+      "row": 129
+    },
+    {
+      "kind": "lord",
+      "faction": "goguryeo",
+      "row": 130
+    },
+    {
+      "kind": "lord",
+      "faction": "mahan",
+      "row": 131
+    },
+    {
+      "kind": "lord",
+      "faction": "jinhan",
+      "row": 132
+    },
+    {
+      "kind": "lord",
+      "faction": "byeonhan",
+      "row": 133
+    },
+    {
+      "kind": "lord",
+      "faction": "lelange",
+      "row": 134
+    },
+    {
+      "kind": "lord",
+      "faction": "other",
+      "row": 135
+    }
+  ]
+}

@@ -54,20 +54,18 @@ export function HistoricalMap({
   });
 
   return (
-    <div className="relative h-full min-h-[280px] w-full overflow-hidden rounded-2xl border border-paper/10 bg-[#16110c]">
+    <div className="eik-win relative h-full min-h-[280px] w-full min-w-0 overflow-hidden">
       <svg viewBox="0 0 100 72" className="h-full w-full" preserveAspectRatio="xMidYMid meet">
         <defs>
           <radialGradient id="glow" cx="50%" cy="45%" r="55%">
-            <stop offset="0%" stopColor="#2a2014" />
-            <stop offset="100%" stopColor="#120e0a" />
+            <stop offset="0%" stopColor="#14224a" />
+            <stop offset="100%" stopColor="#060a14" />
           </radialGradient>
         </defs>
         <rect width="100" height="72" fill="url(#glow)" />
 
-        {/* stylized landmasses in lon/lat space */}
         <Land />
 
-        {/* yellow river / yangtze hints */}
         <path
           d={riverPath([
             [103.5, 36.2],
@@ -105,19 +103,19 @@ export function HistoricalMap({
             onClick={() => onSelect?.(pin.id)}
           >
             {pin.live && (
-              <circle r={1.8 + pin.importance * 0.15} className="pin-pulse" fill={pin.color} opacity={0.5} />
+              <circle r={1.8 + pin.importance * 0.15} fill={pin.color} opacity={0.5} />
             )}
             <circle
               r={selectedId === pin.id ? 1.15 : pin.live ? 0.85 : 0.55}
               fill={pin.color}
-              stroke={selectedId === pin.id ? "#ead9b6" : "transparent"}
+              stroke={selectedId === pin.id ? "#e8e0c8" : "transparent"}
               strokeWidth="0.25"
             />
             {(pin.live || selectedId === pin.id) && (
               <text
                 y={-1.6}
                 textAnchor="middle"
-                fill="#ead9b6"
+                fill="#f0ead8"
                 fontSize="1.55"
                 fontFamily="Noto Serif KR, serif"
               >
@@ -134,10 +132,11 @@ export function HistoricalMap({
           .map((r) => (
             <span
               key={r}
-              className="rounded-sm bg-ink/70 px-1.5 py-0.5 text-[9px] text-paper/80"
+              className="eik-src px-1.5 py-0.5"
+              style={{ background: "rgba(10,18,38,0.7)", color: "var(--color-eik-text)" }}
             >
               <i
-                className="mr-1 inline-block h-1.5 w-1.5 rounded-full"
+                className="mr-1 inline-block h-1.5 w-1.5"
                 style={{ background: REGION_COLOR[r] }}
               />
               {REGION_LABEL[r]}
@@ -201,8 +200,8 @@ function Land() {
 
   return (
     <g>
-      <path d={to(china)} fill="#2a2318" stroke="#3d3426" strokeWidth="0.2" />
-      <path d={to(korea)} fill="#24302c" stroke="#3d5c52" strokeWidth="0.22" />
+      <path d={to(china)} fill="#1c2f5e" stroke="#14224a" strokeWidth="0.2" />
+      <path d={to(korea)} fill="#0f2a28" stroke="#3d8b7a" strokeWidth="0.22" />
     </g>
   );
 }

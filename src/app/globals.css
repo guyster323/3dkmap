@@ -4,8 +4,6 @@
   --color-ink: #1a120c;
   --color-ink-2: #24180f;
   --color-ink-3: #3a2818;
-  --color-wood: #5a3a22;
-  --color-wood-hi: #7a522e;
   --color-paper: #ead9b6;
   --color-paper-2: #d8c49a;
   --color-cinnabar: #c23b22;
@@ -19,20 +17,36 @@
   --color-wu: #2a4a6b;
   --font-serif: "Noto Serif KR", "Songti SC", serif;
   --font-sans: "Noto Sans KR", "Pretendard", system-ui, sans-serif;
+
+  /* 영걸전 창틀 — docs/REDESIGN-EIKETSU.md §2 */
+  --color-eik-win-top: #1c2f5e;
+  --color-eik-win-mid: #14224a;
+  --color-eik-win-bot: #0a1226;
+  --color-eik-bevel-hi: #e8e0c8;
+  --color-eik-bevel-lo: #04070f;
+  --color-eik-gold: #d8b74a;
+  --color-eik-gold-dim: #8a7430;
+  --color-eik-text: #f0ead8;
+  --color-eik-text-dim: #9aa8c4;
+  --color-eik-text-ink: #0a1226;
+  --color-eik-cinnabar: #c23b22;
+  --color-eik-jade: #3d8b7a;
+  --color-eik-hp: #4aae52;
+  --color-eik-hp-warn: #d8b74a;
+  --color-eik-hp-crit: #c23b22;
+  --color-eik-void: #060a14;
+  --font-pixel: "Galmuri11", "DungGeunMo", "Noto Sans KR", system-ui, sans-serif;
 }
 
 html,
 body {
-  background: #140e0a;
-  color: var(--color-paper);
-  font-family: var(--font-sans);
+  background: var(--color-eik-void);
+  color: var(--color-eik-text);
+  font-family: var(--font-pixel);
 }
 
 body {
   min-height: 100dvh;
-  background-image:
-    repeating-linear-gradient(90deg, rgba(90, 58, 34, 0.18) 0 2px, transparent 2px 7px),
-    linear-gradient(180deg, #1c140e 0%, #120c08 100%);
 }
 
 ::selection {
@@ -50,26 +64,81 @@ body {
   image-rendering: crisp-edges;
 }
 
-.wood-panel {
-  background: linear-gradient(180deg, #6a4428 0%, #4a301c 55%, #3a2416 100%);
-  border: 3px solid #c9a227;
+/* 창틀 4겹: 바깥 2px #04070f → 1px 금테 → 남색 그라데이션 본문 → 안쪽 상단 하이라이트 */
+.eik-win {
+  background: linear-gradient(180deg, var(--color-eik-win-top) 0%,
+                              var(--color-eik-win-mid) 55%,
+                              var(--color-eik-win-bot) 100%);
+  border: 2px solid var(--color-eik-bevel-lo);
   box-shadow:
-    inset 0 0 0 1px #8a7018,
-    inset 0 0 0 3px #3a2416,
-    0 2px 0 #1a1008;
+    inset 0 0 0 1px var(--color-eik-gold),
+    inset 0 1px 0 2px rgba(232,224,200,0.35),
+    0 2px 0 0 var(--color-eik-bevel-lo);
+  border-radius: 0;
+  box-sizing: border-box;
+  color: var(--color-eik-text);
+  font-family: var(--font-pixel);
+  max-width: 100%;
+  min-width: 0;
 }
 
-.wood-inlay {
-  background: #1a120c;
-  border: 2px solid #8a7018;
-  box-shadow: inset 0 0 0 1px #3a2416;
+.eik-win--active {
+  box-shadow:
+    inset 0 0 0 1px #f0dc8a,
+    inset 0 1px 0 2px rgba(232,224,200,0.5),
+    0 2px 0 0 var(--color-eik-bevel-lo);
 }
 
-.gold-btn {
-  background: linear-gradient(180deg, #d4b03a, #9a7818);
-  color: #1a120c;
-  border: 2px solid #ead9b6;
+.eik-win--flat {
+  background: var(--color-eik-win-mid);
+}
+
+.eik-nameplate {
+  display: inline-block;
+  max-width: 100%;
+  background: var(--color-eik-win-top);
+  color: var(--color-eik-text);
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  padding: 4px 10px;
+  border: 1px solid var(--color-eik-gold);
+  border-radius: 0;
+  box-shadow:
+    0 0 0 1px var(--color-eik-bevel-lo),
+    inset 0 1px 0 0 var(--color-eik-bevel-hi);
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+}
+
+.eik-era {
   font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.eik-body {
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+.eik-stat {
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.eik-src {
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .idle-2 {
@@ -105,4 +174,17 @@ body {
 .scroll-thin {
   scrollbar-width: thin;
   scrollbar-color: #8a7018 transparent;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-20%);
+  }
+  100% {
+    transform: translateY(220%);
+  }
+}
+
+.scanline {
+  animation: scanline 1.15s linear infinite;
 }

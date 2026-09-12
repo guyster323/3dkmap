@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TileMap } from "@/components/TileMap";
-import { getAllEpisodes, getEvents, getPlace } from "@/lib/content";
+import { HistoricalMap } from "@/components/HistoricalMap";
+import { getAllEpisodes, getEvents, getPlace, getPlaces } from "@/lib/content";
 import { REGION_LABEL } from "@/lib/types";
 
 export default async function PlacePage({ params }: { params: Promise<{ id: string }> }) {
@@ -10,23 +10,26 @@ export default async function PlacePage({ params }: { params: Promise<{ id: stri
   if (!p) notFound();
   const eps = getAllEpisodes().filter((e) => e.placeIds.includes(p.id));
   const evs = getEvents().filter((e) => e.placeId === p.id);
+  const allPlaces = getPlaces();
 
   return (
-    <main className="px-4 py-6 md:px-8">
-      <Link href="/world" className="text-xs text-ash">
+    <main className="min-w-0 px-4 py-6 md:px-8">
+      <Link href="/world" className="eik-src inline-flex min-h-[44px] items-center" style={{ color: "var(--color-eik-text-dim)" }}>
         ← 세계
       </Link>
-      <p className="mt-3 text-[11px] tracking-widest text-gold">
+      <p className="eik-src mt-3 tracking-widest" style={{ color: "var(--color-eik-gold)" }}>
         {REGION_LABEL[p.region]} · {p.kind}
       </p>
       <h1 className="seal text-3xl">
-        {p.nameKo} <span className="text-lg text-ash">{p.nameHanja}</span>
+        {p.nameKo} <span className="text-lg" style={{ color: "var(--color-eik-text-dim)" }}>{p.nameHanja}</span>
       </h1>
-      <p className="mt-1 text-sm text-ash">오늘날 {p.modernName}</p>
-      {p.note && <p className="mt-3 max-w-xl text-sm text-paper-2">{p.note}</p>}
+      <p className="eik-src mt-1" style={{ color: "var(--color-eik-text-dim)" }}>
+        오늘날 {p.modernName}
+      </p>
+      {p.note && <p className="eik-body mt-3 max-w-xl">{p.note}</p>}
 
-      <div className="mt-5">
-        <TileMap places={[p]} liveEvents={evs} selectedId={p.id} />
+      <div className="mt-5 min-h-[280px]">
+        <HistoricalMap places={allPlaces} liveEvents={evs} selectedId={p.id} />
       </div>
 
       <section className="mt-8">
@@ -34,12 +37,20 @@ export default async function PlacePage({ params }: { params: Promise<{ id: stri
         <ul className="mt-3 space-y-1">
           {eps.map((e) => (
             <li key={e.id}>
-              <Link href={`/episodes/${e.id}`} className="text-gold hover:underline">
+              <Link
+                href={`/episodes/${e.id}`}
+                className="inline-flex min-h-[44px] items-center"
+                style={{ color: "var(--color-eik-gold)" }}
+              >
                 {e.volume}권 · {e.title}
               </Link>
             </li>
           ))}
-          {eps.length === 0 && <li className="text-sm text-ash">1차 Plot에 직접 묶인 회차는 없습니다.</li>}
+          {eps.length === 0 && (
+            <li className="eik-body" style={{ color: "var(--color-eik-text-dim)" }}>
+              이 장소와 직접 묶인 회차는 없습니다.
+            </li>
+          )}
         </ul>
       </section>
     </main>

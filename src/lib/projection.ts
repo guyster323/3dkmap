@@ -19,3 +19,9 @@ export function unproject(x: number, y: number): { lon: number; lat: number } {
   const lat = maxLat - (y / 100) * (maxLat - minLat);
   return { lon, lat };
 }
+
+/** 전역도 논리 좌표 (0..1000, 0..700). `project` 결과의 ×10, ×7. */
+export function projectStrategic(lon: number, lat: number): { x: number; y: number } {
+  const { x, y } = project(lon, lat);
+  return { x: x * 10, y: y * 7 };
+}

@@ -1,0 +1,16 @@
+{
+  "cellW": 32,
+  "cellH": 64,
+  "cols": 4,
+  "rowCount": 8,
+  "rows": {
+    "liu-bei": 0,
+    "guan-yu": 1,
+    "zhang-fei": 2,
+    "cao-cao": 3,
+    "dong-zhuo": 4,
+    "lu-bu": 5,
+    "sun-jian": 6,
+    "gogukcheon": 7
+  }
+}

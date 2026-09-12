@@ -1,10 +1,14 @@
 import { CHARACTERS } from "@/data/characters";
-import { EPISODES } from "@/data/episodes";
+import { EPISODES as EPISODES_EARLY } from "@/data/episodes";
+import { EPISODES_MID } from "@/data/episodes-mid";
+import { EPISODES_LATE } from "@/data/episodes-late";
 import { EVENTS } from "@/data/events";
 import { PLACES } from "@/data/places";
 import { VOLUMES } from "@/data/volumes";
 import { eraToAbsDays } from "./clock";
 import type { Character, Episode, Place, Volume, WorldEvent } from "./types";
+
+const EPISODES: Episode[] = [...EPISODES_EARLY, ...EPISODES_MID, ...EPISODES_LATE];
 
 export function getVolumes(): Volume[] {
   return VOLUMES;
@@ -70,6 +74,66 @@ export function eventsForVolumeYears(volume: Volume): WorldEvent[] {
 
 export function firstEpisodeOfVolume(n: number): Episode | undefined {
   return getEpisodesByVolume(n)[0];
+}
+
+export function episodeNearestYear(year: number): Episode | undefined {
+  const all = getAllEpisodes();
+  if (!all.length) return undefined;
+  return all.reduce((best, e) => {
+    const d = Math.abs(e.timeStart.year - year);
+    const bd = Math.abs(best.timeStart.year - year);
+    if (d < bd) return e;
+    if (d === bd && e.timeStart.year <= year && best.timeStart.year > year) return e;
+    return best;
+  });
+}
+
+export function catalogIssues(): string[] {
+  const issues: string[] = [];
+  const charIds = new Set(CHARACTERS.map((c) => c.id));
+  const placeIds = new Set(PLACES.map((p) => p.id));
+  const epIds = new Set(EPISODES.map((e) => e.id));
+  const volNums = new Set(VOLUMES.map((v) => v.number));
+  const seenEp = new Set<string>();
+
+  for (const e of EPISODES) {
+    if (seenEp.has(e.id)) issues.push(`duplicate episode id ${e.id}`);
+    seenEp.add(e.id);
+    if (!volNums.has(e.volume)) issues.push(`${e.id}: unknown volume ${e.volume}`);
+    for (const id of e.characterIds) {
+      if (!charIds.has(id)) issues.push(`${e.id}: missing character ${id}`);
+    }
+    for (const id of e.placeIds) {
+      if (!placeIds.has(id)) issues.push(`${e.id}: missing place ${id}`);
+    }
+  }
+
+  for (const ev of EVENTS) {
+    if (ev.placeId && !placeIds.has(ev.placeId)) issues.push(`${ev.id}: missing place ${ev.placeId}`);
+    for (const id of ev.characterIds ?? []) {
+      if (!charIds.has(id)) issues.push(`${ev.id}: missing character ${id}`);
+    }
+    if (ev.relatedEpisodeId && !epIds.has(ev.relatedEpisodeId)) {
+      issues.push(`${ev.id}: missing episode ${ev.relatedEpisodeId}`);
+    }
+  }
+
+  if (VOLUMES.length !== 60) issues.push(`expected 60 volumes, got ${VOLUMES.length}`);
+  for (let n = 1; n <= 60; n++) {
+    if (!volNums.has(n)) issues.push(`missing volume ${n}`);
+    if (!EPISODES.some((e) => e.volume === n)) issues.push(`volume ${n} has no episodes`);
+  }
+  for (const v of VOLUMES) {
+    if (v.complete && !EPISODES.some((e) => e.volume === v.number)) {
+      issues.push(`volume ${v.number} marked complete without episodes`);
+    }
+  }
+  const epKinds = new Set(EPISODES.flatMap((e) => e.sources.map((s) => s.kind)));
+  const evKinds = new Set(EVENTS.flatMap((e) => e.sources.map((s) => s.kind)));
+  if (!epKinds.has("연의")) issues.push("no 연의 chips on episodes");
+  if (!epKinds.has("정사")) issues.push("no 정사 chips on episodes");
+  if (!evKinds.has("삼국사기")) issues.push("no 삼국사기 chips on events");
+  return issues;
 }
 
 export function searchCatalog(q: string): { volumes: Volume[]; episodes: Episode[] } {
