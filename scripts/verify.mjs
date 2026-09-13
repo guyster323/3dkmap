@@ -4,9 +4,9 @@ const base = "http://localhost:3000";
 const fails = [];
 
 const PT_ASSETS = [
-  ["/assets/pixel-times/portrait-atlas.png", 512, 160],
-  ["/assets/pixel-times/scene-actors.png", 192, 448],
-  ["/assets/pixel-times/map-characters.png", 128, 256],
+  ["/assets/pixel-times/portrait-atlas.png", 512, 720],
+  ["/assets/pixel-times/scene-actors.png", 192, 2176],
+  ["/assets/pixel-times/map-characters.png", 128, 1088],
   ["/assets/pixel-times/terrain/tiles16.png", 256, 160],
   ["/assets/pixel-times/terrain/world-map.png", 1024, 704],
   ["/assets/pixel-times/event-banners/v01-e04.png", 320, 180],
@@ -14,6 +14,8 @@ const PT_ASSETS = [
   ["/assets/pixel-times/event-banners/v26-e01.png", 320, 180],
   ["/assets/pixel-times/event-banners/v01-e01.png", 320, 180],
   ["/assets/pixel-times/event-banners/v16-e03.png", 320, 180],
+  ["/assets/pixel-times/event-banners/ev-263-fall.png", 320, 180],
+  ["/assets/pixel-times/event-banners/ev-200-guandu.png", 320, 180],
   ["/assets/pixel-times/terrain/landmark-ship.png", 48, 32],
   ["/assets/pixel-times/terrain/landmark-army.png", 40, 28],
   ["/assets/pixel-times/scene-backgrounds/taoyuan.png", 480, 270],

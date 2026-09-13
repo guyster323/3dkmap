@@ -32,9 +32,9 @@ export type PtManifestEntry = {
 
 /** Packed sheets and stills the runtime and verify.mjs must serve. */
 export const PT_MANIFEST: PtManifestEntry[] = [
-  { path: PT_PATH.portraitAtlas, w: 512, h: 160, required: true },
-  { path: PT_PATH.sceneActorAtlas, w: 192, h: 448, required: true },
-  { path: PT_PATH.mapCharacterAtlas, w: 128, h: 256, required: true },
+  { path: PT_PATH.portraitAtlas, w: 512, h: 720, required: true },
+  { path: PT_PATH.sceneActorAtlas, w: 192, h: 2176, required: true },
+  { path: PT_PATH.mapCharacterAtlas, w: 128, h: 1088, required: true },
   { path: "/assets/pixel-times/terrain/tiles16.png", w: 256, h: 160, required: true },
   { path: "/assets/pixel-times/terrain/world-map.png", w: 1024, h: 704, required: true },
   { path: `${PT_PATH.banners}v01-e04.png`, w: 320, h: 180, required: true },

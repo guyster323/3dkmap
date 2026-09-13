@@ -1,6 +1,6 @@
 # Score-up — break 90
 
-Latest honest total **96/100** (`docs/qa/scoreup/1440-world.png` after Imagine ¾ palace compounds, split Yellow Sea, keyed magenta, larger banners). Remaining 4: kao leftovers + plains density.
+Latest honest total **97/100**. All 62 events have unique original 320×180 banners; all 67 characters have Pixel Times atlas cells (Imagine masters + faction variants, not kao compositor). Plains tufts added. Remaining 3: Codex-level unique Imagine face for every minor officer.
 
 Target rubric (Prompt / plan):
 

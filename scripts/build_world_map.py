@@ -162,6 +162,11 @@ def paint_map(grid: list[str]) -> Image.Image:
             }[k]
             if (x % 8) + (y % 8) < 3:
                 col = tuple(min(255, v + 8) for v in col[:3]) + (255,)
+            # Plains tufts — Codex-like scatter, not empty olive
+            if k in ("plain", "grass") and (x + y * 3) % 11 == 0 and n > 90:
+                col = (78, 102, 58, 255) if k == "plain" else (48, 82, 44, 255)
+            if k in ("plain", "grass") and n < 12 and (x % 5 == 0):
+                col = (92, 118, 64, 255)
             px[x, y] = col
 
     # Pixel-edge foam (not cell-snapped)

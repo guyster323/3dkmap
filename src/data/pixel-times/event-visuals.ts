@@ -1,4 +1,5 @@
 /** Banner / overlay visuals. Join on episode.id or event.id. */
+import { GENERATED_EVENT_VISUALS } from "./event-visuals-generated";
 
 export type EventBannerStateArt = {
   idle: string;
@@ -19,7 +20,7 @@ export type EventVisual = {
   art: EventBannerStateArt;
 };
 
-export const EVENT_VISUALS: Record<string, EventVisual> = {
+const HAND_EVENT_VISUALS: Record<string, EventVisual> = {
   "v01-e04": {
     id: "v01-e04",
     episodeId: "v01-e04",
@@ -141,6 +142,11 @@ export const EVENT_VISUALS: Record<string, EventVisual> = {
     importance: 3,
     art: { idle: "/assets/pixel-times/event-banners/ev-184-goguryeo.png" },
   },
+};
+
+export const EVENT_VISUALS: Record<string, EventVisual> = {
+  ...(GENERATED_EVENT_VISUALS as Record<string, EventVisual>),
+  ...HAND_EVENT_VISUALS,
 };
 
 export function getEventVisual(id: string): EventVisual | undefined {

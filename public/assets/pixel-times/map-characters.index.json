@@ -2,59 +2,275 @@
   "cellW": 32,
   "cellH": 64,
   "cols": 4,
-  "rowCount": 4,
+  "rowCount": 17,
   "cells": {
-    "liu-bei": {
+    "cao-cao": {
       "col": 0,
       "row": 0
     },
-    "guan-yu": {
+    "cao-pi": {
       "col": 1,
       "row": 0
+    },
+    "cao-ren": {
+      "col": 2,
+      "row": 0
+    },
+    "chen-gong": {
+      "col": 3,
+      "row": 0
+    },
+    "deng-ai": {
+      "col": 0,
+      "row": 1
+    },
+    "diaochan": {
+      "col": 1,
+      "row": 1
+    },
+    "dong-zhuo": {
+      "col": 2,
+      "row": 1
+    },
+    "dongcheon": {
+      "col": 3,
+      "row": 1
+    },
+    "emperor-ling": {
+      "col": 0,
+      "row": 2
+    },
+    "emperor-shao": {
+      "col": 1,
+      "row": 2
+    },
+    "emperor-xian": {
+      "col": 2,
+      "row": 2
+    },
+    "eulpaso": {
+      "col": 3,
+      "row": 2
+    },
+    "fa-zheng": {
+      "col": 0,
+      "row": 3
+    },
+    "gan-ning": {
+      "col": 1,
+      "row": 3
+    },
+    "gogukcheon": {
+      "col": 2,
+      "row": 3
+    },
+    "gongsun-kang": {
+      "col": 3,
+      "row": 3
+    },
+    "gongsun-zan": {
+      "col": 0,
+      "row": 4
+    },
+    "guan-qiu-jian": {
+      "col": 1,
+      "row": 4
+    },
+    "guan-yu": {
+      "col": 2,
+      "row": 4
+    },
+    "han-sui": {
+      "col": 3,
+      "row": 4
+    },
+    "hao-zhao": {
+      "col": 0,
+      "row": 5
+    },
+    "he-jin": {
+      "col": 1,
+      "row": 5
+    },
+    "hua-xiong": {
+      "col": 2,
+      "row": 5
+    },
+    "huang-gai": {
+      "col": 3,
+      "row": 5
+    },
+    "huang-zhong": {
+      "col": 0,
+      "row": 6
+    },
+    "jiang-wei": {
+      "col": 1,
+      "row": 6
+    },
+    "lady-sun": {
+      "col": 2,
+      "row": 6
+    },
+    "liu-bei": {
+      "col": 3,
+      "row": 6
+    },
+    "liu-biao": {
+      "col": 0,
+      "row": 7
+    },
+    "liu-shan": {
+      "col": 1,
+      "row": 7
+    },
+    "liu-yan": {
+      "col": 2,
+      "row": 7
+    },
+    "liu-yao": {
+      "col": 3,
+      "row": 7
+    },
+    "liu-zhang": {
+      "col": 0,
+      "row": 8
+    },
+    "lu-bu": {
+      "col": 1,
+      "row": 8
+    },
+    "lu-meng": {
+      "col": 2,
+      "row": 8
+    },
+    "lu-su": {
+      "col": 3,
+      "row": 8
+    },
+    "lu-xun": {
+      "col": 0,
+      "row": 9
+    },
+    "ma-chao": {
+      "col": 1,
+      "row": 9
+    },
+    "ma-su": {
+      "col": 2,
+      "row": 9
+    },
+    "meng-huo": {
+      "col": 3,
+      "row": 9
+    },
+    "onjo-line": {
+      "col": 0,
+      "row": 10
+    },
+    "pang-tong": {
+      "col": 1,
+      "row": 10
+    },
+    "sansang": {
+      "col": 2,
+      "row": 10
+    },
+    "sima-yi": {
+      "col": 3,
+      "row": 10
+    },
+    "sun-ce": {
+      "col": 0,
+      "row": 11
+    },
+    "sun-jian": {
+      "col": 1,
+      "row": 11
+    },
+    "sun-quan": {
+      "col": 2,
+      "row": 11
+    },
+    "taishi-ci": {
+      "col": 3,
+      "row": 11
+    },
+    "tao-qian": {
+      "col": 0,
+      "row": 12
+    },
+    "wang-yun": {
+      "col": 1,
+      "row": 12
+    },
+    "wei-yan": {
+      "col": 2,
+      "row": 12
+    },
+    "xiahou-yuan": {
+      "col": 3,
+      "row": 12
+    },
+    "xu-shu": {
+      "col": 0,
+      "row": 13
+    },
+    "xun-yu": {
+      "col": 1,
+      "row": 13
+    },
+    "yan-liang": {
+      "col": 2,
+      "row": 13
+    },
+    "yan-yan": {
+      "col": 3,
+      "row": 13
+    },
+    "yuan-shao": {
+      "col": 0,
+      "row": 14
+    },
+    "yuan-shu": {
+      "col": 1,
+      "row": 14
     },
     "zhang-fei": {
       "col": 2,
-      "row": 0
+      "row": 14
     },
-    "cao-cao": {
+    "zhang-he": {
       "col": 3,
-      "row": 0
-    },
-    "sun-quan": {
-      "col": 0,
-      "row": 1
-    },
-    "zhuge-liang": {
-      "col": 1,
-      "row": 1
-    },
-    "lu-bu": {
-      "col": 2,
-      "row": 1
-    },
-    "zhou-yu": {
-      "col": 3,
-      "row": 1
-    },
-    "sima-yi": {
-      "col": 0,
-      "row": 2
-    },
-    "zhao-yun": {
-      "col": 1,
-      "row": 2
-    },
-    "yuan-shao": {
-      "col": 2,
-      "row": 2
-    },
-    "dong-zhuo": {
-      "col": 3,
-      "row": 2
+      "row": 14
     },
     "zhang-jiao": {
       "col": 0,
-      "row": 3
+      "row": 15
+    },
+    "zhang-liao": {
+      "col": 1,
+      "row": 15
+    },
+    "zhang-lu": {
+      "col": 2,
+      "row": 15
+    },
+    "zhang-zhao": {
+      "col": 3,
+      "row": 15
+    },
+    "zhao-yun": {
+      "col": 0,
+      "row": 16
+    },
+    "zhou-yu": {
+      "col": 1,
+      "row": 16
+    },
+    "zhuge-liang": {
+      "col": 2,
+      "row": 16
     }
   }
 }
