@@ -2,7 +2,7 @@
   "cellW": 64,
   "cellH": 80,
   "cols": 8,
-  "rowCount": 1,
+  "rowCount": 2,
   "cells": {
     "liu-bei": {
       "col": 0,
@@ -27,6 +27,18 @@
     "zhuge-liang": {
       "col": 5,
       "row": 0
+    },
+    "lu-bu": {
+      "col": 6,
+      "row": 0
+    },
+    "zhou-yu": {
+      "col": 7,
+      "row": 0
+    },
+    "sima-yi": {
+      "col": 0,
+      "row": 1
     }
   }
 }

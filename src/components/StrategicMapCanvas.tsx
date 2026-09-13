@@ -37,8 +37,14 @@ export type StrategicMapCanvasProps = {
 
 const LOGIC_W = 1000;
 const LOGIC_H = 700;
-const TILE = ATLAS.tile;
+const TILE = ATLAS.worldTile;
 const HIT = 44;
+
+const CITY_SRC: Record<1 | 2 | 3, string> = {
+  1: "/assets/pixel-times/terrain/city-capital.png",
+  2: "/assets/pixel-times/terrain/city-major.png",
+  3: "/assets/pixel-times/terrain/city-county.png",
+};
 
 const SINGLE_BASE: Record<string, number> = {
   plain: 0,
@@ -197,40 +203,6 @@ function anchorStyle(anchor: LabelAnchor): CSSProperties {
   return { top: "100%", left: "50%", transform: "translateX(-50%)" };
 }
 
-function iconSize(tier: 1 | 2 | 3): number {
-  if (tier === 1) return 22;
-  if (tier === 2) return 16;
-  return 12;
-}
-
-function NodeGlyph({ tier, active }: { tier: 1 | 2 | 3; active: boolean }) {
-  const size = iconSize(tier);
-  const stroke = active ? "#f0dc8a" : "#d8b74a";
-  const fill = active ? "#1c2f5e" : "#0a1226";
-  if (tier === 1) {
-    return (
-      <svg width={size} height={size} viewBox="0 0 22 22" aria-hidden="true">
-        <rect x="3" y="8" width="16" height="11" fill={fill} stroke={stroke} strokeWidth="1.5" />
-        <polygon points="2,8 11,2 20,8" fill={fill} stroke={stroke} strokeWidth="1.5" />
-        <rect x="9" y="13" width="4" height="6" fill={stroke} />
-      </svg>
-    );
-  }
-  if (tier === 2) {
-    return (
-      <svg width={size} height={size} viewBox="0 0 16 16" aria-hidden="true">
-        <rect x="2" y="4" width="12" height="10" fill={fill} stroke={stroke} strokeWidth="1.5" />
-        <rect x="6" y="8" width="4" height="6" fill={stroke} />
-      </svg>
-    );
-  }
-  return (
-    <svg width={size} height={size} viewBox="0 0 12 12" aria-hidden="true">
-      <polygon points="6,1 11,6 6,11 1,6" fill={fill} stroke={stroke} strokeWidth="1.4" />
-    </svg>
-  );
-}
-
 export function StrategicMapCanvas({
   nodes,
   edges,
@@ -279,15 +251,20 @@ export function StrategicMapCanvas({
     img.onload = () => {
       if (cancelled) return;
       ctx.imageSmoothingEnabled = false;
+      const cw = GRID_COLS * TILE;
+      const ch = GRID_ROWS * TILE;
+      if (canvas.width !== cw) canvas.width = cw;
+      if (canvas.height !== ch) canvas.height = ch;
+      ctx.imageSmoothingEnabled = false;
       ctx.fillStyle = "#060a14";
-      ctx.fillRect(0, 0, LOGIC_W, LOGIC_H);
+      ctx.fillRect(0, 0, cw, ch);
       for (let r = 0; r < GRID_ROWS; r++) {
         for (let c = 0; c < GRID_COLS; c++) {
           blitTile(ctx, img, terrainIndex(grid, c, r), c * TILE, r * TILE);
         }
       }
     };
-    img.src = ATLAS.tiles;
+    img.src = ATLAS.worldTiles;
     return () => {
       cancelled = true;
     };
@@ -302,8 +279,8 @@ export function StrategicMapCanvas({
       >
         <canvas
           ref={canvasRef}
-          width={LOGIC_W}
-          height={LOGIC_H}
+          width={GRID_COLS * TILE}
+          height={GRID_ROWS * TILE}
           aria-hidden="true"
           className="pixelated absolute inset-0 block h-full w-full bg-[var(--color-eik-void)]"
           style={{ imageRendering: "pixelated" }}
@@ -376,7 +353,14 @@ export function StrategicMapCanvas({
                       : undefined,
                 }}
               >
-                <NodeGlyph tier={node.tier} active={selected || lit} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={CITY_SRC[node.tier]}
+                  alt=""
+                  className="pixelated pointer-events-none"
+                  width={node.tier === 1 ? 48 : node.tier === 2 ? 32 : 24}
+                  height={node.tier === 1 ? 48 : node.tier === 2 ? 32 : 24}
+                />
               </span>
               {showLabel ? (
                 <span

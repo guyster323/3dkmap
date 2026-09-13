@@ -18,6 +18,7 @@ export type UnitKind =
 
 export const ATLAS = {
   tiles: "/assets/eiketsu/tiles32.png",
+  worldTiles: "/assets/pixel-times/terrain/tiles16.png",
   units: "/assets/eiketsu/units.png",
   officers: "/assets/eiketsu/units-officer.png",
   kao: "/assets/eiketsu/kao.png",
@@ -25,6 +26,7 @@ export const ATLAS = {
   ptActors: "/assets/pixel-times/scene-actors.png",
   ptMap: "/assets/pixel-times/map-characters.png",
   tile: 32,
+  worldTile: 16,
   tileCols: 16,
   unitW: 32,
   unitH: 64,

@@ -28,7 +28,17 @@ SIZE = {
     "sceneBackground": (480, 270),
 }
 
-MASTER_IDS = ["liu-bei", "guan-yu", "zhang-fei", "cao-cao", "sun-quan", "zhuge-liang"]
+MASTER_IDS = [
+    "liu-bei",
+    "guan-yu",
+    "zhang-fei",
+    "cao-cao",
+    "sun-quan",
+    "zhuge-liang",
+    "lu-bu",
+    "zhou-yu",
+    "sima-yi",
+]
 MAGENTA = (255, 0, 255, 255)
 
 

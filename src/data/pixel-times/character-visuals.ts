@@ -189,7 +189,12 @@ export const CHARACTER_VISUALS: Record<string, CharacterVisual> = {
     secondaryColor: "#C9A227",
     factionAccent: "#8A2A4A",
     silhouetteNotes: "Plume taller than any other helm; no beard.",
-    referenceAssets: {},
+    referenceAssets: {
+      master: "/assets/pixel-times/masters/lu-bu.png",
+      portrait: "/assets/pixel-times/portraits/lu-bu.png",
+      mapSprite: "/assets/pixel-times/map-sprites/lu-bu.png",
+      sceneActor: "/assets/pixel-times/scene-actors/lu-bu-f0.png",
+    },
   },
   "zhou-yu": {
     characterId: "zhou-yu",
@@ -207,7 +212,12 @@ export const CHARACTER_VISUALS: Record<string, CharacterVisual> = {
     secondaryColor: "#C9A227",
     factionAccent: "#C47820",
     silhouetteNotes: "Beardless Wu commander; slimmer than Sun Quan, no fan.",
-    referenceAssets: {},
+    referenceAssets: {
+      master: "/assets/pixel-times/masters/zhou-yu.png",
+      portrait: "/assets/pixel-times/portraits/zhou-yu.png",
+      mapSprite: "/assets/pixel-times/map-sprites/zhou-yu.png",
+      sceneActor: "/assets/pixel-times/scene-actors/zhou-yu-f0.png",
+    },
   },
   "sima-yi": {
     characterId: "sima-yi",
@@ -225,7 +235,12 @@ export const CHARACTER_VISUALS: Record<string, CharacterVisual> = {
     secondaryColor: "#6B2A2A",
     factionAccent: "#8B1A1A",
     silhouetteNotes: "Robe, not armor; greyer and more stooped than Cao Cao.",
-    referenceAssets: {},
+    referenceAssets: {
+      master: "/assets/pixel-times/masters/sima-yi.png",
+      portrait: "/assets/pixel-times/portraits/sima-yi.png",
+      mapSprite: "/assets/pixel-times/map-sprites/sima-yi.png",
+      sceneActor: "/assets/pixel-times/scene-actors/sima-yi-f0.png",
+    },
   },
 };
 

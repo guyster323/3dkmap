@@ -1,0 +1,60 @@
+# Score-up — break 90
+
+Latest honest total **76/100** (`docs/qa/scoreup/`, after 16px tiles + 여포/주유/사마의). Prompt.md fails a wave under 90 even if `verify` is green. Working list: idea → status.
+
+Target rubric (Prompt / plan):
+
+| Criterion | Max | Now | Gap |
+|---|---|---|---|
+| Map dominance | 25 | 17 | 8 |
+| Pixel-art consistency | 20 | 14 | 6 |
+| UI chrome | 15 | 13 | 2 |
+| Hierarchy | 10 | 8 | 2 |
+| Character consistency | 10 | 9 | 1 |
+| Event banners | 10 | 7 | 3 |
+| Atmosphere | 5 | 4 | 1 |
+| Mobile | 5 | 4 | 1 |
+| **Total** | **100** | **76** | **24** |
+
+## Map dominance (14 → 22+)
+
+1. **16px world tiles, 64×44 grid** (upsample + carve Shandong / Bohai / Korea / Yangtze). Integer scale. Battle maps stay 32px.
+2. **¾ lighting on tiles** (UL key, SE shadow, tree crowns, not RPG Maker top-down grass).
+3. **City-tier landmarks** as overlay sprites: village 2×2, county 3×3, major 4×4, capital 5×5. 장안/낙양/국내성 must not be 1-tile huts.
+4. Hide/collapse trees by default on 375; map ≥ 50% of first screen.
+5. Do not invent `STRATEGIC_TERRITORIES`.
+
+## Pixel-art consistency (12 → 18+)
+
+1. One world tilesheet in the same navy/gold/low-chroma grammar as `.eik-win`.
+2. Scene backgrounds and banners already Imagine; **crop banners from scene BGs** so they match.
+3. Kill remaining chalky olive 32px world blit on `/world`.
+
+## Character consistency (8 → 9+)
+
+1. Master 6 already distinct; **edit-chain** idle frame 1 from Imagine (weight shift), not 1px Pillow.
+2. Add **여포 · 주유 · 사마의** via Imagine masters (new Grok thread / Orca worker if this thread 429s).
+3. Wire those ids through `atlas.ts` the same as the six.
+4. Lu Bu in 호로관 scene must not show kao compositor.
+
+## Event banners (7 → 9+)
+
+1. Resize Imagine scene BGs to 320×180 for banner idle (same painting).
+2. Hover = brighter gold frame only (CSS), no second painting required.
+
+## Chrome / hierarchy / atmosphere / mobile
+
+1. Chrome: keep 4-layer windows; shrink world header padding.
+2. Hierarchy: volume timeline one row; 전역도 label smaller.
+3. Atmosphere: fire 4-frame on 적벽 BG optional later; smoke CSS not required for 90.
+4. Mobile: trees in flow already; **default collapse tree bodies** on `<md` so map is visible without scroll.
+
+## Rate-limit / thread strategy
+
+- Imagine team 429 is **shared quota**, not always per-thread. Still: spawn an Orca **Grok** worker on `pixel-times-v2` for character Imagine while ROOT does tiles (no API).
+- If worker also 429: **Pillow ¾ tiles + landmarks** still move map score without Imagine.
+- Never stall the whole project on Imagine.
+
+## Stop condition
+
+Re-score from four-width screenshots of `/` and `/world` plus the three scenes. Iterate the highest-gap row until **≥ 90** or a hard external blocker (Imagine down **and** tiles already shipped).

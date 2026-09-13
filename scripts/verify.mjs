@@ -4,9 +4,10 @@ const base = "http://localhost:3000";
 const fails = [];
 
 const PT_ASSETS = [
-  ["/assets/pixel-times/portrait-atlas.png", 512, 80],
-  ["/assets/pixel-times/scene-actors.png", 192, 192],
-  ["/assets/pixel-times/map-characters.png", 128, 128],
+  ["/assets/pixel-times/portrait-atlas.png", 512, 160],
+  ["/assets/pixel-times/scene-actors.png", 192, 320],
+  ["/assets/pixel-times/map-characters.png", 128, 192],
+  ["/assets/pixel-times/terrain/tiles16.png", 256, 160],
   ["/assets/pixel-times/event-banners/v01-e04.png", 320, 180],
   ["/assets/pixel-times/event-banners/v05-e03.png", 320, 180],
   ["/assets/pixel-times/event-banners/v26-e01.png", 320, 180],
