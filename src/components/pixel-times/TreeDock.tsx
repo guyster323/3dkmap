@@ -20,8 +20,20 @@ export function TreeDock({ openId, onOpen, children, collapsed = false }: TreeDo
 
   return (
     <div
+      role="navigation"
+      aria-label="Pixel Times 나무 메뉴"
       className="eik-win flex min-w-0 max-w-[calc(100vw-1rem)] flex-col overflow-hidden"
       style={{ width: collapsed ? 48 : "min(var(--pt-tree-w), calc(100vw - 1rem))" }}
+      onKeyDown={(e) => {
+        if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+        e.preventDefault();
+        const i = TREE_IDS.indexOf((open ?? "book") as TreeId);
+        const next =
+          e.key === "ArrowDown"
+            ? TREE_IDS[(i + 1) % TREE_IDS.length]
+            : TREE_IDS[(i - 1 + TREE_IDS.length) % TREE_IDS.length];
+        setOpen(next);
+      }}
     >
       {TREE_IDS.map((id) => {
         const expanded = !collapsed && open === id;

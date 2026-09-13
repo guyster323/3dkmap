@@ -14,6 +14,7 @@ import { GRID_COLS, GRID_ROWS } from "@/data/terrain/strategic-terrain";
 import { ATLAS } from "@/lib/atlas";
 import { FACTION_BANNER } from "@/lib/eiketsu";
 import { getPlace } from "@/lib/content";
+import { getStrategicOverlay } from "@/data/pixel-times";
 
 export type StrategicMapCanvasProps = {
   nodes: StrategicNode[];
@@ -310,6 +311,26 @@ export function StrategicMapCanvas({
                   width={CITY_SRC[node.tier].w}
                   height={CITY_SRC[node.tier].h}
                 />
+                {getStrategicOverlay(node.placeId)?.ship ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src="/assets/pixel-times/terrain/landmark-ship.png"
+                    alt=""
+                    width={48}
+                    height={32}
+                    className="pixelated pointer-events-none absolute -right-6 top-0"
+                  />
+                ) : null}
+                {getStrategicOverlay(node.placeId)?.army ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src="/assets/pixel-times/terrain/landmark-army.png"
+                    alt=""
+                    width={40}
+                    height={28}
+                    className="pixelated pointer-events-none absolute -left-5 bottom-0"
+                  />
+                ) : null}
               </span>
               {showLabel ? (
                 <span

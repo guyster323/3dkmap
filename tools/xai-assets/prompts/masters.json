@@ -1,0 +1,19 @@
+{
+  "styleLock": "Original 16-bit SNES strategy-RPG pixel art, 1px navy outlines, UL light, magenta #FF00FF backdrop for characters, no text.",
+  "characters": [
+    "liu-bei", "guan-yu", "zhang-fei", "cao-cao", "sun-quan", "zhuge-liang",
+    "lu-bu", "zhou-yu", "sima-yi", "zhao-yun", "yuan-shao", "dong-zhuo", "zhang-jiao"
+  ],
+  "families": {
+    "terrain": "¾ landmask world-map.png",
+    "city": "capital/major Imagine compounds",
+    "castle": "city-capital.png",
+    "port": "landmark-port.png",
+    "ships": "landmark-ship.png",
+    "armies": "landmark-army.png",
+    "portraits": "64x80 atlas",
+    "scene-actors": "48x64 x2",
+    "event-banners": "320x180 crops of scene BGs",
+    "scene-backgrounds": "480x270 Imagine stills"
+  }
+}

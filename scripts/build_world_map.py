@@ -306,18 +306,48 @@ def city(kind: str) -> Image.Image:
 
 def match_banners() -> None:
     pairs = [
-        ("taoyuan.png", "v01-e04.png"),
-        ("hulao.png", "v05-e03.png"),
-        ("chibi.png", "v26-e01.png"),
+        ("taoyuan.png", "v01-e04.png", 0),
+        ("hulao.png", "v05-e03.png", 0),
+        ("chibi.png", "v26-e01.png", 0),
+        ("hulao.png", "v01-e01.png", 40),
+        ("chibi.png", "v06-e01.png", 80),
+        ("chibi.png", "v16-e03.png", 20),
+        ("taoyuan.png", "v21-e02.png", 60),
+        ("hulao.png", "v23-e02.png", 90),
+        ("hulao.png", "v44-e01.png", 30),
+        ("hulao.png", "v58-e01.png", 110),
+        ("taoyuan.png", "ev-184-goguryeo.png", 100),
     ]
     BANNER.mkdir(parents=True, exist_ok=True)
-    for src_name, dest_name in pairs:
+    for src_name, dest_name, dx in pairs:
         src = BG / src_name
         if not src.exists():
             continue
         im = Image.open(src).convert("RGBA")
-        im.resize((320, 180), Image.Resampling.NEAREST).save(BANNER / dest_name)
+        w, h = im.size
+        x0 = min(dx, max(0, w - 200))
+        im.crop((x0, 0, w, h)).resize((320, 180), Image.Resampling.NEAREST).save(BANNER / dest_name)
         print("banner", dest_name)
+
+
+def landmarks() -> None:
+    ship = Image.new("RGBA", (48, 32), (0, 0, 0, 0))
+    d = ImageDraw.Draw(ship)
+    d.polygon([(4, 22), (22, 8), (44, 22)], fill=(40, 32, 28, 255))
+    d.rectangle((20, 4, 24, 20), fill=(180, 48, 36, 255))
+    ship.save(OUT / "landmark-ship.png")
+    army = Image.new("RGBA", (40, 28), (0, 0, 0, 0))
+    d = ImageDraw.Draw(army)
+    d.ellipse((8, 16, 32, 26), fill=(20, 16, 12, 160))
+    d.rectangle((16, 4, 20, 18), fill=(194, 59, 34, 255))
+    d.polygon([(12, 18), (18, 8), (24, 18)], fill=(80, 70, 58, 255))
+    army.save(OUT / "landmark-army.png")
+    port = Image.new("RGBA", (40, 28), (0, 0, 0, 0))
+    d = ImageDraw.Draw(port)
+    d.rectangle((2, 16, 38, 26), fill=(70, 90, 110, 255))
+    d.rectangle((8, 8, 20, 18), fill=(120, 80, 50, 255))
+    port.save(OUT / "landmark-port.png")
+    print("landmarks")
 
 
 def main() -> None:
@@ -342,6 +372,7 @@ def main() -> None:
         city(k).save(OUT / f"city-{k}.png")
         print("city", k)
     match_banners()
+    landmarks()
 
 
 if __name__ == "__main__":

@@ -39,6 +39,22 @@
     "sima-yi": {
       "col": 0,
       "row": 1
+    },
+    "zhao-yun": {
+      "col": 1,
+      "row": 1
+    },
+    "yuan-shao": {
+      "col": 2,
+      "row": 1
+    },
+    "dong-zhuo": {
+      "col": 3,
+      "row": 1
+    },
+    "zhang-jiao": {
+      "col": 4,
+      "row": 1
     }
   }
 }

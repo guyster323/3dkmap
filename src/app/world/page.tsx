@@ -18,7 +18,7 @@ import {
   VolumeTitleplate,
 } from "@/components/pixel-times";
 import { STRATEGIC_EDGES, STRATEGIC_NODES, STRATEGIC_TERRITORIES } from "@/data/terrain";
-import { eventVisualsForEpisode, getEventScene, type TreeId } from "@/data/pixel-times";
+import { eventVisualsOnMap, getEventScene, type TreeId } from "@/data/pixel-times";
 import {
   episodeNearestYear,
   episodesAround,
@@ -64,7 +64,10 @@ function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: strin
   );
   const live = regionFilter ? liveAll.filter((e) => e.region === regionFilter) : liveAll;
   const highlight = liveAll.map((e) => e.placeId).filter((pid): pid is string => Boolean(pid));
-  const banners = eventVisualsForEpisode(episode.id);
+  const banners = eventVisualsOnMap(
+    episode.id,
+    liveAll.map((e) => e.id),
+  );
   const scene = sceneId ? getEventScene(sceneId) : undefined;
 
   const goEpisode = (id: string) => {

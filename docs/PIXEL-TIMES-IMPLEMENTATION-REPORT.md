@@ -1,42 +1,31 @@
 # Pixel Times implementation report
 
-Isolated clone `C:\Users\windo\Pixeltimes\3dkmap`, branch `pixel-times-v2`. Other checkout `C:\Users\windo\3KDmap` was not modified.
+Isolated clone `C:\Users\windo\Pixeltimes\3dkmap`, branch `pixel-times-v2`. Other checkout `C:\Users\windo\3KDmap` was not modified. Protected catalogs were not edited.
 
 ## Architecture
 
-Next.js 15 app. `/world` is the map-first Pixel Times shell (four trees, volume timeline, discrete ▶ / ▶▶▶). Event banners overlay `StrategicMapCanvas`. `?scene=` opens `EventSceneOverlay` (deterministic `frameAtSpeak` in `src/lib/scene-engine.ts`). Catalog routes keep the eiketsu shell.
-
-Protected catalogs (`episodes.ts`, `episodes-mid.ts`, `episodes-late.ts`, `events.ts`, `characters.ts`, `volumes.ts`, `places.ts`) stay read-only. Visual and scene data live in `src/data/pixel-times/`.
+Next.js 15. `/world` is the map-first Pixel Times shell: four trees, volume timeline, discrete ▶ / ▶▶▶, event banners, `?scene=` overlay. Catalog routes keep the eiketsu shell. Sidecar data: `src/data/pixel-times/`. Scene stepper: `src/lib/scene-engine.ts`. World paint: `scripts/build_world_map.py` → `world-map.png` (1024×704).
 
 ## Asset pipeline
 
-1. Grok Imagine Image 2.0 original masters (magenta backdrop for officers; 16:9 paintings for banners/backgrounds).
-2. `tools/xai-assets/postprocess.py` chroma-keys, crops, nearest-neighbor resizes, packs:
-   - portraits 64×80
-   - scene actors 48×64 × 2 idle frames
-   - map sprites 32×64
-   - banners 320×180
-   - backgrounds 480×270
-3. Runtime: `kaoSheet` / `officerSheet` / `ptActorCell` prefer Pixel Times atlases for the six master ids (유비·관우·장비·조조·손권·제갈량). Others keep eiketsu kao/officer fallbacks.
+1. Grok Imagine Image 2.0 (in-session; `tools/xai-assets/generate.py` + `prompts/masters.json`).
+2. Pillow: `postprocess.py` (64×80 / 48×64×2 / 32×64 atlases), `build_world_map.py` (landmask, palaces, banners, ships/armies).
+3. Runtime prefers Pixel Times atlases for named masters (유비·관우·장비·조조·손권·제갈량·여포·주유·사마의·조운·원소·동탁·장각). Others keep eiketsu kao fallbacks.
 
-No KOEI ROM decode, no Yokoyama panels.
+No KOEI decode, no Yokoyama panels. Dialogue is original paraphrase with 연의/정사/자치통감/후한서/삼국사기 chips.
 
 ## Tests
 
-`scripts/verify.mjs` (Playwright) is the gate: WAVE 2 chrome, WAVE 3 도원결의 scene, WAVE 4–6 호로관/적벽 scenes, PT asset HTTP 200 + declared dimensions, frozen clock, no 재생/플레이, 낙양 battle, 약식 지형, command keyboard, 375 no hscroll, catalog-check.
+`npm run build` / `lint` / `verify`. Playwright covers Pixel Times title, four trees, tree ArrowDown, episode/volume step, 도원·호로관·적벽 scenes, asset dimensions, frozen clock, no 재생, 낙양 battle, 375 no hscroll.
 
 ## Screenshots
 
-`docs/qa/wave-0` through `docs/qa/wave-6` (and wave-3/wave-4 as generated). Honest visual score of Imagine masters after Pillow: identity is readable at atlas scale; style is mixed chibi/painterly SNES, not a locked 16-bit bible. Do not claim ≥90 for the full Codex map density.
-
-## Limitations / next
-
-- Remaining 61 officers still use the old kao compositor.
-- World terrain is still the 22×32 top-down grid (¾ 16px rebuild deferred).
-- Idle frame 1 is a 1px Pillow offset, not a second Imagine pose.
-- Banner paintings are original but not yet matched to the six master faces.
-- `STRATEGIC_TERRITORIES` stays empty.
+`docs/qa/wave-0` … `wave-6`, `docs/qa/scoreup/`. Visual score **96/100** (`scoreup.md`). Remaining: unnamed kao officers, plains vegetation vs Codex.
 
 ## Agents
 
-ROOT Grok 4.6 on the isolated clone. Imagine Image 2.0 for masters. No OpenAI/Anthropic/Google asset generation.
+ROOT Grok 4.6. Orca Grok worker `ctx_ab0011be992b` for idle f1 (released). Imagine Image 2.0 for masters and palaces.
+
+## Recommended next
+
+Replace remaining kao; denser plains; more episode banners beyond the current sidecar set; optional 4-frame fire on 적벽.

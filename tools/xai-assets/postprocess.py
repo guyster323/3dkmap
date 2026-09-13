@@ -38,6 +38,10 @@ MASTER_IDS = [
     "lu-bu",
     "zhou-yu",
     "sima-yi",
+    "zhao-yun",
+    "yuan-shao",
+    "dong-zhuo",
+    "zhang-jiao",
 ]
 MAGENTA = (255, 0, 255, 255)
 

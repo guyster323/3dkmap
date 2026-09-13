@@ -2,7 +2,7 @@
   "cellW": 48,
   "cellH": 64,
   "cols": 4,
-  "rowCount": 5,
+  "rowCount": 7,
   "cells": {
     "liu-bei:0": {
       "col": 0,
@@ -75,6 +75,38 @@
     "sima-yi:1": {
       "col": 1,
       "row": 4
+    },
+    "zhao-yun:0": {
+      "col": 2,
+      "row": 4
+    },
+    "zhao-yun:1": {
+      "col": 3,
+      "row": 4
+    },
+    "yuan-shao:0": {
+      "col": 0,
+      "row": 5
+    },
+    "yuan-shao:1": {
+      "col": 1,
+      "row": 5
+    },
+    "dong-zhuo:0": {
+      "col": 2,
+      "row": 5
+    },
+    "dong-zhuo:1": {
+      "col": 3,
+      "row": 5
+    },
+    "zhang-jiao:0": {
+      "col": 0,
+      "row": 6
+    },
+    "zhang-jiao:1": {
+      "col": 1,
+      "row": 6
     }
   }
 }

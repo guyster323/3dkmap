@@ -5,13 +5,17 @@ const fails = [];
 
 const PT_ASSETS = [
   ["/assets/pixel-times/portrait-atlas.png", 512, 160],
-  ["/assets/pixel-times/scene-actors.png", 192, 320],
-  ["/assets/pixel-times/map-characters.png", 128, 192],
+  ["/assets/pixel-times/scene-actors.png", 192, 448],
+  ["/assets/pixel-times/map-characters.png", 128, 256],
   ["/assets/pixel-times/terrain/tiles16.png", 256, 160],
   ["/assets/pixel-times/terrain/world-map.png", 1024, 704],
   ["/assets/pixel-times/event-banners/v01-e04.png", 320, 180],
   ["/assets/pixel-times/event-banners/v05-e03.png", 320, 180],
   ["/assets/pixel-times/event-banners/v26-e01.png", 320, 180],
+  ["/assets/pixel-times/event-banners/v01-e01.png", 320, 180],
+  ["/assets/pixel-times/event-banners/v16-e03.png", 320, 180],
+  ["/assets/pixel-times/terrain/landmark-ship.png", 48, 32],
+  ["/assets/pixel-times/terrain/landmark-army.png", 40, 28],
   ["/assets/pixel-times/scene-backgrounds/taoyuan.png", 480, 270],
   ["/assets/pixel-times/scene-backgrounds/hulao.png", 480, 270],
   ["/assets/pixel-times/scene-backgrounds/chibi.png", 480, 270],
@@ -142,6 +146,13 @@ async function run(viewport, label) {
   await check(`${label} tree region`, await seen(page, page.getByRole("button", { name: "주요 지역" })));
   await check(`${label} tree event`, await seen(page, page.getByRole("button", { name: "주요 사건" })));
   await check(`${label} tree people`, await seen(page, page.getByRole("button", { name: "주요 인물" })));
+  await page.getByRole("button", { name: "전략 삼국지 책" }).focus();
+  await page.keyboard.press("ArrowDown");
+  await check(
+    `${label} tree keyboard`,
+    (await page.getByRole("button", { name: "주요 지역" }).getAttribute("aria-expanded")) === "true",
+  );
+  await page.getByRole("button", { name: "전략 삼국지 책" }).click();
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await check(`${label} chip samguk`, await seen(page, page.locator("li").filter({ hasText: /^삼국사기/ })));
   await page.getByRole("button", { name: "본편 수위" }).click();

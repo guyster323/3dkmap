@@ -15,6 +15,7 @@ export {
 export {
   EVENT_VISUALS,
   eventVisualsForEpisode,
+  eventVisualsOnMap,
   getEventVisual,
   type EventBannerStateArt,
   type EventVisual,

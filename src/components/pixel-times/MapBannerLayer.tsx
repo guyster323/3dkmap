@@ -21,11 +21,11 @@ export function MapBannerLayer({
   const byId = new Map(nodes.map((n) => [n.placeId, n]));
   return (
     <>
-      {visuals.map((visual) => {
+      {visuals.map((visual, i) => {
         const node = byId.get(visual.mapPlaceId ?? visual.placeId);
         if (!node) return null;
-        const left = Math.min(78, Math.max(4, (node.x / LOGIC_W) * 100 + 4));
-        const top = Math.min(72, Math.max(6, (node.y / LOGIC_H) * 100 - 8));
+        const left = Math.min(62, Math.max(4, (node.x / LOGIC_W) * 100 + 4 + (i % 2) * 8));
+        const top = Math.min(58, Math.max(8, (node.y / LOGIC_H) * 100 - 8 + i * 22));
         return (
           <div
             key={visual.id}

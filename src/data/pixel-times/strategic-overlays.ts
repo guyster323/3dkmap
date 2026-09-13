@@ -16,10 +16,12 @@ export const STRATEGIC_OVERLAYS: Record<string, StrategicOverlay> = {
   xuchang: { placeId: "xuchang", cityTier: 3 },
   ye: { placeId: "ye", cityTier: 3 },
   chengdu: { placeId: "chengdu", cityTier: 4 },
-  jianye: { placeId: "jianye", cityTier: 3 },
+  jianye: { placeId: "jianye", cityTier: 3, ship: "yangtze-fleet" },
   gongnae: { placeId: "gongnae", cityTier: 3 },
   hulao: { placeId: "hulao", cityTier: 2, landmark: "pass-gate" },
   chibi: { placeId: "chibi", cityTier: 1, ship: "yangtze-fleet" },
+  xiapi: { placeId: "xiapi", cityTier: 2, army: "camp" },
+  guandu: { placeId: "guandu", cityTier: 2, army: "camp" },
   zhuo: { placeId: "zhuo", cityTier: 2 },
   taoyuan: { placeId: "taoyuan", cityTier: 1 },
 };
