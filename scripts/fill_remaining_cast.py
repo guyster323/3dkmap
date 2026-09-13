@@ -20,7 +20,7 @@ TEMPLATE = {
     "liu": "liu-bei",
     "cao": "cao-cao",
     "sun": "sun-quan",
-    "han": "cao-cao",
+    "han": "emperor-ling",
     "dong": "dong-zhuo",
     "lu-bu": "lu-bu",
     "yuan-shao": "yuan-shao",
