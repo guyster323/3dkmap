@@ -12,7 +12,13 @@ export {
   type SceneActor,
   type SceneOp,
 } from "./event-scenes";
-export { EVENT_VISUALS, getEventVisual, type EventBannerStateArt, type EventVisual } from "./event-visuals";
+export {
+  EVENT_VISUALS,
+  eventVisualsForEpisode,
+  getEventVisual,
+  type EventBannerStateArt,
+  type EventVisual,
+} from "./event-visuals";
 export { EPISODE_CAMERA_HINTS, getEpisodeCameraHint, type BookTimeline, type EpisodeCameraHint } from "./book-timelines";
 export {
   FACTION_TREE_ORDER,

@@ -71,6 +71,72 @@ export const EVENT_SCENES: Record<string, EventScene> = {
       { t: "wait", ms: 400 },
     ],
   },
+  "v05-e03": {
+    id: "v05-e03",
+    episodeId: "v05-e03",
+    title: "호로관의 여포",
+    background: "/assets/pixel-times/scene-backgrounds/hulao.png",
+    actors: [
+      { id: "lu-bu", characterId: "lu-bu", col: 12, row: 6, dir: 1 },
+      { id: "zhang-fei", characterId: "zhang-fei", col: 6, row: 10, dir: 0 },
+      { id: "guan-yu", characterId: "guan-yu", col: 8, row: 10, dir: 0 },
+      { id: "liu-bei", characterId: "liu-bei", col: 10, row: 10, dir: 0 },
+    ],
+    timeline: [
+      { t: "enter", actorId: "lu-bu", col: 12, row: 6, dir: 1 },
+      { t: "enter", actorId: "zhang-fei", col: 6, row: 10, dir: 0 },
+      { t: "enter", actorId: "guan-yu", col: 8, row: 10, dir: 0 },
+      { t: "enter", actorId: "liu-bei", col: 10, row: 10, dir: 0 },
+      {
+        t: "speak",
+        actorId: "lu-bu",
+        name: "여포",
+        body: "관문 앞에 누가 서든 한칼이다. 세 사람이 한꺼번에 와도 마찬가지다.",
+        sources: [{ kind: "연의", ref: "제5회 삼영전여포" }],
+      },
+      {
+        t: "speak",
+        actorId: "zhang-fei",
+        name: "장비",
+        body: "그 말은 여기까지다. 호로관에서 네 방천극을 받아 주마.",
+        sources: [{ kind: "연의", ref: "제5회" }],
+      },
+    ],
+  },
+  "v26-e01": {
+    id: "v26-e01",
+    episodeId: "v26-e01",
+    eventId: "ev-208-chibi",
+    title: "장강이 불타다",
+    background: "/assets/pixel-times/scene-backgrounds/chibi.png",
+    actors: [
+      { id: "zhou-yu", characterId: "zhou-yu", col: 5, row: 9, dir: 0 },
+      { id: "huang-gai", characterId: "huang-gai", col: 8, row: 9, dir: 0 },
+      { id: "cao-cao", characterId: "cao-cao", col: 16, row: 7, dir: 1 },
+    ],
+    timeline: [
+      { t: "enter", actorId: "zhou-yu", col: 5, row: 9, dir: 0 },
+      { t: "enter", actorId: "huang-gai", col: 8, row: 9, dir: 0 },
+      { t: "enter", actorId: "cao-cao", col: 16, row: 7, dir: 1 },
+      {
+        t: "speak",
+        actorId: "zhou-yu",
+        name: "주유",
+        body: "바람이 동에서 온다. 화공을 쓸 자리는 여기다.",
+        sources: [
+          { kind: "정사", ref: "오서 주유전" },
+          { kind: "자치통감", ref: "권65 적벽" },
+        ],
+      },
+      {
+        t: "speak",
+        actorId: "cao-cao",
+        name: "조조",
+        body: "연환은 파도를 가라앉히려 한 수였다. 불이 옮으면 배가 오히려 덫이 된다.",
+        sources: [{ kind: "정사", ref: "위서 무제기" }],
+      },
+    ],
+  },
 };
 
 export function getEventScene(episodeId: string): EventScene | undefined {

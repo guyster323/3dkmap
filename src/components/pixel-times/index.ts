@@ -5,3 +5,7 @@ export { VolumeTitleplate } from "./VolumeTitleplate";
 export { VolumeTimeline } from "./VolumeTimeline";
 export { EpisodeStepper } from "./EpisodeStepper";
 export { BookTree, RegionTree, EventTree, PeopleTree } from "./WorldTrees";
+export { EventBanner } from "./EventBanner";
+export { MapBannerLayer } from "./MapBannerLayer";
+export { EventSceneOverlay } from "./EventSceneOverlay";
+export { SceneActorSprite } from "./SceneActorSprite";

@@ -8,7 +8,9 @@ import { DirectRecord, MatureToggle, useMature, notifyPrefs } from "@/components
 import {
   BookTree,
   EpisodeStepper,
+  EventSceneOverlay,
   EventTree,
+  MapBannerLayer,
   PeopleTree,
   RegionTree,
   TreeDock,
@@ -16,7 +18,7 @@ import {
   VolumeTitleplate,
 } from "@/components/pixel-times";
 import { STRATEGIC_EDGES, STRATEGIC_NODES, STRATEGIC_TERRITORIES } from "@/data/terrain";
-import type { TreeId } from "@/data/pixel-times";
+import { eventVisualsForEpisode, getEventScene, type TreeId } from "@/data/pixel-times";
 import {
   episodeNearestYear,
   episodesAround,
@@ -33,6 +35,7 @@ import { REGION_LABEL, type Episode, type RegionId, type WorldEvent } from "@/li
 function WorldInner() {
   const sp = useSearchParams();
   const id = sp.get("episode");
+  const sceneId = sp.get("scene");
   const year = Number(sp.get("year") ?? 0);
   let episode: Episode | undefined = id ? getEpisode(id) : undefined;
   if (!episode && year) episode = episodeNearestYear(year);
@@ -42,10 +45,10 @@ function WorldInner() {
     return <p className="p-6" style={{ color: "var(--color-eik-text-dim)" }}>열 수 있는 에피소드가 없습니다.</p>;
   }
 
-  return <StrategicWorld key={episode.id} episode={episode} />;
+  return <StrategicWorld key={episode.id} episode={episode} sceneId={sceneId} />;
 }
 
-function StrategicWorld({ episode }: { episode: Episode }) {
+function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: string | null }) {
   const router = useRouter();
   const volume = getVolume(episode.volume);
   const around = episodesAround(episode.id);
@@ -61,6 +64,8 @@ function StrategicWorld({ episode }: { episode: Episode }) {
   );
   const live = regionFilter ? liveAll.filter((e) => e.region === regionFilter) : liveAll;
   const highlight = liveAll.map((e) => e.placeId).filter((pid): pid is string => Boolean(pid));
+  const banners = eventVisualsForEpisode(episode.id);
+  const scene = sceneId ? getEventScene(sceneId) : undefined;
 
   const goEpisode = (id: string) => {
     const next = getEpisode(id);
@@ -68,6 +73,16 @@ function StrategicWorld({ episode }: { episode: Episode }) {
     savePrefs({ lastEpisodeId: next.id, lastVolume: next.volume });
     notifyPrefs();
     router.push(`/world?episode=${next.id}`);
+  };
+
+  const openScene = (id: string) => {
+    router.push(`/world?episode=${episode.id}&scene=${id}`);
+  };
+
+  const closeScene = () => {
+    const opener = sceneId ? document.getElementById(`pt-banner-${sceneId}`) : null;
+    router.push(`/world?episode=${episode.id}`);
+    window.setTimeout(() => opener?.focus(), 0);
   };
 
   const openPlace = (placeId: string) => {
@@ -138,9 +153,18 @@ function StrategicWorld({ episode }: { episode: Episode }) {
           selectedPlaceId={selectedPlace}
           highlight={highlight}
           onSelect={openPlace}
+          overlay={
+            <MapBannerLayer
+              visuals={banners}
+              nodes={STRATEGIC_NODES}
+              selectedId={sceneId ?? undefined}
+              onOpen={openScene}
+            />
+          }
         />
         <EikChronicle live={live} mature={mature} selectedPlace={selectedPlace} onPick={focusPlace} />
       </div>
+      {scene ? <EventSceneOverlay scene={scene} onClose={closeScene} /> : null}
     </main>
   );
 }

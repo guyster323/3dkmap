@@ -10,6 +10,8 @@ export type EventVisual = {
   episodeId?: string;
   eventId?: string;
   placeId: string;
+  /** Strategic-node id when placeId is not on the world graph (e.g. taoyuan → zhuo). */
+  mapPlaceId?: string;
   dateLabel: string;
   title: string;
   summary: string;
@@ -22,6 +24,7 @@ export const EVENT_VISUALS: Record<string, EventVisual> = {
     id: "v01-e04",
     episodeId: "v01-e04",
     placeId: "taoyuan",
+    mapPlaceId: "zhuo",
     dateLabel: "184년 봄",
     title: "도원결의",
     summary: "탁현 복숭아밭에서 세 사람이 형제를 맺는다. 의식은 연의의 무대다.",
@@ -53,4 +56,8 @@ export const EVENT_VISUALS: Record<string, EventVisual> = {
 
 export function getEventVisual(id: string): EventVisual | undefined {
   return EVENT_VISUALS[id];
+}
+
+export function eventVisualsForEpisode(episodeId: string): EventVisual[] {
+  return Object.values(EVENT_VISUALS).filter((v) => v.episodeId === episodeId);
 }

@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import type { StrategicEdge, StrategicNode, StrategicTerritory } from "@/data/terrain";
 import {
@@ -31,6 +32,7 @@ export type StrategicMapCanvasProps = {
   selectedPlaceId?: string;
   onSelect?: (placeId: string) => void;
   highlight?: string[];
+  overlay?: ReactNode;
 };
 
 const LOGIC_W = 1000;
@@ -236,6 +238,7 @@ export function StrategicMapCanvas({
   selectedPlaceId,
   onSelect,
   highlight = [],
+  overlay,
 }: StrategicMapCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -393,6 +396,7 @@ export function StrategicMapCanvas({
             </button>
           );
         })}
+        {overlay}
       </div>
     </div>
   );

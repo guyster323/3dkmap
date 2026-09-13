@@ -118,6 +118,31 @@ async function run(viewport, label) {
     /* fall through */
   }
   await check(`${label} episode select`, /episode=v01-e04/.test(page.url()), page.url());
+  const banner = page.getByRole("button", { name: "184년 봄 도원결의" });
+  await check(`${label} event banner`, await seen(page, banner));
+  await banner.scrollIntoViewIfNeeded();
+  await banner.click();
+  try {
+    await page.waitForURL(/scene=v01-e04/, { timeout: 8000 });
+  } catch {
+    /* fall through */
+  }
+  await check(`${label} scene open`, /scene=v01-e04/.test(page.url()) && (await seen(page, page.getByRole("dialog"))), page.url());
+  await check(`${label} scene dialogue`, await seen(page, page.getByText("복숭아밭에서 형제를 맺는다")));
+  await check(`${label} scene actor`, (await page.locator('[data-anim="idle-2"]').count()) > 0);
+  await page.getByRole("button", { name: "다음 대사" }).click();
+  await check(`${label} dialogue advance`, await seen(page, page.getByText("형님을 형으로 모시겠습니다")));
+  await page.getByRole("button", { name: "장면 닫기" }).click();
+  try {
+    await page.waitForURL((url) => !url.searchParams.has("scene"), { timeout: 8000 });
+  } catch {
+    /* fall through */
+  }
+  await check(
+    `${label} scene close`,
+    !/scene=/.test(page.url()) && (await page.getByRole("dialog").count()) === 0,
+    page.url(),
+  );
   await check(
     `${label} next episode disabled`,
     await page.getByRole("button", { name: "다음 장" }).isDisabled(),
