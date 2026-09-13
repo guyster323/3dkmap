@@ -4,6 +4,7 @@ import { useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { StrategicMapCanvas } from "@/components/StrategicMapCanvas";
 import { SourceBadge } from "@/components/eiketsu";
+import { KaoPortrait } from "@/components/KaoPortrait";
 import { DirectRecord, MatureToggle, useMature, notifyPrefs } from "@/components/MatureContext";
 import {
   BookTree,
@@ -24,6 +25,7 @@ import {
   episodesAround,
   eventsOverlapping,
   firstEpisodeOfVolume,
+  getCharacter,
   getEpisode,
   getPlace,
   getVolume,
@@ -112,6 +114,7 @@ function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: strin
               </p>
             </div>
             <div className="flex min-w-0 flex-wrap items-center gap-2">
+              <QuotePlate episode={episode} />
               <EpisodeStepper
                 hasPrevEpisode={Boolean(around.prev)}
                 hasNextEpisode={Boolean(around.next)}
@@ -172,6 +175,19 @@ function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: strin
   );
 }
 
+function QuotePlate({ episode }: { episode: Episode }) {
+  const c = getCharacter(episode.characterIds[0]);
+  if (!c) return null;
+  return (
+    <div className="eik-win eik-win--flat hidden max-w-[200px] items-center gap-2 p-1 md:flex">
+      <KaoPortrait character={c} size={40} />
+      <p className="eik-src min-w-0 leading-snug break-keep" style={{ color: "var(--color-eik-gold)" }}>
+        {c.nameKo}
+      </p>
+    </div>
+  );
+}
+
 function EikChronicle({
   live,
   mature,
@@ -184,7 +200,7 @@ function EikChronicle({
   onPick: (placeId: string) => void;
 }) {
   return (
-    <aside className="pointer-events-auto relative z-10 mx-2 mb-2 mt-2 max-h-[28vh] min-w-0 overflow-hidden lg:absolute lg:bottom-2 lg:right-2 lg:z-10 lg:mx-0 lg:mb-0 lg:mt-0 lg:w-[min(280px,calc(100vw-1rem))]">
+    <aside className="pointer-events-auto relative z-10 mx-2 mb-2 mt-2 max-h-[24vh] min-w-0 overflow-hidden lg:absolute lg:bottom-2 lg:right-2 lg:z-10 lg:mx-0 lg:mb-0 lg:mt-0 lg:w-[min(240px,calc(100vw-1rem))]">
       <div className="eik-win flex max-h-[36vh] min-w-0 flex-col overflow-hidden">
         <p className="eik-nameplate m-2">그 시각 사건</p>
         <ul className="scroll-thin min-w-0 flex-1 space-y-2 overflow-y-auto px-2 pb-2">
