@@ -3,6 +3,18 @@ import { chromium } from "playwright";
 const base = "http://localhost:3000";
 const fails = [];
 
+const PT_ASSETS = [
+  ["/assets/pixel-times/portrait-atlas.png", 512, 80],
+  ["/assets/pixel-times/scene-actors.png", 192, 192],
+  ["/assets/pixel-times/map-characters.png", 128, 128],
+  ["/assets/pixel-times/event-banners/v01-e04.png", 320, 180],
+  ["/assets/pixel-times/event-banners/v05-e03.png", 320, 180],
+  ["/assets/pixel-times/event-banners/v26-e01.png", 320, 180],
+  ["/assets/pixel-times/scene-backgrounds/taoyuan.png", 480, 270],
+  ["/assets/pixel-times/scene-backgrounds/hulao.png", 480, 270],
+  ["/assets/pixel-times/scene-backgrounds/chibi.png", 480, 270],
+];
+
 const HSCROLL_ROUTES = [
   "/",
   "/world",
@@ -38,6 +50,40 @@ async function seen(page, locator) {
 
 async function goto(page, path) {
   await page.goto(`${base}${path}`, { waitUntil: "networkidle" });
+}
+
+async function probeImage(page, path) {
+  return page.evaluate(async (p) => {
+    const r = await fetch(p);
+    if (!r.ok) return { ok: false, w: 0, h: 0, status: r.status };
+    const blob = await r.blob();
+    const bmp = await createImageBitmap(blob);
+    return { ok: true, w: bmp.width, h: bmp.height, status: r.status };
+  }, path);
+}
+
+async function openScene(page, episodeId, sceneId, bannerName, dialogueNeedle) {
+  await goto(page, `/world?episode=${episodeId}`);
+  const banner = page.getByRole("button", { name: bannerName });
+  const bannerOk = await seen(page, banner);
+  if (bannerOk) {
+    await banner.scrollIntoViewIfNeeded();
+    await banner.click();
+  } else {
+    await goto(page, `/world?episode=${episodeId}&scene=${sceneId}`);
+  }
+  try {
+    await page.waitForURL(new RegExp(`scene=${sceneId}`), { timeout: 8000 });
+  } catch {
+    /* fall through */
+  }
+  return {
+    banner: bannerOk,
+    url: /scene=/.test(page.url()),
+    dialog: await seen(page, page.getByRole("dialog")),
+    dialogue: await seen(page, page.getByText(dialogueNeedle)),
+    actor: (await page.locator('[data-anim="idle-2"]').count()) > 0,
+  };
 }
 
 async function hScrollBox(page) {
@@ -156,6 +202,29 @@ async function run(viewport, label) {
   await check(`${label} volume advance`, /episode=v02-e01/.test(page.url()), page.url());
   await check(`${label} no playback`, (await page.getByRole("button", { name: /재생|플레이/ }).count()) === 0);
 
+  const hulao = await openScene(page, "v05-e03", "v05-e03", "190년 봄 호로관의 여포", "관문 앞에 누가 서든");
+  await check(`${label} hulao banner`, hulao.banner);
+  await check(`${label} hulao scene`, hulao.url && hulao.dialog && hulao.dialogue && hulao.actor, JSON.stringify(hulao));
+  await page.getByRole("button", { name: "장면 닫기" }).click();
+  try {
+    await page.waitForURL((url) => !url.searchParams.has("scene"), { timeout: 8000 });
+  } catch {
+    /* fall through */
+  }
+  await check(`${label} hulao close`, !/scene=/.test(page.url()));
+
+  const chibi = await openScene(page, "v26-e01", "v26-e01", "208년 겨울 적벽 대전", "바람이 동에서 온다");
+  await check(`${label} chibi banner`, chibi.banner);
+  await check(`${label} chibi scene`, chibi.url && chibi.dialog && chibi.dialogue && chibi.actor, JSON.stringify(chibi));
+  await page.getByRole("button", { name: "장면 닫기" }).click();
+  try {
+    await page.waitForURL((url) => !url.searchParams.has("scene"), { timeout: 8000 });
+  } catch {
+    /* fall through */
+  }
+  await check(`${label} chibi close`, !/scene=/.test(page.url()));
+  await check(`${label} no playback after scenes`, (await page.getByRole("button", { name: /재생|플레이/ }).count()) === 0);
+
   if (wide) {
     const node = page.getByRole("button", { name: "낙양", exact: true });
     await node.scrollIntoViewIfNeeded();
@@ -234,6 +303,12 @@ async function run(viewport, label) {
   await check(`${label} atlas tiles`, Boolean(tilesRes?.ok()));
   await check(`${label} atlas units`, Boolean(unitsRes?.ok()));
   await check(`${label} atlas kao`, Boolean(kaoRes?.ok()));
+
+  await goto(page, "/");
+  for (const [path, w, h] of PT_ASSETS) {
+    const probe = await probeImage(page, path);
+    await check(`${label} pt asset ${path}`, probe.ok && probe.w === w && probe.h === h, JSON.stringify(probe));
+  }
 
   await goto(page, "/volumes/11");
   await check(`${label} vol11`, await seen(page, page.getByText("곡아의 거병")));

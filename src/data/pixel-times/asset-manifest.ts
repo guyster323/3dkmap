@@ -30,9 +30,15 @@ export type PtManifestEntry = {
   required: boolean;
 };
 
-/** Assets that WAVE 4+ must produce. WAVE 1 entries are declared, not yet required. */
+/** Packed sheets and stills the runtime and verify.mjs must serve. */
 export const PT_MANIFEST: PtManifestEntry[] = [
-  { path: PT_PATH.portraitAtlas, w: 512, h: 720, required: false },
-  { path: PT_PATH.sceneActorAtlas, w: 192, h: 576, required: false },
-  { path: PT_PATH.mapCharacterAtlas, w: 128, h: 576, required: false },
+  { path: PT_PATH.portraitAtlas, w: 512, h: 80, required: true },
+  { path: PT_PATH.sceneActorAtlas, w: 192, h: 192, required: true },
+  { path: PT_PATH.mapCharacterAtlas, w: 128, h: 128, required: true },
+  { path: `${PT_PATH.banners}v01-e04.png`, w: 320, h: 180, required: true },
+  { path: `${PT_PATH.banners}v05-e03.png`, w: 320, h: 180, required: true },
+  { path: `${PT_PATH.banners}v26-e01.png`, w: 320, h: 180, required: true },
+  { path: `${PT_PATH.backgrounds}taoyuan.png`, w: 480, h: 270, required: true },
+  { path: `${PT_PATH.backgrounds}hulao.png`, w: 480, h: 270, required: true },
+  { path: `${PT_PATH.backgrounds}chibi.png`, w: 480, h: 270, required: true },
 ];

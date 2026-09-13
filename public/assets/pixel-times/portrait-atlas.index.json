@@ -1,0 +1,32 @@
+{
+  "cellW": 64,
+  "cellH": 80,
+  "cols": 8,
+  "rowCount": 1,
+  "cells": {
+    "liu-bei": {
+      "col": 0,
+      "row": 0
+    },
+    "guan-yu": {
+      "col": 1,
+      "row": 0
+    },
+    "zhang-fei": {
+      "col": 2,
+      "row": 0
+    },
+    "cao-cao": {
+      "col": 3,
+      "row": 0
+    },
+    "sun-quan": {
+      "col": 4,
+      "row": 0
+    },
+    "zhuge-liang": {
+      "col": 5,
+      "row": 0
+    }
+  }
+}

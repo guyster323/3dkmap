@@ -1,0 +1,56 @@
+{
+  "cellW": 48,
+  "cellH": 64,
+  "cols": 4,
+  "rowCount": 3,
+  "cells": {
+    "liu-bei:0": {
+      "col": 0,
+      "row": 0
+    },
+    "liu-bei:1": {
+      "col": 1,
+      "row": 0
+    },
+    "guan-yu:0": {
+      "col": 2,
+      "row": 0
+    },
+    "guan-yu:1": {
+      "col": 3,
+      "row": 0
+    },
+    "zhang-fei:0": {
+      "col": 0,
+      "row": 1
+    },
+    "zhang-fei:1": {
+      "col": 1,
+      "row": 1
+    },
+    "cao-cao:0": {
+      "col": 2,
+      "row": 1
+    },
+    "cao-cao:1": {
+      "col": 3,
+      "row": 1
+    },
+    "sun-quan:0": {
+      "col": 0,
+      "row": 2
+    },
+    "sun-quan:1": {
+      "col": 1,
+      "row": 2
+    },
+    "zhuge-liang:0": {
+      "col": 2,
+      "row": 2
+    },
+    "zhuge-liang:1": {
+      "col": 3,
+      "row": 2
+    }
+  }
+}

@@ -51,7 +51,12 @@ export const CHARACTER_VISUALS: Record<string, CharacterVisual> = {
     secondaryColor: "#E8E0C8",
     factionAccent: "#4A8B4A",
     silhouetteNotes: "Tall soft turban, rounded shoulders, no spear.",
-    referenceAssets: {},
+    referenceAssets: {
+      master: "/assets/pixel-times/masters/liu-bei.png",
+      portrait: "/assets/pixel-times/portraits/liu-bei.png",
+      mapSprite: "/assets/pixel-times/map-sprites/liu-bei.png",
+      sceneActor: "/assets/pixel-times/scene-actors/liu-bei-f0.png",
+    },
   },
   "guan-yu": {
     characterId: "guan-yu",
@@ -69,7 +74,12 @@ export const CHARACTER_VISUALS: Record<string, CharacterVisual> = {
     secondaryColor: "#C23B22",
     factionAccent: "#4A8B4A",
     silhouetteNotes: "Vertical beard + oversized guandao; unmistakable at map scale.",
-    referenceAssets: {},
+    referenceAssets: {
+      master: "/assets/pixel-times/masters/guan-yu.png",
+      portrait: "/assets/pixel-times/portraits/guan-yu.png",
+      mapSprite: "/assets/pixel-times/map-sprites/guan-yu.png",
+      sceneActor: "/assets/pixel-times/scene-actors/guan-yu-f0.png",
+    },
   },
   "zhang-fei": {
     characterId: "zhang-fei",
@@ -87,7 +97,12 @@ export const CHARACTER_VISUALS: Record<string, CharacterVisual> = {
     secondaryColor: "#6A4428",
     factionAccent: "#4A8B4A",
     silhouetteNotes: "Widest head of the three brothers; spear longer than Guan Yu's blade.",
-    referenceAssets: {},
+    referenceAssets: {
+      master: "/assets/pixel-times/masters/zhang-fei.png",
+      portrait: "/assets/pixel-times/portraits/zhang-fei.png",
+      mapSprite: "/assets/pixel-times/map-sprites/zhang-fei.png",
+      sceneActor: "/assets/pixel-times/scene-actors/zhang-fei-f0.png",
+    },
   },
   "cao-cao": {
     characterId: "cao-cao",
@@ -105,7 +120,12 @@ export const CHARACTER_VISUALS: Record<string, CharacterVisual> = {
     secondaryColor: "#C9A227",
     factionAccent: "#8B1A1A",
     silhouetteNotes: "Low cap, no turban, no huge weapon; the smallest major lord silhouette.",
-    referenceAssets: {},
+    referenceAssets: {
+      master: "/assets/pixel-times/masters/cao-cao.png",
+      portrait: "/assets/pixel-times/portraits/cao-cao.png",
+      mapSprite: "/assets/pixel-times/map-sprites/cao-cao.png",
+      sceneActor: "/assets/pixel-times/scene-actors/cao-cao-f0.png",
+    },
   },
   "sun-quan": {
     characterId: "sun-quan",
@@ -123,7 +143,12 @@ export const CHARACTER_VISUALS: Record<string, CharacterVisual> = {
     secondaryColor: "#C47820",
     factionAccent: "#C47820",
     silhouetteNotes: "Navy body, amber accent; younger than Cao Cao, no red face.",
-    referenceAssets: {},
+    referenceAssets: {
+      master: "/assets/pixel-times/masters/sun-quan.png",
+      portrait: "/assets/pixel-times/portraits/sun-quan.png",
+      mapSprite: "/assets/pixel-times/map-sprites/sun-quan.png",
+      sceneActor: "/assets/pixel-times/scene-actors/sun-quan-f0.png",
+    },
   },
   "zhuge-liang": {
     characterId: "zhuge-liang",
@@ -141,7 +166,12 @@ export const CHARACTER_VISUALS: Record<string, CharacterVisual> = {
     secondaryColor: "#3D6B3A",
     factionAccent: "#4A8B4A",
     silhouetteNotes: "No armor, fan, trailing cap ribbons — the only unarmed master.",
-    referenceAssets: {},
+    referenceAssets: {
+      master: "/assets/pixel-times/masters/zhuge-liang.png",
+      portrait: "/assets/pixel-times/portraits/zhuge-liang.png",
+      mapSprite: "/assets/pixel-times/map-sprites/zhuge-liang.png",
+      sceneActor: "/assets/pixel-times/scene-actors/zhuge-liang-f0.png",
+    },
   },
   "lu-bu": {
     characterId: "lu-bu",

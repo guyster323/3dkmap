@@ -6,6 +6,7 @@ import {
   TILE_ROW,
   autoTile,
   officerCell,
+  officerSheet,
   unitCell,
 } from "@/lib/atlas";
 import {
@@ -163,11 +164,11 @@ function cellKey(col: number, row: number) {
 function unitSprite(
   unit: MapUnit,
   frame: 0 | 1,
-): { sheet: "units" | "officers"; sx: number; sy: number } {
+): { sheet: "units" | "officers" | "ptMap"; sx: number; sy: number } {
   const dir: 0 | 1 = unit.dir === 1 ? 1 : 0;
   if (unit.characterId) {
     const cell = officerCell(unit.characterId, dir, frame);
-    if (cell) return { sheet: "officers", ...cell };
+    if (cell) return { sheet: officerSheet(unit.characterId), ...cell };
   }
   const cell = unitCell(unit.kind, unit.faction, dir, frame);
   return { sheet: "units", ...cell };
@@ -221,6 +222,7 @@ export function BattleMapCanvas({
     let tiles: HTMLImageElement | null = null;
     let unitsSheet: HTMLImageElement | null = null;
     let officersSheet: HTMLImageElement | null = null;
+    let ptMapSheet: HTMLImageElement | null = null;
 
     const draw = (t: number) => {
       if (cancelled) return;
@@ -305,7 +307,8 @@ export function BattleMapCanvas({
         ctx.stroke();
 
         const sprite = unitSprite(unit, frame);
-        const sheet = sprite.sheet === "officers" ? officersSheet : unitsSheet;
+        const sheet =
+          sprite.sheet === "ptMap" ? ptMapSheet : sprite.sheet === "officers" ? officersSheet : unitsSheet;
         if (!sheet) continue;
         const dx = unit.col * TILE + (TILE - ATLAS.unitW) / 2;
         const dy = unit.row * TILE + TILE - ATLAS.unitH;
@@ -324,12 +327,18 @@ export function BattleMapCanvas({
       raf = requestAnimationFrame(draw);
     };
 
-    Promise.all([loadImage(ATLAS.tiles), loadImage(ATLAS.units), loadImage(ATLAS.officers)])
-      .then(([t, u, o]) => {
+    Promise.all([
+      loadImage(ATLAS.tiles),
+      loadImage(ATLAS.units),
+      loadImage(ATLAS.officers),
+      loadImage(ATLAS.ptMap),
+    ])
+      .then(([t, u, o, p]) => {
         if (cancelled) return;
         tiles = t;
         unitsSheet = u;
         officersSheet = o;
+        ptMapSheet = p;
         raf = requestAnimationFrame(draw);
       })
       .catch(() => {

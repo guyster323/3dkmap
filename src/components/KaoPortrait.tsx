@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { FACTION_BANNER } from "@/lib/eiketsu";
-import { ATLAS, kaoCell } from "@/lib/atlas";
+import { ATLAS, kaoCell, kaoSheet } from "@/lib/atlas";
 import type { Character } from "@/lib/types";
 
 /** 64×80 흉상. kao.png + kaoCell(). 시트에 없으면 초상 사진 또는 낙관. */
@@ -30,7 +30,7 @@ export function KaoPortrait({
     ctx.imageSmoothingEnabled = false;
     if (blit) {
       const img = new Image();
-      img.src = ATLAS.kao;
+      img.src = kaoSheet(character.id) === "ptKao" ? ATLAS.ptKao : ATLAS.kao;
       img.onload = () => {
         ctx.clearRect(0, 0, 64, 80);
         ctx.drawImage(img, blit.sx, blit.sy, 64, 80, 0, 0, 64, 80);

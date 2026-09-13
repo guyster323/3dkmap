@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ATLAS, officerCell, unitCell } from "@/lib/atlas";
+import { ATLAS, officerCell, ptActorCell, unitCell } from "@/lib/atlas";
 import { getCharacter } from "@/lib/content";
 import type { SceneActor } from "@/data/pixel-times";
 
@@ -20,18 +20,29 @@ export function SceneActorSprite({ actor }: { actor: SceneActor }) {
     let cancelled = false;
     const officers = new Image();
     const units = new Image();
+    const actors = new Image();
     officers.src = ATLAS.officers;
     units.src = ATLAS.units;
+    actors.src = ATLAS.ptActors;
+    const w = ATLAS.ptActorW;
+    const h = ATLAS.ptActorH;
 
     const blit = () => {
       const dir = actor.dir;
+      const pt = ptActorCell(actor.characterId, frame);
+      if (pt && actors.complete && actors.naturalWidth) {
+        ctx.clearRect(0, 0, w, h);
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(actors, pt.sx, pt.sy, w, h, 0, 0, w, h);
+        return;
+      }
       const named = officerCell(actor.characterId, dir, frame);
       const cell = named ?? unitCell("lord", character?.faction ?? "other", dir, frame);
       const sheet = named ? officers : units;
       if (!sheet.complete) return;
-      ctx.clearRect(0, 0, ATLAS.unitW, ATLAS.unitH);
+      ctx.clearRect(0, 0, w, h);
       ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(sheet, cell.sx, cell.sy, ATLAS.unitW, ATLAS.unitH, 0, 0, ATLAS.unitW, ATLAS.unitH);
+      ctx.drawImage(sheet, cell.sx, cell.sy, ATLAS.unitW, ATLAS.unitH, 8, 0, ATLAS.unitW, ATLAS.unitH);
     };
 
     let raf = 0;
@@ -46,6 +57,7 @@ export function SceneActorSprite({ actor }: { actor: SceneActor }) {
     };
     officers.onload = blit;
     units.onload = blit;
+    actors.onload = blit;
     raf = requestAnimationFrame(tick);
     return () => {
       cancelled = true;
@@ -56,12 +68,12 @@ export function SceneActorSprite({ actor }: { actor: SceneActor }) {
   return (
     <canvas
       ref={ref}
-      width={ATLAS.unitW}
-      height={ATLAS.unitH}
+      width={ATLAS.ptActorW}
+      height={ATLAS.ptActorH}
       data-anim="idle-2"
       data-actor={actor.characterId}
       className="pixelated pointer-events-none block"
-      style={{ width: ATLAS.unitW * 2, height: ATLAS.unitH * 2, imageRendering: "pixelated" }}
+      style={{ width: ATLAS.ptActorW * 2, height: ATLAS.ptActorH * 2, imageRendering: "pixelated" }}
       aria-hidden="true"
     />
   );
