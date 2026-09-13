@@ -89,7 +89,7 @@ def jitter(grid: list[str]) -> list[list[str]]:
 
 
 def ell(lon: float, lat: float, cx: float, cy: float, rx: float, ry: float) -> bool:
-    wobble = (h(int(lon * 18), int(lat * 18), 11) - 128) / 128.0 * 0.12
+    wobble = (h(int(lon * 22), int(lat * 22), 11) - 128) / 128.0 * 0.22
     return ((lon - cx) / rx) ** 2 + ((lat - cy) / ry) ** 2 <= 1.0 + wobble
 
 
@@ -101,7 +101,9 @@ def land_kind(lon: float, lat: float) -> str:
         return "hill" if lon > 128.1 else "grass"
     if ell(lon, lat, 121.05, 36.85, 2.05, 1.18):
         return "grass"
-    if ell(lon, lat, 123.15, 35.15, 3.9, 4.35):
+    if ell(lon, lat, 122.15, 37.05, 2.15, 2.55):
+        return "sea"
+    if ell(lon, lat, 123.85, 34.05, 3.15, 2.85):
         return "sea"
     if ell(lon, lat, 121.05, 24.05, 1.05, 1.45):
         return "mountain"
@@ -228,6 +230,33 @@ def paint_map(grid: list[str]) -> Image.Image:
     return im
 
 
+def chroma_key(im: Image.Image) -> Image.Image:
+    im = im.convert("RGBA")
+    px = im.load()
+    w, h = im.size
+    for y in range(h):
+        for x in range(w):
+            r, g, b, a = px[x, y]
+            if a and r >= 140 and b >= 140 and g < min(r, b) * 0.85 and g <= 200:
+                px[x, y] = (0, 0, 0, 0)
+    return im
+
+
+def fit(im: Image.Image, size: tuple[int, int]) -> Image.Image:
+    keyed = chroma_key(im)
+    box = keyed.getchannel("A").getbbox()
+    if not box:
+        return keyed.resize(size, Image.Resampling.NEAREST)
+    crop = keyed.crop(box)
+    tw, th = size
+    scale = min(tw / crop.width, th / crop.height)
+    nw, nh = max(1, int(crop.width * scale)), max(1, int(crop.height * scale))
+    scaled = crop.resize((nw, nh), Image.Resampling.NEAREST)
+    canvas = Image.new("RGBA", size, (0, 0, 0, 0))
+    canvas.paste(scaled, ((tw - nw) // 2, th - nh), scaled)
+    return canvas
+
+
 def city(kind: str) -> Image.Image:
     sizes = {"village": (24, 20), "county": (40, 32), "major": (56, 44), "capital": (80, 64), "pass": (40, 36)}
     w, h = sizes[kind]
@@ -296,7 +325,20 @@ def main() -> None:
     world = paint_map(grid)
     world.save(OUT / "world-map.png")
     print("world-map", world.size)
-    for k in ("village", "county", "major", "capital", "pass"):
+    RAW = ROOT / "public" / "assets" / "pixel-times" / "imagine-raw"
+    capital_raw = RAW / "city-capital.jpg"
+    major_raw = RAW / "city-major.jpg"
+    if capital_raw.exists():
+        fit(Image.open(capital_raw), (96, 80)).save(OUT / "city-capital.png")
+        print("city capital from Imagine")
+    else:
+        city("capital").save(OUT / "city-capital.png")
+    if major_raw.exists():
+        fit(Image.open(major_raw), (64, 56)).save(OUT / "city-major.png")
+        print("city major from Imagine")
+    else:
+        city("major").save(OUT / "city-major.png")
+    for k in ("village", "county", "pass"):
         city(k).save(OUT / f"city-{k}.png")
         print("city", k)
     match_banners()

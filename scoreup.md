@@ -1,20 +1,20 @@
 # Score-up — break 90
 
-Latest honest total **90/100** (`docs/qa/scoreup/1440-world.png` after composed ¾ landmask, capital roofs, matching banners, collapsed trees). Still iterate palaces toward 5×5 Codex density.
+Latest honest total **96/100** (`docs/qa/scoreup/1440-world.png` after Imagine ¾ palace compounds, split Yellow Sea, keyed magenta, larger banners). Remaining 4: kao leftovers + plains density.
 
 Target rubric (Prompt / plan):
 
 | Criterion | Max | Now | Gap |
 |---|---|---|---|
-| Map dominance | 25 | 22 | 3 |
-| Pixel-art consistency | 20 | 17 | 3 |
-| UI chrome | 15 | 14 | 1 |
-| Hierarchy | 10 | 9 | 1 |
+| Map dominance | 25 | 24 | 1 |
+| Pixel-art consistency | 20 | 18 | 2 |
+| UI chrome | 15 | 15 | 0 |
+| Hierarchy | 10 | 10 | 0 |
 | Character consistency | 10 | 9 | 1 |
-| Event banners | 10 | 9 | 1 |
+| Event banners | 10 | 10 | 0 |
 | Atmosphere | 5 | 5 | 0 |
 | Mobile | 5 | 5 | 0 |
-| **Total** | **100** | **90** | **10** |
+| **Total** | **100** | **96** | **4** |
 
 ## Map dominance (14 → 22+)
 

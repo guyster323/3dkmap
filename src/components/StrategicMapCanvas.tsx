@@ -31,8 +31,8 @@ const TILE = ATLAS.worldTile;
 const HIT = 44;
 
 const CITY_SRC: Record<1 | 2 | 3, { src: string; w: number; h: number }> = {
-  1: { src: "/assets/pixel-times/terrain/city-capital.png", w: 80, h: 64 },
-  2: { src: "/assets/pixel-times/terrain/city-major.png", w: 56, h: 44 },
+  1: { src: "/assets/pixel-times/terrain/city-capital.png", w: 96, h: 80 },
+  2: { src: "/assets/pixel-times/terrain/city-major.png", w: 64, h: 56 },
   3: { src: "/assets/pixel-times/terrain/city-county.png", w: 40, h: 32 },
 };
 

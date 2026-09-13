@@ -38,7 +38,7 @@
   --font-pixel: "Galmuri11", "DungGeunMo", "Noto Sans KR", system-ui, sans-serif;
 
   /* Pixel Times overlay chrome — docs/PIXEL-TIMES-STYLE-BIBLE.md */
-  --pt-tree-w: 280px;
+  --pt-tree-w: 240px;
   --pt-hit: 44px;
   --pt-banner-w: 320px;
 }

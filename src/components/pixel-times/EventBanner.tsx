@@ -19,7 +19,7 @@ export function EventBanner({
       aria-label={name}
       aria-pressed={selected}
       onClick={onOpen}
-      className={`eik-win pointer-events-auto flex min-h-[44px] min-w-[160px] max-w-[220px] gap-2 p-1.5 text-left ${
+      className={`eik-win pointer-events-auto flex min-h-[44px] min-w-[180px] max-w-[280px] gap-2 p-1.5 text-left hover:brightness-110 ${
         selected ? "eik-win--active" : ""
       }`}
     >
@@ -27,9 +27,9 @@ export function EventBanner({
       <img
         src={visual.art.idle}
         alt=""
-        width={88}
-        height={50}
-        className="pixelated h-[50px] w-[88px] shrink-0 object-cover"
+        width={120}
+        height={68}
+        className="pixelated h-[68px] w-[120px] shrink-0 object-cover"
       />
       <span className="min-w-0">
         <span className="eik-src block" style={{ color: "var(--color-eik-gold)" }}>
