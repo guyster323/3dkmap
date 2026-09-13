@@ -32,10 +32,10 @@ Target rubric (Prompt / plan):
 
 ## Character consistency (8 → 9+)
 
-1. Master 6 already distinct; **edit-chain** idle frame 1 from Imagine (weight shift), not 1px Pillow.
-2. Add **여포 · 주유 · 사마의** via Imagine masters (new Grok thread / Orca worker if this thread 429s).
-3. Wire those ids through `atlas.ts` the same as the six.
-4. Lu Bu in 호로관 scene must not show kao compositor.
+1. Master 6 already distinct; **edit-chain idle f1** — **DONE** (Orca Grok worker; `imagine-raw/{id}-idle-f1.png` + packed 48×64). Cao Cao / Zhuge Liang idle is a bit walk-like; iterate if it pops.
+2. Add **여포 · 주유 · 사마의** — **DONE files**, visual ~84–86. Need another Imagine pass for eyes/stoop to hit 90.
+3. Wire those ids — **DONE** (`character-visuals` + atlases).
+4. Lu Bu in 호로관 — **DONE** (plume + ji, not kao compositor).
 
 ## Event banners (7 → 9+)
 
