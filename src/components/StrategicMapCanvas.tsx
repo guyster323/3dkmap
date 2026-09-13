@@ -10,18 +10,8 @@ import {
   type ReactNode,
 } from "react";
 import type { StrategicEdge, StrategicNode, StrategicTerritory } from "@/data/terrain";
-import {
-  GRID_COLS,
-  GRID_ROWS,
-  STRATEGIC_TERRAIN_GRID,
-} from "@/data/terrain/strategic-terrain";
-import { ATLAS, TILE_ROW, autoTile } from "@/lib/atlas";
-import {
-  AUTOTILE_KINDS,
-  edgeMask,
-  parseTerrainGrid,
-  type TerrainKind,
-} from "@/lib/autotile";
+import { GRID_COLS, GRID_ROWS } from "@/data/terrain/strategic-terrain";
+import { ATLAS } from "@/lib/atlas";
 import { FACTION_BANNER } from "@/lib/eiketsu";
 import { getPlace } from "@/lib/content";
 
@@ -40,28 +30,13 @@ const LOGIC_H = 700;
 const TILE = ATLAS.worldTile;
 const HIT = 44;
 
-const CITY_SRC: Record<1 | 2 | 3, string> = {
-  1: "/assets/pixel-times/terrain/city-capital.png",
-  2: "/assets/pixel-times/terrain/city-major.png",
-  3: "/assets/pixel-times/terrain/city-county.png",
+const CITY_SRC: Record<1 | 2 | 3, { src: string; w: number; h: number }> = {
+  1: { src: "/assets/pixel-times/terrain/city-capital.png", w: 80, h: 64 },
+  2: { src: "/assets/pixel-times/terrain/city-major.png", w: 56, h: 44 },
+  3: { src: "/assets/pixel-times/terrain/city-county.png", w: 40, h: 32 },
 };
 
-const SINGLE_BASE: Record<string, number> = {
-  plain: 0,
-  grass: 4,
-  field: 8,
-  waste: 12,
-};
 
-const AUTOTILE_ROW: Record<string, number> = {
-  forest: TILE_ROW.forest,
-  hill: TILE_ROW.hill,
-  mountain: TILE_ROW.mountain,
-  river: TILE_ROW.river,
-  sea: TILE_ROW.sea,
-  road: TILE_ROW.road,
-  wall: TILE_ROW.wall,
-};
 
 const EDGE_STYLE: Record<StrategicEdge["kind"], { stroke: string; width: number; dash?: string }> = {
   road: { stroke: "#c9a06a", width: 2.4 },
@@ -69,27 +44,6 @@ const EDGE_STYLE: Record<StrategicEdge["kind"], { stroke: string; width: number;
   sea: { stroke: "#1a4a6a", width: 2.2, dash: "6 5" },
   pass: { stroke: "#8a7430", width: 2, dash: "4 3" },
 };
-
-function terrainIndex(grid: TerrainKind[][], col: number, row: number): number {
-  const kind = grid[row][col];
-  if (AUTOTILE_KINDS.has(kind)) {
-    return autoTile(AUTOTILE_ROW[kind], edgeMask(grid, col, row));
-  }
-  const base = SINGLE_BASE[kind] ?? 0;
-  return autoTile(TILE_ROW.single, base + ((col + row) & 3));
-}
-
-function blitTile(
-  ctx: CanvasRenderingContext2D,
-  sheet: HTMLImageElement,
-  index: number,
-  dx: number,
-  dy: number,
-) {
-  const sx = (index % ATLAS.tileCols) * TILE;
-  const sy = Math.floor(index / ATLAS.tileCols) * TILE;
-  ctx.drawImage(sheet, sx, sy, TILE, TILE, dx, dy, TILE, TILE);
-}
 
 function labelPriority(node: StrategicNode, selected: boolean, lit: boolean): number {
   if (selected) return 300;
@@ -214,7 +168,6 @@ export function StrategicMapCanvas({
 }: StrategicMapCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
-  const grid = useMemo(() => parseTerrainGrid(STRATEGIC_TERRAIN_GRID), []);
   const byId = useMemo(() => new Map(nodes.map((n) => [n.placeId, n])), [nodes]);
   const highlightKey = [...highlight].sort().join(",");
   const highlightSet = useMemo(
@@ -258,17 +211,13 @@ export function StrategicMapCanvas({
       ctx.imageSmoothingEnabled = false;
       ctx.fillStyle = "#060a14";
       ctx.fillRect(0, 0, cw, ch);
-      for (let r = 0; r < GRID_ROWS; r++) {
-        for (let c = 0; c < GRID_COLS; c++) {
-          blitTile(ctx, img, terrainIndex(grid, c, r), c * TILE, r * TILE);
-        }
-      }
+      ctx.drawImage(img, 0, 0, cw, ch);
     };
-    img.src = ATLAS.worldTiles;
+    img.src = ATLAS.worldMap;
     return () => {
       cancelled = true;
     };
-  }, [grid]);
+  }, []);
 
   return (
     <div className="eik-win w-full max-w-full min-w-0 overflow-hidden">
@@ -355,11 +304,11 @@ export function StrategicMapCanvas({
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={CITY_SRC[node.tier]}
+                  src={CITY_SRC[node.tier].src}
                   alt=""
                   className="pixelated pointer-events-none"
-                  width={node.tier === 1 ? 48 : node.tier === 2 ? 32 : 24}
-                  height={node.tier === 1 ? 48 : node.tier === 2 ? 32 : 24}
+                  width={CITY_SRC[node.tier].w}
+                  height={CITY_SRC[node.tier].h}
                 />
               </span>
               {showLabel ? (

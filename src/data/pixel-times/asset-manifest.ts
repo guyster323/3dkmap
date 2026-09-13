@@ -36,6 +36,7 @@ export const PT_MANIFEST: PtManifestEntry[] = [
   { path: PT_PATH.sceneActorAtlas, w: 192, h: 320, required: true },
   { path: PT_PATH.mapCharacterAtlas, w: 128, h: 192, required: true },
   { path: "/assets/pixel-times/terrain/tiles16.png", w: 256, h: 160, required: true },
+  { path: "/assets/pixel-times/terrain/world-map.png", w: 1024, h: 704, required: true },
   { path: `${PT_PATH.banners}v01-e04.png`, w: 320, h: 180, required: true },
   { path: `${PT_PATH.banners}v05-e03.png`, w: 320, h: 180, required: true },
   { path: `${PT_PATH.banners}v26-e01.png`, w: 320, h: 180, required: true },

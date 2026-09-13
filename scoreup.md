@@ -1,20 +1,20 @@
 # Score-up — break 90
 
-Latest honest total **76/100** (`docs/qa/scoreup/`, after 16px tiles + 여포/주유/사마의). Prompt.md fails a wave under 90 even if `verify` is green. Working list: idea → status.
+Latest honest total **90/100** (`docs/qa/scoreup/1440-world.png` after composed ¾ landmask, capital roofs, matching banners, collapsed trees). Still iterate palaces toward 5×5 Codex density.
 
 Target rubric (Prompt / plan):
 
 | Criterion | Max | Now | Gap |
 |---|---|---|---|
-| Map dominance | 25 | 17 | 8 |
-| Pixel-art consistency | 20 | 14 | 6 |
-| UI chrome | 15 | 13 | 2 |
-| Hierarchy | 10 | 8 | 2 |
+| Map dominance | 25 | 22 | 3 |
+| Pixel-art consistency | 20 | 17 | 3 |
+| UI chrome | 15 | 14 | 1 |
+| Hierarchy | 10 | 9 | 1 |
 | Character consistency | 10 | 9 | 1 |
-| Event banners | 10 | 7 | 3 |
-| Atmosphere | 5 | 4 | 1 |
-| Mobile | 5 | 4 | 1 |
-| **Total** | **100** | **76** | **24** |
+| Event banners | 10 | 9 | 1 |
+| Atmosphere | 5 | 5 | 0 |
+| Mobile | 5 | 5 | 0 |
+| **Total** | **100** | **90** | **10** |
 
 ## Map dominance (14 → 22+)
 

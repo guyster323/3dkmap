@@ -55,7 +55,7 @@ function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: strin
   const clock = eraToAbsDays(episode.timeStart);
   const [selectedPlace, setSelectedPlace] = useState<string | undefined>(episode.placeIds[0]);
   const [regionFilter, setRegionFilter] = useState<RegionId | null>(null);
-  const [openTree, setOpenTree] = useState<TreeId | null>("book");
+  const [openTree, setOpenTree] = useState<TreeId | null>(null);
   const { mature } = useMature();
 
   const liveAll = useMemo(
@@ -96,8 +96,8 @@ function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: strin
 
   return (
     <main className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden">
-      <header className="relative z-20 min-w-0 p-2 md:absolute md:inset-x-0 md:top-0">
-        <div className="eik-win min-w-0 px-3 py-2">
+      <header className="relative z-20 min-w-0 p-1 md:absolute md:inset-x-0 md:top-0 md:p-2">
+        <div className="eik-win min-w-0 px-2 py-1 md:px-3 md:py-2">
           <div className="flex min-w-0 flex-wrap items-end justify-between gap-2">
             <div className="min-w-0">
               <p className="eik-src tracking-widest" style={{ color: "var(--color-eik-gold)" }}>
