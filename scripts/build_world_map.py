@@ -2,6 +2,7 @@
 """Compose one ¾ world map + city landmarks + matching banners. Original pixels."""
 from __future__ import annotations
 
+import math
 import re
 from pathlib import Path
 
@@ -89,73 +90,138 @@ def jitter(grid: list[str]) -> list[list[str]]:
 
 
 def ell(lon: float, lat: float, cx: float, cy: float, rx: float, ry: float) -> bool:
-    wobble = (h(int(lon * 22), int(lat * 22), 11) - 128) / 128.0 * 0.22
+    wobble = (h(int(lon * 22), int(lat * 22), 11) - 128) / 128.0 * 0.08
     return ((lon - cx) / rx) ** 2 + ((lat - cy) / ry) ** 2 <= 1.0 + wobble
 
 
+def dist_seg(px: float, py: float, ax: float, ay: float, bx: float, by: float) -> float:
+    vx, vy = bx - ax, by - ay
+    l2 = vx * vx + vy * vy
+    if l2 == 0:
+        return (px - ax) ** 2 + (py - ay) ** 2
+    t = max(0.0, min(1.0, ((px - ax) * vx + (py - ay) * vy) / l2))
+    dx, dy = px - ax - t * vx, py - ay - t * vy
+    return dx * dx + dy * dy
+
+
+def near_path(lon: float, lat: float, path: list[tuple[float, float]], width: float) -> bool:
+    w2 = width * width
+    for i in range(len(path) - 1):
+        if dist_seg(lon, lat, *path[i], *path[i + 1]) <= w2:
+            return True
+    return False
+
+
+# Sketch polylines for paint only. Not a survey, not a border claim.
+HUANGHE = [
+    (110.6, 40.5),
+    (110.9, 39.0),
+    (110.3, 37.4),
+    (110.1, 35.4),
+    (111.6, 34.75),
+    (113.4, 34.85),
+    (114.9, 35.15),
+    (117.0, 36.15),
+    (118.6, 37.75),
+]
+YANGTZE = [
+    (106.4, 31.9),
+    (108.6, 30.85),
+    (111.2, 30.55),
+    (114.2, 30.45),
+    (116.6, 31.7),
+    (118.9, 32.05),
+    (121.4, 31.25),
+]
+
+
+def in_shandong(lon: float, lat: float) -> bool:
+    if ell(lon, lat, 121.25, 36.78, 1.58, 0.62):
+        return True
+    if ell(lon, lat, 122.4, 37.32, 0.42, 0.32):
+        return True
+    if 118.7 < lon < 120.5 and 36.4 < lat < 37.15:
+        return True
+    return False
+
+
+def in_korea(lon: float, lat: float) -> bool:
+    if ell(lon, lat, 126.52, 33.38, 0.38, 0.22):
+        return True
+    body = ell(lon, lat, 127.55, 37.45, 1.18, 4.45) or ell(lon, lat, 127.25, 41.05, 1.22, 1.85)
+    if not body:
+        return False
+    if ell(lon, lat, 125.35, 36.9, 1.05, 1.55) and lon < 126.55:
+        return False
+    if ell(lon, lat, 129.55, 36.15, 0.48, 1.05) and lon > 129.2:
+        return False
+    return True
+
+
+def in_liaodong(lon: float, lat: float) -> bool:
+    return ell(lon, lat, 121.95, 40.2, 1.65, 1.35)
+
+
+def china_east_coast(lat: float) -> float:
+    """Mainland east-coast longitude. Sketch for the landmask, not a surveyed shore."""
+    if lat < 22.0:
+        return 113.4
+    if lat < 25.0:
+        return 113.4 + (lat - 22.0) / 3.0 * 5.4
+    if lat < 30.5:
+        return 118.8 + (lat - 25.0) / 5.5 * 1.5
+    if lat < 35.2:
+        return 120.3 - (lat - 30.5) / 4.7 * 1.6
+    if lat < 38.4:
+        return 118.7 - (lat - 35.2) / 3.2 * 1.05
+    if lat < 41.2:
+        return 117.65 + (lat - 38.4) / 2.8 * 4.4
+    return 124.4
+
+
 def land_kind(lon: float, lat: float) -> str:
-    """Soft original landmask. Geographic skeleton, not a survey or border claim."""
-    # Bohai / Yellow Sea basin
-    if ell(lon, lat, 119.4, 38.7, 1.85, 1.25):
+    """Pixel landmask. Geographic skeleton, not a survey or border claim."""
+    if lat < 21.15 or lat > 43.85 or lon < 100.2 or lon > 131.8:
         return "sea"
-    if ell(lon, lat, 122.6, 37.6, 1.55, 1.85):
-        return "sea"
-    # Shandong peninsula
-    if ell(lon, lat, 120.9, 36.65, 1.85, 0.78):
+    if in_korea(lon, lat):
+        if lon > 128.4 or lat > 40.4:
+            return "hill"
+        if lat < 35.4:
+            return "plain"
+        return "grass"
+    if in_shandong(lon, lat):
+        return "hill" if lon > 121.4 else "plain"
+    if in_liaodong(lon, lat):
         return "hill"
-    # Korean peninsula: slim N-S body, west-coast Yellow Sea bite, east coast
-    if ell(lon, lat, 127.55, 36.55, 1.55, 4.35):
-        if ell(lon, lat, 125.15, 36.9, 1.15, 2.15) and lon < 126.35:
-            return "sea"
-        if ell(lon, lat, 129.85, 36.4, 0.85, 1.6) and lon > 129.45 and lat < 37.6:
-            return "sea"
-        return "hill" if lon > 128.35 or lat > 40.2 else "grass"
-    if ell(lon, lat, 129.15, 41.35, 1.05, 1.55):
-        return "forest"
-    if ell(lon, lat, 126.5, 33.38, 0.38, 0.22):
-        return "grass"
-    if ell(lon, lat, 121.05, 36.85, 2.05, 1.18):
-        return "grass"
-    if ell(lon, lat, 122.15, 37.05, 2.15, 2.55):
-        return "sea"
-    if ell(lon, lat, 123.85, 34.05, 3.15, 2.85):
-        return "sea"
-    if ell(lon, lat, 121.05, 24.05, 1.05, 1.45):
+    if ell(lon, lat, 121.02, 23.7, 0.72, 1.35):
         return "mountain"
-    if lon > 122.0 and lat < 32.2:
+    if lon > china_east_coast(lat) + 0.12:
         return "sea"
-    if lat < 21.4 or (lat < 23.2 and lon > 113.8):
+    if ell(lon, lat, 119.4, 38.85, 2.05, 1.22) and not in_shandong(lon, lat) and not in_liaodong(lon, lat):
         return "sea"
-    import math
-
-    west = 103.4 + 1.1 * math.sin((lat - 30) * 0.31)
-    if lon < west:
-        return "mountain" if lat > 27.2 + 0.4 * math.sin(lon) else "forest"
-    if lat > 41.2 + 0.5 * math.sin(lon * 0.4):
-        return "waste"
-    if lat < 25.8 + 0.9 * math.sin((lon - 108) * 0.45) and lon < 117.8:
-        return "forest"
-    if ell(lon, lat, 105.6, 30.35, 2.25, 1.65):
-        return "field"
-    import math
-
-    yz = 30.55 + 0.38 * math.sin((lon - 108.0) * 0.72)
-    if abs(lat - yz) < 0.42 and 106.2 < lon < 121.2:
+    if near_path(lon, lat, HUANGHE, 0.16):
         return "river"
+    if near_path(lon, lat, YANGTZE, 0.20):
+        return "river"
+    west = 103.5 + 1.05 * math.sin((lat - 30) * 0.31)
+    if lon < west:
+        return "mountain" if lat > 27.0 else "forest"
+    if lat > 41.3 + 0.4 * math.sin(lon * 0.35):
+        return "waste"
+    if lat < 26.2 + 0.7 * math.sin((lon - 108) * 0.4) and lon < 117.5:
+        return "forest"
+    if ell(lon, lat, 105.7, 30.4, 2.2, 1.55):
+        return "field"
+    if 112.2 < lon < 116.8 and 33.4 < lat < 36.2:
+        return "field"
     return "plain"
 
 
 def paint_map(grid: list[str]) -> Image.Image:
-    cells = jitter(grid)
-    rows, cols = len(cells), len(cells[0])
+    rows, cols = len(grid), len(grid[0])
     W, H = cols * TILE, rows * TILE
     im = Image.new("RGBA", (W, H), SEA)
     px = im.load()
-
-    def kind_cell(c, r):
-        if r < 0 or r >= rows or c < 0 or c >= cols:
-            return "sea"
-        return KIND.get(cells[r][c], "plain")
 
     # Pixel landmask first (breaks 2x upsample rectangles).
     for y in range(H):
@@ -164,24 +230,23 @@ def paint_map(grid: list[str]) -> Image.Image:
             lat = 44.0 - (y + 0.5) / H * 23.0
             k = land_kind(lon, lat)
             n = h(x // 3, y // 3, x + y)
-            col = {
-                "plain": PLAIN2 if n > 200 else PLAIN,
-                "grass": GRASS2 if n > 180 else GRASS,
-                "field": FIELD,
-                "waste": WASTE,
-                "forest": FOREST2 if n > 150 else FOREST,
-                "hill": HILL,
-                "mountain": MOUNT2 if (y % 16) > 9 else MOUNT,
-                "river": RIVER,
-                "sea": SEA2 if (y + n) % 7 == 0 else SEA,
-            }[k]
-            if (x % 8) + (y % 8) < 3:
-                col = tuple(min(255, v + 8) for v in col[:3]) + (255,)
-            # Plains tufts — Codex-like scatter, not empty olive
-            if k in ("plain", "grass") and (x + y * 3) % 11 == 0 and n > 90:
-                col = (78, 102, 58, 255) if k == "plain" else (48, 82, 44, 255)
-            if k in ("plain", "grass") and n < 12 and (x % 5 == 0):
-                col = (92, 118, 64, 255)
+            if k == "sea":
+                col = SEA
+            else:
+                col = {
+                    "plain": PLAIN2 if n > 200 else PLAIN,
+                    "grass": GRASS2 if n > 180 else GRASS,
+                    "field": FIELD,
+                    "waste": WASTE,
+                    "forest": FOREST2 if n > 150 else FOREST,
+                    "hill": HILL,
+                    "mountain": MOUNT2 if n > 140 else MOUNT,
+                    "river": RIVER,
+                }[k]
+                if k != "river" and (x % 11) + (y % 9) == 2:
+                    col = tuple(min(255, v + 10) for v in col[:3]) + (255,)
+                if k in ("plain", "grass") and (x + y * 3) % 17 == 0 and n > 110:
+                    col = (78, 102, 58, 255) if k == "plain" else (48, 82, 44, 255)
             px[x, y] = col
 
     # Pixel-edge foam (not cell-snapped)
@@ -190,50 +255,36 @@ def paint_map(grid: list[str]) -> Image.Image:
             if px[x, y][:3] != SEA[:3] and px[x, y][:3] != SEA2[:3]:
                 continue
             nbs = (px[x - 1, y], px[x + 1, y], px[x, y - 1], px[x, y + 1])
-            if any(p[:3] not in (SEA[:3], SEA2[:3], FOAM[:3]) for p in nbs):
-                if h(x, y, 3) > 200:
+            if any(p[:3] not in (SEA[:3], SEA2[:3], FOAM[:3], RIVER[:3]) for p in nbs):
+                if h(x, y, 3) > 140:
                     px[x, y] = FOAM
 
-    def kind(c, r):
-        lon = 100.0 + (c + 0.5) / cols * 32.0
-        lat = 44.0 - (r + 0.5) / rows * 23.0
-        return land_kind(lon, lat)
+    RAW = ROOT / "public" / "assets" / "pixel-times" / "imagine-raw"
+    forest_src = RAW / "forest-crowns.jpg"
+    mount_src = RAW / "mountain-ridge.jpg"
+    forest_spr = fit(Image.open(forest_src), (36, 28)) if forest_src.exists() else None
+    mount_spr = fit(Image.open(mount_src), (56, 36)) if mount_src.exists() else None
 
-    # Tree crowns (multi-pixel, not one-per-cell squares)
-    d = ImageDraw.Draw(im)
-    for r in range(rows):
-        for c in range(cols):
-            if kind(c, r) not in ("forest", "grass"):
-                continue
-            if kind(c, r) == "grass" and h(c, r, 3) > 50:
-                continue
-            ox, oy = c * TILE + (h(c, r, 1) % 5) - 2, r * TILE + (h(c, r, 2) % 4) - 1
-            for i, (dx, dy) in enumerate(((3, 4), (9, 2), (6, 9), (12, 8))):
-                if h(c, r, i) < 50 and kind(c, r) == "forest":
+    def stamp(sprite: Image.Image | None, want: str, step: int, thresh: int) -> None:
+        if sprite is None:
+            return
+        sw, sh = sprite.size
+        for y in range(0, H - sh, step):
+            for x in range(0, W - sw, step):
+                lon = 100.0 + (x + sw / 2) / W * 32.0
+                lat = 44.0 - (y + sh / 2) / H * 23.0
+                if land_kind(lon, lat) != want:
                     continue
-                d.ellipse((ox + dx, oy + dy, ox + dx + 7, oy + dy + 5), fill=FOREST2)
-                d.point((ox + dx + 2, oy + dy + 5), fill=(70, 52, 32, 255))
+                if h(x, y, 9) < thresh:
+                    continue
+                ox = x + (h(x, y, 1) % (step // 2)) - step // 4
+                oy = y + (h(x, y, 2) % (step // 3)) - step // 6
+                im.alpha_composite(sprite, (max(0, ox), max(0, oy)))
 
-    # Mountain peaks spanning a cell
-    for r in range(rows):
-        for c in range(cols):
-            if kind(c, r) != "mountain":
-                continue
-            if h(c, r, 9) < 80:
-                continue
-            ox = c * TILE + (h(c, r, 4) % 6) - 2
-            oy = r * TILE + (h(c, r, 5) % 4) - 2
-            peak = 2 + (h(c, r, 6) % 5)
-            d.polygon(
-                [(ox + 1, oy + 15), (ox + 8, oy + peak), (ox + 15, oy + 15)],
-                fill=MOUNT2,
-            )
-            d.polygon(
-                [(ox + 1, oy + 15), (ox + 8, oy + peak), (ox + 8, oy + 15)],
-                fill=(150, 142, 128, 255),
-            )
-            d.point((ox + 8, oy + peak), fill=(210, 208, 200, 255))
-
+    stamp(forest_spr, "forest", 36, 70)
+    stamp(forest_spr, "grass", 64, 190)
+    stamp(mount_spr, "mountain", 52, 40)
+    stamp(mount_spr, "hill", 72, 210)
     return im
 
 
@@ -241,10 +292,20 @@ def chroma_key(im: Image.Image) -> Image.Image:
     im = im.convert("RGBA")
     px = im.load()
     w, h = im.size
+    corners = [px[0, 0][:3], px[w - 1, 0][:3], px[0, h - 1][:3], px[w - 1, h - 1][:3]]
     for y in range(h):
         for x in range(w):
             r, g, b, a = px[x, y]
-            if a and r >= 140 and b >= 140 and g < min(r, b) * 0.85 and g <= 200:
+            if not a:
+                continue
+            magenta = r >= 150 and g <= 110 and b >= 70 and r > g + 40
+            keyed = magenta
+            if not keyed:
+                for kr, kg, kb in corners:
+                    if abs(r - kr) + abs(g - kg) + abs(b - kb) < 54:
+                        keyed = True
+                        break
+            if keyed:
                 px[x, y] = (0, 0, 0, 0)
     return im
 

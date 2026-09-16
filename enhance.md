@@ -18,7 +18,7 @@ Model id is `gpt-6-astra`, not `astra`.
 
 ## Still P0 (map art)
 
-Coast/river/city-tier density vs Codex mock; remaining unique officer faces.
+Pixel landmask now has Shandong, Bohai, a slim Korea, Huang He and Yangtze. Imagine forest/mountain stamps (magenta keyed). Remaining: denser plains vs Codex, Liaodong/coast wobble, unique remaining officer faces.
 
 ## Also shipped (not from Codex)
 
