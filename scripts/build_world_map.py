@@ -114,69 +114,121 @@ def near_path(lon: float, lat: float, path: list[tuple[float, float]], width: fl
 
 # Sketch polylines for paint only. Not a survey, not a border claim.
 HUANGHE = [
+    (108.8, 40.55),
     (110.6, 40.5),
-    (110.9, 39.0),
-    (110.3, 37.4),
-    (110.1, 35.4),
-    (111.6, 34.75),
-    (113.4, 34.85),
-    (114.9, 35.15),
-    (117.0, 36.15),
-    (118.6, 37.75),
+    (111.15, 39.15),
+    (110.35, 37.45),
+    (110.05, 35.45),
+    (111.55, 34.72),
+    (112.7, 34.68),
+    (113.45, 34.88),
+    (114.9, 35.18),
+    (116.05, 35.65),
+    (117.05, 36.2),
+    (118.05, 37.05),
+    (118.85, 37.9),
 ]
 YANGTZE = [
     (106.4, 31.9),
-    (108.6, 30.85),
-    (111.2, 30.55),
-    (114.2, 30.45),
-    (116.6, 31.7),
-    (118.9, 32.05),
-    (121.4, 31.25),
+    (107.6, 31.2),
+    (108.7, 30.85),
+    (111.2, 30.52),
+    (113.1, 30.4),
+    (114.3, 30.48),
+    (115.4, 30.85),
+    (116.7, 31.65),
+    (118.2, 32.1),
+    (119.4, 32.15),
+    (121.45, 31.22),
 ]
 
 
+def near_path_var(lon: float, lat: float, path: list[tuple[float, float]], w0: float, w1: float) -> bool:
+    n = len(path) - 1
+    for i in range(n):
+        t = i / max(1, n - 1)
+        w = w0 + (w1 - w0) * t
+        if dist_seg(lon, lat, *path[i], *path[i + 1]) <= w * w:
+            return True
+    return False
+
+
+def wobble(lon: float, lat: float, amp: float = 0.14) -> float:
+    n = (h(int(lon * 48), int(lat * 48), 4) - 128) / 128.0
+    n2 = (h(int(lat * 21), int(lon * 9), 8) - 128) / 128.0
+    return n * amp + n2 * (amp * 0.7)
+
+
 def in_shandong(lon: float, lat: float) -> bool:
-    if ell(lon, lat, 121.25, 36.78, 1.58, 0.62):
+    n = wobble(lon, lat, 0.1)
+    if 118.62 < lon < 120.12 and 36.32 + n < lat < 37.02 + n:
         return True
-    if ell(lon, lat, 122.4, 37.32, 0.42, 0.32):
+    if ell(lon, lat, 121.38, 36.7, 1.52, 0.48):
+        if ell(lon, lat, 120.52, 37.4, 0.7, 0.3):
+            return False
+        if ell(lon, lat, 120.32, 36.1, 0.48, 0.22):
+            return False
         return True
-    if 118.7 < lon < 120.5 and 36.4 < lat < 37.15:
+    if ell(lon, lat, 122.45, 37.26, 0.38, 0.24):
         return True
     return False
 
 
 def in_korea(lon: float, lat: float) -> bool:
-    if ell(lon, lat, 126.52, 33.38, 0.38, 0.22):
+    if ell(lon, lat, 126.52, 33.38, 0.36, 0.2):
         return True
-    body = ell(lon, lat, 127.55, 37.45, 1.18, 4.45) or ell(lon, lat, 127.25, 41.05, 1.22, 1.85)
-    if not body:
+    if lat < 34.28 or lat > 43.04:
         return False
-    if ell(lon, lat, 125.35, 36.9, 1.05, 1.55) and lon < 126.55:
-        return False
-    if ell(lon, lat, 129.55, 36.15, 0.48, 1.05) and lon > 129.2:
-        return False
-    return True
+    cx = 127.08 + (43.0 - lat) * 0.07
+    if lat > 40.7:
+        hw_w, hw_e = 1.42, 1.5
+    elif lat > 38.4:
+        hw_w, hw_e = 1.02, 1.18
+    elif lat > 36.3:
+        hw_w, hw_e = 0.92, 1.08
+    else:
+        hw_w, hw_e = 0.74, 0.92
+    if 36.25 < lat < 37.75:
+        hw_w -= 0.4 * math.sin((lat - 36.25) / 1.5 * math.pi)
+    n = wobble(lon, lat, 0.15)
+    return (cx - hw_w + n) <= lon <= (cx + hw_e + n)
 
 
 def in_liaodong(lon: float, lat: float) -> bool:
-    return ell(lon, lat, 121.95, 40.2, 1.65, 1.35)
+    if near_path(lon, lat, [(124.55, 41.75), (123.15, 40.55), (121.95, 39.2)], 0.7):
+        return True
+    if ell(lon, lat, 121.5, 38.92, 0.52, 0.34):
+        return True
+    return False
 
 
 def china_east_coast(lat: float) -> float:
     """Mainland east-coast longitude. Sketch for the landmask, not a surveyed shore."""
     if lat < 22.0:
-        return 113.4
-    if lat < 25.0:
-        return 113.4 + (lat - 22.0) / 3.0 * 5.4
-    if lat < 30.5:
-        return 118.8 + (lat - 25.0) / 5.5 * 1.5
-    if lat < 35.2:
-        return 120.3 - (lat - 30.5) / 4.7 * 1.6
-    if lat < 38.4:
-        return 118.7 - (lat - 35.2) / 3.2 * 1.05
-    if lat < 41.2:
-        return 117.65 + (lat - 38.4) / 2.8 * 4.4
-    return 124.4
+        base = 113.4
+    elif lat < 25.0:
+        base = 113.4 + (lat - 22.0) / 3.0 * 5.4
+    elif lat < 30.5:
+        base = 118.8 + (lat - 25.0) / 5.5 * 1.5
+    elif lat < 35.2:
+        base = 120.3 - (lat - 30.5) / 4.7 * 1.6
+    elif lat < 38.4:
+        base = 118.7 - (lat - 35.2) / 3.2 * 1.05
+    elif lat < 41.0:
+        base = 117.65 + (lat - 38.4) / 2.6 * 5.2
+    else:
+        base = 124.6
+    return base + wobble(110.0, lat, 0.28)
+
+
+def in_bohai(lon: float, lat: float) -> bool:
+    if not (117.35 < lon < 121.35 and 37.35 < lat < 40.65):
+        return False
+    if in_shandong(lon, lat) or in_liaodong(lon, lat):
+        return False
+    if lon < china_east_coast(lat) + 0.04:
+        return False
+    return True
 
 
 def land_kind(lon: float, lat: float) -> str:
@@ -184,24 +236,24 @@ def land_kind(lon: float, lat: float) -> str:
     if lat < 21.15 or lat > 43.85 or lon < 100.2 or lon > 131.8:
         return "sea"
     if in_korea(lon, lat):
-        if lon > 128.4 or lat > 40.4:
+        if lon > 128.35 or lat > 40.35:
             return "hill"
-        if lat < 35.4:
+        if lat < 35.35:
             return "plain"
         return "grass"
     if in_shandong(lon, lat):
-        return "hill" if lon > 121.4 else "plain"
+        return "hill" if lon > 121.35 else "plain"
     if in_liaodong(lon, lat):
         return "hill"
-    if ell(lon, lat, 121.02, 23.7, 0.72, 1.35):
+    if ell(lon, lat, 121.02, 23.7, 0.68, 1.28):
         return "mountain"
-    if lon > china_east_coast(lat) + 0.12:
+    if in_bohai(lon, lat):
         return "sea"
-    if ell(lon, lat, 119.4, 38.85, 2.05, 1.22) and not in_shandong(lon, lat) and not in_liaodong(lon, lat):
+    if lon > china_east_coast(lat) + 0.1:
         return "sea"
-    if near_path(lon, lat, HUANGHE, 0.16):
+    if near_path_var(lon, lat, HUANGHE, 0.12, 0.22):
         return "river"
-    if near_path(lon, lat, YANGTZE, 0.20):
+    if near_path_var(lon, lat, YANGTZE, 0.14, 0.26):
         return "river"
     west = 103.5 + 1.05 * math.sin((lat - 30) * 0.31)
     if lon < west:
@@ -210,11 +262,52 @@ def land_kind(lon: float, lat: float) -> str:
         return "waste"
     if lat < 26.2 + 0.7 * math.sin((lon - 108) * 0.4) and lon < 117.5:
         return "forest"
-    if ell(lon, lat, 105.7, 30.4, 2.2, 1.55):
-        return "field"
-    if 112.2 < lon < 116.8 and 33.4 < lat < 36.2:
-        return "field"
     return "plain"
+
+
+def lonlat_xy(lon: float, lat: float, W: int, H: int) -> tuple[int, int]:
+    return int((lon - 100.0) / 32.0 * W), int((44.0 - lat) / 23.0 * H)
+
+
+def parse_places() -> list[tuple[str, float, float, str]]:
+    text = (ROOT / "src" / "data" / "places.ts").read_text(encoding="utf-8")
+    return [
+        (m.group(1), float(m.group(2)), float(m.group(3)), m.group(4))
+        for m in re.finditer(
+            r'\{ id: "([^"]+)".*?lon: ([0-9.\-]+), lat: ([0-9.\-]+), kind: "([^"]+)"',
+            text,
+        )
+    ]
+
+
+def parse_road_edges() -> list[tuple[str, str]]:
+    text = (ROOT / "src" / "data" / "terrain" / "strategic.ts").read_text(encoding="utf-8")
+    return re.findall(r'\{ from: "([^"]+)", to: "([^"]+)", kind: "(?:road|pass)" \}', text)
+
+
+def bresenham(x0: int, y0: int, x1: int, y1: int) -> list[tuple[int, int]]:
+    pts: list[tuple[int, int]] = []
+    dx, dy = abs(x1 - x0), -abs(y1 - y0)
+    sx = 1 if x0 < x1 else -1
+    sy = 1 if y0 < y1 else -1
+    err, x, y = dx + dy, x0, y0
+    while True:
+        pts.append((x, y))
+        if x == x1 and y == y1:
+            break
+        e2 = 2 * err
+        if e2 >= dy:
+            err += dy
+            x += sx
+        if e2 <= dx:
+            err += dx
+            y += sy
+    return pts
+
+
+def is_sea_px(px, x: int, y: int) -> bool:
+    c = px[x, y][:3]
+    return c == SEA[:3] or c == SEA2[:3] or c == FOAM[:3] or c == RIVER[:3]
 
 
 def paint_map(grid: list[str]) -> Image.Image:
@@ -222,20 +315,21 @@ def paint_map(grid: list[str]) -> Image.Image:
     W, H = cols * TILE, rows * TILE
     im = Image.new("RGBA", (W, H), SEA)
     px = im.load()
+    kinds = [[""] * W for _ in range(H)]
 
-    # Pixel landmask first (breaks 2x upsample rectangles).
     for y in range(H):
         for x in range(W):
             lon = 100.0 + (x + 0.5) / W * 32.0
             lat = 44.0 - (y + 0.5) / H * 23.0
             k = land_kind(lon, lat)
+            kinds[y][x] = k
             n = h(x // 3, y // 3, x + y)
             if k == "sea":
                 col = SEA
             else:
                 col = {
-                    "plain": PLAIN2 if n > 200 else PLAIN,
-                    "grass": GRASS2 if n > 180 else GRASS,
+                    "plain": PLAIN2 if n > 210 else PLAIN,
+                    "grass": GRASS2 if n > 190 else GRASS,
                     "field": FIELD,
                     "waste": WASTE,
                     "forest": FOREST2 if n > 150 else FOREST,
@@ -243,48 +337,122 @@ def paint_map(grid: list[str]) -> Image.Image:
                     "mountain": MOUNT2 if n > 140 else MOUNT,
                     "river": RIVER,
                 }[k]
-                if k != "river" and (x % 11) + (y % 9) == 2:
-                    col = tuple(min(255, v + 10) for v in col[:3]) + (255,)
-                if k in ("plain", "grass") and (x + y * 3) % 17 == 0 and n > 110:
-                    col = (78, 102, 58, 255) if k == "plain" else (48, 82, 44, 255)
             px[x, y] = col
 
-    # Pixel-edge foam (not cell-snapped)
+    places = parse_places()
+    by_id = {pid: (lon, lat, kind) for pid, lon, lat, kind in places}
+    hubs: list[tuple[int, int, float]] = []
+    for pid, lon, lat, kind in places:
+        x, y = lonlat_xy(lon, lat, W, H)
+        if not (0 <= x < W and 0 <= y < H):
+            continue
+        if kinds[y][x] == "sea":
+            continue
+        weight = 1.4 if kind == "city" else 0.9 if kind in ("pass", "battlefield") else 0.55
+        hubs.append((x, y, weight))
+
+    # Dirt roads follow catalog edges. Skip water.
+    for a, b in parse_road_edges():
+        if a not in by_id or b not in by_id:
+            continue
+        x0, y0 = lonlat_xy(by_id[a][0], by_id[a][1], W, H)
+        x1, y1 = lonlat_xy(by_id[b][0], by_id[b][1], W, H)
+        for i, (x, y) in enumerate(bresenham(x0, y0, x1, y1)):
+            if not (0 <= x < W and 0 <= y < H):
+                continue
+            if kinds[y][x] in ("sea", "river"):
+                continue
+            px[x, y] = ROAD
+            if i % 5 == 0 and 0 <= y + 1 < H and kinds[y + 1][x] not in ("sea", "river"):
+                px[x, y + 1] = (140, 118, 82, 255)
+
+    # Fields, tufts, shrubs cluster around cities and rivers — quiet midtone elsewhere.
+    for y in range(H):
+        for x in range(W):
+            k = kinds[y][x]
+            if k not in ("plain", "grass"):
+                continue
+            infl = 0.0
+            for hx, hy, w in hubs:
+                d2 = (x - hx) ** 2 + (y - hy) ** 2
+                r2 = (38 * w) ** 2
+                if d2 < r2:
+                    infl = max(infl, w * (1.0 - d2 / r2))
+            if k == "grass":
+                infl = max(infl, 0.25)
+            n = h(x, y, 11)
+            if infl > 0.45 and n > 200:
+                px[x, y] = FIELD if (x + y) % 3 else (118, 108, 58, 255)
+            elif infl > 0.22 and n < 18:
+                px[x, y] = (78, 102, 58, 255) if k == "plain" else (48, 82, 44, 255)
+            elif infl > 0.12 and n > 248:
+                px[x, y] = (70, 92, 52, 255)
+
     for y in range(1, H - 1):
         for x in range(1, W - 1):
-            if px[x, y][:3] != SEA[:3] and px[x, y][:3] != SEA2[:3]:
+            if px[x, y][:3] != SEA[:3]:
                 continue
             nbs = (px[x - 1, y], px[x + 1, y], px[x, y - 1], px[x, y + 1])
             if any(p[:3] not in (SEA[:3], SEA2[:3], FOAM[:3], RIVER[:3]) for p in nbs):
-                if h(x, y, 3) > 140:
+                if h(x, y, 3) > 150:
                     px[x, y] = FOAM
 
     RAW = ROOT / "public" / "assets" / "pixel-times" / "imagine-raw"
-    forest_src = RAW / "forest-crowns.jpg"
-    mount_src = RAW / "mountain-ridge.jpg"
-    forest_spr = fit(Image.open(forest_src), (36, 28)) if forest_src.exists() else None
-    mount_spr = fit(Image.open(mount_src), (56, 36)) if mount_src.exists() else None
 
-    def stamp(sprite: Image.Image | None, want: str, step: int, thresh: int) -> None:
+    def load_spr(name: str, size: tuple[int, int]) -> Image.Image | None:
+        p = RAW / name
+        return fit(Image.open(p), size) if p.exists() else None
+
+    forest_a = load_spr("forest-crowns.jpg", (36, 28))
+    forest_b = load_spr("forest-crowns-2.jpg", (32, 26))
+    mount_spr = load_spr("mountain-ridge.jpg", (56, 36))
+    field_spr = load_spr("field-patch.jpg", (28, 22))
+    hamlet_spr = load_spr("hamlet.jpg", (26, 22))
+    shrub_spr = load_spr("shrub-clump.jpg", (18, 14))
+
+    def stamp_kind(sprite: Image.Image | None, want: str, step: int, thresh: int) -> None:
         if sprite is None:
             return
         sw, sh = sprite.size
         for y in range(0, H - sh, step):
             for x in range(0, W - sw, step):
-                lon = 100.0 + (x + sw / 2) / W * 32.0
-                lat = 44.0 - (y + sh / 2) / H * 23.0
-                if land_kind(lon, lat) != want:
+                cx, cy = x + sw // 2, y + sh // 2
+                if not (0 <= cx < W and 0 <= cy < H):
+                    continue
+                if kinds[cy][cx] != want:
                     continue
                 if h(x, y, 9) < thresh:
                     continue
-                ox = x + (h(x, y, 1) % (step // 2)) - step // 4
-                oy = y + (h(x, y, 2) % (step // 3)) - step // 6
+                ox = x + (h(x, y, 1) % max(1, step // 2)) - step // 4
+                oy = y + (h(x, y, 2) % max(1, step // 3)) - step // 6
                 im.alpha_composite(sprite, (max(0, ox), max(0, oy)))
 
-    stamp(forest_spr, "forest", 36, 70)
-    stamp(forest_spr, "grass", 64, 190)
-    stamp(mount_spr, "mountain", 52, 40)
-    stamp(mount_spr, "hill", 72, 210)
+    stamp_kind(forest_a, "forest", 34, 60)
+    stamp_kind(forest_b, "forest", 40, 90)
+    stamp_kind(forest_b, "grass", 58, 175)
+    stamp_kind(mount_spr, "mountain", 50, 35)
+    stamp_kind(mount_spr, "hill", 70, 200)
+
+    def stamp_near(sprite: Image.Image | None, radius: int, thresh: int, jitter: int) -> None:
+        if sprite is None:
+            return
+        sw, sh = sprite.size
+        for hx, hy, w in hubs:
+            if h(hx, hy, 13) < thresh:
+                continue
+            ox = hx + (h(hx, hy, 1) % (jitter * 2 + 1)) - jitter - sw // 3
+            oy = hy + (h(hx, hy, 2) % (jitter + 3)) - 2
+            if not (0 <= ox < W - sw and 0 <= oy < H - sh):
+                continue
+            if kinds[min(H - 1, oy + sh // 2)][min(W - 1, ox + sw // 2)] in ("sea", "river", "mountain"):
+                continue
+            if abs(ox - hx) > radius * w and abs(oy - hy) > radius * w:
+                continue
+            im.alpha_composite(sprite, (ox, oy))
+
+    stamp_near(field_spr, 28, 40, 18)
+    stamp_near(hamlet_spr, 16, 90, 10)
+    stamp_near(shrub_spr, 24, 20, 14)
     return im
 
 
