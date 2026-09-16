@@ -124,7 +124,7 @@ export function EventTree({
   );
 }
 
-export function PeopleTree() {
+export function PeopleTree({ onPick }: { onPick?: (id: string) => void }) {
   const chars = getCharacters();
   const [open, setOpen] = useState<string | null>("liu");
   return (
@@ -144,7 +144,7 @@ export function PeopleTree() {
           >
             {expanded
               ? kids.map((c) => (
-                  <TreeNode key={c.id} label={c.nameKo} level={1} />
+                  <TreeNode key={c.id} label={c.nameKo} level={1} onSelect={() => onPick?.(c.id)} />
                 ))
               : null}
           </TreeNode>

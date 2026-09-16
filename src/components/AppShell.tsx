@@ -58,7 +58,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div
         className={
           worldHome
-            ? "flex min-h-dvh w-full overflow-x-hidden"
+            ? "flex h-dvh w-full overflow-hidden"
             : "mx-auto flex min-h-dvh w-full max-w-[1400px] overflow-x-hidden"
         }
       >
@@ -108,7 +108,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div
           className={
             worldHome
-              ? "flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden"
+              ? "flex h-dvh min-h-0 min-w-0 flex-1 flex-col overflow-hidden"
               : "flex min-w-0 flex-1 flex-col overflow-x-hidden pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] md:pb-2 md:pr-2 md:pt-2"
           }
         >

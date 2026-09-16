@@ -21,6 +21,10 @@ const PT_ASSETS = [
   ["/assets/pixel-times/scene-backgrounds/taoyuan.png", 480, 270],
   ["/assets/pixel-times/scene-backgrounds/hulao.png", 480, 270],
   ["/assets/pixel-times/scene-backgrounds/chibi.png", 480, 270],
+  ["/assets/pixel-times/scene-backgrounds/yellow-turban.png", 480, 270],
+  ["/assets/pixel-times/scene-backgrounds/luoyang-fire.png", 480, 270],
+  ["/assets/pixel-times/scene-backgrounds/wucao.png", 480, 270],
+  ["/assets/pixel-times/scene-backgrounds/longzhong.png", 480, 270],
 ];
 
 const HSCROLL_ROUTES = [
@@ -141,7 +145,8 @@ async function run(viewport, label) {
   await check(`${label} no playback`, (await page.getByRole("button", { name: /재생|플레이/ }).count()) === 0);
   await page.getByRole("link", { name: "같은 시각 천하 보기" }).click();
   await check(`${label} world`, await seen(page, page.getByText("전역도")));
-  await check(`${label} frozen`, await seen(page, page.getByText("시계 정지")));
+  await check(`${label} frozen`, (await page.getByText("시계 정지").count()) === 0);
+  await check(`${label} next episode`, await seen(page, page.getByRole("button", { name: "다음 장" })));
   await check(`${label} tiles`, await page.locator("canvas").first().isVisible());
   await check(`${label} prev episode`, await seen(page, page.getByRole("button", { name: "이전 장" })));
   await check(`${label} tree book`, await seen(page, page.getByRole("button", { name: "전략 삼국지 책" })));

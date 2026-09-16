@@ -166,9 +166,17 @@ def main(argv: list[str]) -> int:
         (raw / "v01-e04-banner.jpg", BANNER_DIR / "v01-e04.png", "eventBanner"),
         (raw / "v05-e03-banner.jpg", BANNER_DIR / "v05-e03.png", "eventBanner"),
         (raw / "v26-e01-banner.jpg", BANNER_DIR / "v26-e01.png", "eventBanner"),
+        (raw / "v01-e01-banner.jpg", BANNER_DIR / "v01-e01.png", "eventBanner"),
+        (raw / "v06-e01-banner.jpg", BANNER_DIR / "v06-e01.png", "eventBanner"),
+        (raw / "v16-e03-banner.jpg", BANNER_DIR / "v16-e03.png", "eventBanner"),
+        (raw / "v21-e02-banner.jpg", BANNER_DIR / "v21-e02.png", "eventBanner"),
         (raw / "taoyuan-bg.jpg", BG_DIR / "taoyuan.png", "sceneBackground"),
         (raw / "hulao-bg.jpg", BG_DIR / "hulao.png", "sceneBackground"),
         (raw / "chibi-bg.jpg", BG_DIR / "chibi.png", "sceneBackground"),
+        (raw / "yellow-turban-bg.jpg", BG_DIR / "yellow-turban.png", "sceneBackground"),
+        (raw / "luoyang-fire-bg.jpg", BG_DIR / "luoyang-fire.png", "sceneBackground"),
+        (raw / "wucao-bg.jpg", BG_DIR / "wucao.png", "sceneBackground"),
+        (raw / "longzhong-bg.jpg", BG_DIR / "longzhong.png", "sceneBackground"),
     ]
     for src, dest, kind in stills:
         if src.exists():

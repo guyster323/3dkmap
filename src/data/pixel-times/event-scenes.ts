@@ -142,7 +142,7 @@ export const EVENT_SCENES: Record<string, EventScene> = {
     episodeId: "v01-e01",
     eventId: "ev-184-yellow-jizhou",
     title: "창천이 이미 죽다",
-    background: "/assets/pixel-times/scene-backgrounds/hulao.png",
+    background: "/assets/pixel-times/scene-backgrounds/yellow-turban.png",
     actors: [
       { id: "zhang-jiao", characterId: "zhang-jiao", col: 8, row: 8, dir: 0 },
       { id: "cao-cao", characterId: "cao-cao", col: 14, row: 9, dir: 1 },
@@ -171,7 +171,7 @@ export const EVENT_SCENES: Record<string, EventScene> = {
     episodeId: "v06-e01",
     eventId: "ev-190-burn",
     title: "낙양을 불태우다",
-    background: "/assets/pixel-times/scene-backgrounds/chibi.png",
+    background: "/assets/pixel-times/scene-backgrounds/luoyang-fire.png",
     actors: [
       { id: "dong-zhuo", characterId: "dong-zhuo", col: 10, row: 8, dir: 0 },
     ],
@@ -191,7 +191,7 @@ export const EVENT_SCENES: Record<string, EventScene> = {
     episodeId: "v16-e03",
     eventId: "ev-200-guandu",
     title: "오소의 불",
-    background: "/assets/pixel-times/scene-backgrounds/chibi.png",
+    background: "/assets/pixel-times/scene-backgrounds/wucao.png",
     actors: [
       { id: "cao-cao", characterId: "cao-cao", col: 7, row: 8, dir: 0 },
       { id: "yuan-shao", characterId: "yuan-shao", col: 14, row: 8, dir: 1 },
@@ -220,7 +220,7 @@ export const EVENT_SCENES: Record<string, EventScene> = {
     episodeId: "v21-e02",
     eventId: "ev-207-longzhong",
     title: "융중대",
-    background: "/assets/pixel-times/scene-backgrounds/taoyuan.png",
+    background: "/assets/pixel-times/scene-backgrounds/longzhong.png",
     actors: [
       { id: "liu-bei", characterId: "liu-bei", col: 7, row: 9, dir: 0 },
       { id: "zhuge-liang", characterId: "zhuge-liang", col: 12, row: 9, dir: 1 },

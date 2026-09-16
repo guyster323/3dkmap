@@ -18,10 +18,9 @@
   --font-serif: "Noto Serif KR", "Songti SC", serif;
   --font-sans: "Noto Sans KR", "Pretendard", system-ui, sans-serif;
 
-  /* 영걸전 창틀 — docs/REDESIGN-EIKETSU.md §2 */
-  --color-eik-win-top: #1c2f5e;
-  --color-eik-win-mid: #14224a;
-  --color-eik-win-bot: #0a1226;
+  --color-eik-win-top: #141a28;
+  --color-eik-win-mid: #0c1220;
+  --color-eik-win-bot: #070a14;
   --color-eik-bevel-hi: #e8e0c8;
   --color-eik-bevel-lo: #04070f;
   --color-eik-gold: #d8b74a;
@@ -83,7 +82,6 @@ body {
   box-sizing: border-box;
   color: var(--color-eik-text);
   font-family: var(--font-pixel);
-  max-width: 100%;
   min-width: 0;
 }
 

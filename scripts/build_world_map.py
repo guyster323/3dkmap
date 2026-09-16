@@ -94,11 +94,26 @@ def ell(lon: float, lat: float, cx: float, cy: float, rx: float, ry: float) -> b
 
 
 def land_kind(lon: float, lat: float) -> str:
-    """Soft original landmask (ellipses). Not a survey."""
-    if ell(lon, lat, 127.05, 37.35, 2.35, 5.1):
-        if ell(lon, lat, 124.9, 37.6, 1.35, 2.0) and not ell(lon, lat, 126.4, 37.4, 0.95, 1.7):
+    """Soft original landmask. Geographic skeleton, not a survey or border claim."""
+    # Bohai / Yellow Sea basin
+    if ell(lon, lat, 119.4, 38.7, 1.85, 1.25):
+        return "sea"
+    if ell(lon, lat, 122.6, 37.6, 1.55, 1.85):
+        return "sea"
+    # Shandong peninsula
+    if ell(lon, lat, 120.9, 36.65, 1.85, 0.78):
+        return "hill"
+    # Korean peninsula: slim N-S body, west-coast Yellow Sea bite, east coast
+    if ell(lon, lat, 127.55, 36.55, 1.55, 4.35):
+        if ell(lon, lat, 125.15, 36.9, 1.15, 2.15) and lon < 126.35:
             return "sea"
-        return "hill" if lon > 128.1 else "grass"
+        if ell(lon, lat, 129.85, 36.4, 0.85, 1.6) and lon > 129.45 and lat < 37.6:
+            return "sea"
+        return "hill" if lon > 128.35 or lat > 40.2 else "grass"
+    if ell(lon, lat, 129.15, 41.35, 1.05, 1.55):
+        return "forest"
+    if ell(lon, lat, 126.5, 33.38, 0.38, 0.22):
+        return "grass"
     if ell(lon, lat, 121.05, 36.85, 2.05, 1.18):
         return "grass"
     if ell(lon, lat, 122.15, 37.05, 2.15, 2.55):
@@ -176,26 +191,13 @@ def paint_map(grid: list[str]) -> Image.Image:
                 continue
             nbs = (px[x - 1, y], px[x + 1, y], px[x, y - 1], px[x, y + 1])
             if any(p[:3] not in (SEA[:3], SEA2[:3], FOAM[:3]) for p in nbs):
-                if h(x, y, 3) > 80:
+                if h(x, y, 3) > 200:
                     px[x, y] = FOAM
 
     def kind(c, r):
         lon = 100.0 + (c + 0.5) / cols * 32.0
         lat = 44.0 - (r + 0.5) / rows * 23.0
         return land_kind(lon, lat)
-
-    # Coast foam
-    for r in range(rows):
-        for c in range(cols):
-            if kind(c, r) != "sea":
-                continue
-            land = any(kind(c + dc, r + dr) != "sea" for dc, dr in ((0, -1), (1, 0), (0, 1), (-1, 0)))
-            if not land:
-                continue
-            for dx in range(TILE):
-                x, y = c * TILE + dx, r * TILE + 2 + (h(c, r, dx) % 3)
-                if 0 <= y < H:
-                    px[x, y] = FOAM
 
     # Tree crowns (multi-pixel, not one-per-cell squares)
     d = ImageDraw.Draw(im)
@@ -373,11 +375,25 @@ def main() -> None:
         print("city major from Imagine")
     else:
         city("major").save(OUT / "city-major.png")
-    for k in ("village", "county", "pass"):
-        city(k).save(OUT / f"city-{k}.png")
-        print("city", k)
-    match_banners()
-    landmarks()
+    county_raw = RAW / "city-county.jpg"
+    if county_raw.exists():
+        fit(Image.open(county_raw), (40, 32)).save(OUT / "city-county.png")
+        print("city county from Imagine")
+    else:
+        city("county").save(OUT / "city-county.png")
+    for k in ("village", "pass"):
+        if not (OUT / f"city-{k}.png").exists():
+            city(k).save(OUT / f"city-{k}.png")
+            print("city", k)
+    ship_raw = RAW / "landmark-ship.jpg"
+    army_raw = RAW / "landmark-army.jpg"
+    if ship_raw.exists():
+        fit(Image.open(ship_raw), (48, 32)).save(OUT / "landmark-ship.png")
+        print("ship from Imagine")
+    if army_raw.exists():
+        fit(Image.open(army_raw), (40, 28)).save(OUT / "landmark-army.png")
+        print("army from Imagine")
+    # Do not overwrite approved banners.
 
 
 if __name__ == "__main__":

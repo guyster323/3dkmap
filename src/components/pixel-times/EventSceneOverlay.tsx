@@ -44,7 +44,7 @@ export function EventSceneOverlay({
       aria-labelledby={titleId}
       className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(6,10,20,0.72)] p-2"
     >
-      <div className="eik-win flex max-h-[100dvh] w-full max-w-3xl min-w-0 flex-col overflow-y-auto">
+      <div className="eik-win flex max-h-[80dvh] w-[min(960px,calc(100vw-1rem))] min-w-0 flex-col overflow-y-auto" style={{ maxWidth: 960 }}>
         <div className="flex min-h-[44px] items-center justify-between gap-2 px-3 py-2">
           <h2 id={titleId} className="eik-era min-w-0 break-keep">
             {scene.title}
@@ -61,20 +61,32 @@ export function EventSceneOverlay({
           </button>
         </div>
 
-        <div className="relative mx-2 mb-2 min-h-[180px] overflow-hidden" style={{ background: "var(--color-eik-void)" }}>
+        <div
+          className="relative mx-auto mb-2 overflow-hidden"
+          style={{ background: "var(--color-eik-void)", width: "min(960px, 100%)", aspectRatio: "480 / 270" }}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={scene.background}
             alt=""
-            className="pixelated block h-auto w-full"
+            className="pixelated absolute inset-0 h-full w-full object-contain"
             width={480}
             height={270}
           />
-          <div className="absolute inset-x-0 bottom-2 flex justify-center gap-4">
-            {frame.actors.map((actor) => (
-              <SceneActorSprite key={actor.id} actor={actor} />
-            ))}
-          </div>
+          {frame.actors.map((actor) => (
+            <div
+              key={actor.id}
+              className="absolute"
+              style={{
+                left: `${(actor.col / 20) * 100}%`,
+                top: `${(actor.row / 12) * 100}%`,
+                transform: "translate(-50%, -90%)",
+                zIndex: Math.round(actor.row),
+              }}
+            >
+              <SceneActorSprite actor={actor} />
+            </div>
+          ))}
         </div>
 
         {frame.speak ? (

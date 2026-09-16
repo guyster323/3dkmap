@@ -6,3 +6,5 @@ out
 .env*.local
 tsconfig.tsbuildinfo
 .godot/
+__pycache__/
+*.pyc

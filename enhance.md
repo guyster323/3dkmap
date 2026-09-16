@@ -1,23 +1,31 @@
-# enhance.md — Target UX/UI + unique faces
+# enhance.md
 
-Codex Astra xhigh was dispatched (`run_a238f6aa7e4e` / `ctx_0fadbd9157f8`, launch.effective `astra` + `xhigh`) to advise from `repo/` Target PNGs. The worker terminal is live but **turn start was unobserved** (composer queued; Enter swallowed). This file is ROOT synthesis from those same Target images + Prompt.md §5–8, to be merged with Codex `docs/codex-ux-advice.md` if/when `worker_done` arrives.
+Canonical direction: `docs/codex-astra-direction.md`
+Source: Codex CLI **gpt-6-astra xhigh** (`ctx_8eb13562c112`, run `run_5f286003120f`).
+Target: `repo/Prompt.md` + `repo/Codex 이미지 2026년 9월 12일 오후 11_01_23.png` + `...11_01_37.png`.
 
-## Target vs current (product mock `11_01_23`)
+Older `docs/codex-ux-advice.md` is composition-only and stale for current `/world` (map-as-stage is already done).
 
-1. **Map is the stage.** Target: full-bleed quarter-view land, trees/cities as tiles, event cards sitting *on* the map. Current: geographic color fields + node palaces; left dock and bottom-right chronicle still steal too much of 1440.
-2. **Chrome is overlay, not a dashboard.** Target: thin top bar (lockup + 권 + chapter pips + ▶/▶▶▶), one left accordion. Current: header + four tree headers + chronicle list. Collapse chronicle on md+ into a 1-line “그 시각 N건” chip unless opened.
-3. **Event cards are 16:9 paintings with date/title, not a stacked newsfeed.** Keep max 1–2 banners; never cover 낙양.
-4. **Portrait quote box** (조조 초상 + 한 줄) top-right in Target. Add a small `QuotePlate` using the *current episode’s* first character — never reuse Cao Cao art for 영제.
-5. **Identity.** 조조 ≠ 영제. Unique Imagine masters now exist for emperor-ling/shao/xian, diaochan, lady-sun, pang-tong. Ban `fill_remaining_cast.py` from cloning `cao-cao` onto Han emperors.
+Model id is `gpt-6-astra`, not `astra`.
 
-## Stop doing
+## P0 implemented (HUD / camera)
 
-- Hue-shifting Cao Cao into emperors/ladies.
-- Four simultaneous 280px banners.
-- Treating a passing `verify` as visual QA against Target.
+1. **Map is the stage.** `/world` is `h-dvh` overflow hidden. Map `fill` covers the viewport (1000:700, no stretch). Header, trees, chronicle overlay the map at every width.
+2. **Two-row rail.** Brand + chapter title + ▶ / ▶▶▶ on row 1; chapter marks, quote plate, mature toggle on row 2. No playback. No 「시계 정지」.
+3. **Left trees as HUD.** Four groups, one open. Mobile: 책/지역/사건/인물 strip; panel drops over the map.
+4. **Banners.** Max 1–2; primary card, secondary compact; leader in map space; no HUD-% clamp.
+5. **Camera.** Cover pan clamp is ±(display-viewport)/2 so 국내성 can enter the safe area. Off-graph ids (도원, 기주) resolve to the nearest strategic node.
 
-## Do next (this pass)
+## Still P0 (map art)
 
-- Unique faces shipped (atlases rebuilt).
-- Chronicle compact chip; QuotePlate; keep trees overlay.
-- Do not merge to `master`.
+Coast/river/city-tier density vs Codex mock; remaining unique officer faces.
+
+## Also shipped (not from Codex)
+
+Unique Imagine faces so 영제/헌제/초선 are not hue-shifted 조조.
+
+## Do not
+
+- Merge to `master`.
+- Add autoplay/speed.
+- Invent Korean battles.

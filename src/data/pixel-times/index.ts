@@ -21,6 +21,7 @@ export {
   type EventVisual,
 } from "./event-visuals";
 export { EPISODE_CAMERA_HINTS, getEpisodeCameraHint, type BookTimeline, type EpisodeCameraHint } from "./book-timelines";
+export { episodeFocusNodeId, resolveStrategicNodeId } from "./map-place";
 export {
   FACTION_TREE_ORDER,
   REGION_TREE_ORDER,

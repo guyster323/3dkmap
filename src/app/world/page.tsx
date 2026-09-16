@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, Suspense } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { StrategicMapCanvas } from "@/components/StrategicMapCanvas";
 import { SourceBadge } from "@/components/eiketsu";
@@ -19,7 +20,13 @@ import {
   VolumeTitleplate,
 } from "@/components/pixel-times";
 import { STRATEGIC_EDGES, STRATEGIC_NODES, STRATEGIC_TERRITORIES } from "@/data/terrain";
-import { eventVisualsOnMap, getEventScene, type TreeId } from "@/data/pixel-times";
+import {
+  episodeFocusNodeId,
+  eventVisualsOnMap,
+  getEventScene,
+  resolveStrategicNodeId,
+  type TreeId,
+} from "@/data/pixel-times";
 import {
   episodeNearestYear,
   episodesAround,
@@ -30,7 +37,7 @@ import {
   getPlace,
   getVolume,
 } from "@/lib/content";
-import { eraToAbsDays, eventIsLive, formatEra } from "@/lib/clock";
+import { eraToAbsDays, eventIsLive } from "@/lib/clock";
 import { savePrefs } from "@/lib/prefs";
 import { REGION_LABEL, type Episode, type RegionId, type WorldEvent } from "@/lib/types";
 
@@ -56,8 +63,13 @@ function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: strin
   const around = episodesAround(episode.id);
   const clock = eraToAbsDays(episode.timeStart);
   const [selectedPlace, setSelectedPlace] = useState<string | undefined>(episode.placeIds[0]);
+  const [focusPlaceId, setFocusPlaceId] = useState<string | undefined>(
+    episodeFocusNodeId(episode.id, episode.placeIds),
+  );
+  const [zoom, setZoom] = useState<1 | 2>(1);
   const [regionFilter, setRegionFilter] = useState<RegionId | null>(null);
   const [openTree, setOpenTree] = useState<TreeId | null>(null);
+  const [pickedPerson, setPickedPerson] = useState<string | undefined>(episode.characterIds[0]);
   const { mature } = useMature();
 
   const liveAll = useMemo(
@@ -97,62 +109,17 @@ function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: strin
 
   const focusPlace = (placeId: string) => {
     setSelectedPlace(placeId);
+    const mapped = resolveStrategicNodeId(placeId);
+    if (mapped) setFocusPlaceId(mapped);
   };
 
   return (
-    <main className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden">
-      <header className="relative z-20 min-w-0 p-1 md:absolute md:inset-x-0 md:top-0 md:p-2">
-        <div className="eik-win min-w-0 px-2 py-1 md:px-3 md:py-2">
-          <div className="flex min-w-0 flex-wrap items-end justify-between gap-2">
-            <div className="min-w-0">
-              <p className="eik-src tracking-widest" style={{ color: "var(--color-eik-gold)" }}>
-                전역도
-              </p>
-              {volume ? <VolumeTitleplate volume={volume} /> : null}
-              <p className="eik-src mt-1" style={{ color: "var(--color-eik-text-dim)" }}>
-                {formatEra(episode.timeStart)} · {episode.title}
-              </p>
-            </div>
-            <div className="flex min-w-0 flex-wrap items-center gap-2">
-              <QuotePlate episode={episode} />
-              <EpisodeStepper
-                hasPrevEpisode={Boolean(around.prev)}
-                hasNextEpisode={Boolean(around.next)}
-                hasNextVolume={Boolean(around.nextVolume)}
-                onPrevEpisode={() => around.prev && goEpisode(around.prev.id)}
-                onNextEpisode={() => around.next && goEpisode(around.next.id)}
-                onNextVolume={() => around.nextVolume && goEpisode(around.nextVolume.id)}
-              />
-              <MatureToggle />
-            </div>
-          </div>
-          {around.list.length > 0 ? (
-            <div className="mt-2 min-w-0">
-              <VolumeTimeline episodes={around.list} activeId={episode.id} onSelect={goEpisode} />
-            </div>
-          ) : null}
-        </div>
-      </header>
-
-      <div className="relative z-20 min-w-0 px-2 pb-2 md:absolute md:left-2 md:top-36 md:z-30 md:max-h-[70%] md:overflow-y-auto md:pb-0">
-        <TreeDock openId={openTree} onOpen={setOpenTree}>
-          {{
-            book: <BookTree current={episode} onPickEpisode={goEpisode} />,
-            region: (
-              <RegionTree
-                filter={regionFilter}
-                onFilter={setRegionFilter}
-                onFocusPlace={focusPlace}
-              />
-            ),
-            event: <EventTree events={live} onPick={(pid) => pid && focusPlace(pid)} />,
-            people: <PeopleTree />,
-          }}
-        </TreeDock>
-      </div>
-
-      <div className="relative min-w-0 w-full">
+    <main className="relative h-full min-h-0 min-w-0 flex-1 overflow-hidden">
+      <div className="absolute inset-0 z-0">
         <StrategicMapCanvas
+          fill
+          zoom={zoom}
+          focusPlaceId={focusPlaceId}
           nodes={STRATEGIC_NODES}
           edges={STRATEGIC_EDGES}
           territories={STRATEGIC_TERRITORIES}
@@ -168,19 +135,115 @@ function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: strin
             />
           }
         />
-        <EikChronicle live={live} mature={mature} selectedPlace={selectedPlace} onPick={focusPlace} />
+      </div>
+
+      <div className="pointer-events-none relative z-20 flex h-full min-h-0 flex-col">
+        <header className="pointer-events-auto shrink-0 p-1">
+          <div className="eik-win min-w-0 px-2 py-0">
+            <div className="flex min-w-0 items-center gap-1">
+              <Link
+                href="/"
+                className="eik-src flex min-h-[44px] shrink-0 items-center whitespace-nowrap pr-2"
+                style={{ color: "var(--color-eik-gold)" }}
+              >
+                Pixel Times
+              </Link>
+              <div className="min-w-0 flex-1">
+                {volume ? <VolumeTitleplate volume={volume} compact /> : null}
+                <p className="eik-src truncate" style={{ color: "var(--color-eik-text-dim)" }}>
+                  전역도 · {episode.order}장 {episode.title}
+                </p>
+              </div>
+              <EpisodeStepper
+                hasPrevEpisode={Boolean(around.prev)}
+                hasNextEpisode={Boolean(around.next)}
+                hasNextVolume={Boolean(around.nextVolume)}
+                onPrevEpisode={() => around.prev && goEpisode(around.prev.id)}
+                onNextEpisode={() => around.next && goEpisode(around.next.id)}
+                onNextVolume={() => around.nextVolume && goEpisode(around.nextVolume.id)}
+              />
+            </div>
+            <div className="flex min-w-0 items-center gap-1">
+              {around.list.length > 0 ? (
+                <div className="min-w-0 flex-1">
+                  <VolumeTimeline episodes={around.list} activeId={episode.id} onSelect={goEpisode} />
+                </div>
+              ) : (
+                <div className="min-w-0 flex-1" />
+              )}
+              <QuotePlate episode={episode} characterId={pickedPerson} />
+              <MatureToggle />
+            </div>
+          </div>
+        </header>
+
+        <div className="relative min-h-0 flex-1">
+          <div className="pointer-events-auto absolute left-1 top-1 z-30 max-h-[calc(100%-0.5rem)]">
+            <TreeDock openId={openTree} onOpen={setOpenTree}>
+              {{
+                book: <BookTree current={episode} onPickEpisode={goEpisode} />,
+                region: (
+                  <RegionTree
+                    filter={regionFilter}
+                    onFilter={setRegionFilter}
+                    onFocusPlace={focusPlace}
+                  />
+                ),
+                event: <EventTree events={live} onPick={(pid) => pid && focusPlace(pid)} />,
+                people: <PeopleTree onPick={setPickedPerson} />,
+              }}
+            </TreeDock>
+          </div>
+          <div className="pointer-events-none absolute inset-x-1 bottom-1 z-20 flex flex-col gap-1 pb-[env(safe-area-inset-bottom,0px)] md:inset-x-auto md:left-1 md:right-1 md:flex-row md:items-end md:justify-between">
+            <div className="pointer-events-auto flex flex-wrap gap-1">
+              <button
+                type="button"
+                className="eik-win eik-win--flat min-h-[44px] px-2 eik-src"
+                style={{ color: "var(--color-eik-gold)" }}
+                onClick={() => {
+                  setZoom(1);
+                  setFocusPlaceId(undefined);
+                }}
+              >
+                전체 지도
+              </button>
+              <button
+                type="button"
+                className="eik-win eik-win--flat min-h-[44px] px-2 eik-src"
+                style={{ color: "var(--color-eik-gold)" }}
+                onClick={() => {
+                  setZoom(1);
+                  setFocusPlaceId(episodeFocusNodeId(episode.id, episode.placeIds));
+                  setSelectedPlace(episode.placeIds[0]);
+                }}
+              >
+                현재 장 위치
+              </button>
+              <button
+                type="button"
+                className="eik-win eik-win--flat min-h-[44px] min-w-[44px] px-2 eik-src"
+                style={{ color: "var(--color-eik-gold)" }}
+                aria-pressed={zoom === 2}
+                onClick={() => setZoom((z) => (z === 1 ? 2 : 1))}
+              >
+                {zoom === 2 ? "1×" : "2×"}
+              </button>
+            </div>
+            <EikChronicle live={live} mature={mature} selectedPlace={selectedPlace} onPick={focusPlace} />
+          </div>
+        </div>
       </div>
       {scene ? <EventSceneOverlay scene={scene} onClose={closeScene} /> : null}
     </main>
   );
 }
 
-function QuotePlate({ episode }: { episode: Episode }) {
-  const c = getCharacter(episode.characterIds[0]);
+function QuotePlate({ episode, characterId }: { episode: Episode; characterId?: string }) {
+  const c = getCharacter(characterId ?? episode.characterIds[0]);
   if (!c) return null;
   return (
-    <div className="eik-win eik-win--flat hidden max-w-[200px] items-center gap-2 p-1 md:flex">
-      <KaoPortrait character={c} size={40} />
+    <div className="eik-win eik-win--flat flex max-w-[120px] shrink-0 items-center gap-1 p-1 md:max-w-[160px] md:gap-2">
+      <KaoPortrait character={c} size={32} />
       <p className="eik-src min-w-0 leading-snug break-keep" style={{ color: "var(--color-eik-gold)" }}>
         {c.nameKo}
       </p>
@@ -200,10 +263,10 @@ function EikChronicle({
   onPick: (placeId: string) => void;
 }) {
   return (
-    <aside className="pointer-events-auto relative z-10 mx-2 mb-2 mt-2 max-h-[24vh] min-w-0 overflow-hidden lg:absolute lg:bottom-2 lg:right-2 lg:z-10 lg:mx-0 lg:mb-0 lg:mt-0 lg:w-[min(240px,calc(100vw-1rem))]">
-      <div className="eik-win flex max-h-[36vh] min-w-0 flex-col overflow-hidden">
-        <p className="eik-nameplate m-2">그 시각 사건</p>
-        <ul className="scroll-thin min-w-0 flex-1 space-y-2 overflow-y-auto px-2 pb-2">
+    <aside className="pointer-events-auto relative z-10 max-h-[18vh] w-full min-w-0 overflow-hidden md:max-h-[28vh] md:w-[220px]">
+      <div className="eik-win flex max-h-[18vh] min-w-0 flex-col overflow-hidden md:max-h-[28vh]">
+        <p className="eik-nameplate m-2">그 시각 사건 {live.length ? live.length : ""}</p>
+        <ul className="scroll-thin min-w-0 flex-1 space-y-1 overflow-y-auto px-2 pb-2">
           {live.map((ev) => (
             <EventRow
               key={ev.id}
@@ -248,15 +311,10 @@ function EventRow({
         }
       >
         <button type="button" onClick={onPick} className="min-h-[44px] w-full text-left">
-          <div className="mb-1 flex justify-between eik-src">
-            <span style={{ color: active ? "var(--color-eik-text-ink)" : "var(--color-eik-gold)" }}>
-              {REGION_LABEL[ev.region]}
-              {place ? ` · ${place.nameKo}` : ""}
-            </span>
-            <span>대기</span>
-          </div>
+          <p className="eik-src" style={{ color: active ? "var(--color-eik-text-ink)" : "var(--color-eik-gold)" }}>
+            {place ? place.nameKo : REGION_LABEL[ev.region]}
+          </p>
           <p className="font-serif text-sm leading-snug break-keep">{ev.headline}</p>
-          <p className="eik-body mt-1 text-xs leading-relaxed">{ev.bodyFamily}</p>
         </button>
         {extra && <DirectRecord text={ev.bodyFull!} />}
         <ul className="mt-1 flex flex-wrap gap-1.5">
