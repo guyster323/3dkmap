@@ -177,7 +177,7 @@ function StrategicWorld({ episode, sceneId }: { episode: Episode; sceneId: strin
           </div>
         </header>
 
-        <div className="relative min-h-0 flex-1">
+        <div className="pointer-events-none relative min-h-0 flex-1">
           <div className="pointer-events-auto absolute left-1 top-1 z-30 max-h-[calc(100%-0.5rem)]">
             <TreeDock openId={openTree} onOpen={setOpenTree}>
               {{

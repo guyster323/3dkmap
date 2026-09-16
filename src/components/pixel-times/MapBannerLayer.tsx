@@ -38,10 +38,10 @@ export function MapBannerLayer({
     const w = compact ? 16 : 24;
     const h = compact ? 7 : 12;
     const corners: [number, number][] = [
-      [3, -h - 1],
       [3, 3],
-      [-w - 3, -h - 1],
       [-w - 3, 3],
+      [3, -h - 1],
+      [-w - 3, -h - 1],
     ];
     let box: Box = { left: ax + 3, top: ay + 3, w, h };
     let placedOk = false;

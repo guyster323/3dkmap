@@ -265,8 +265,8 @@ export function StrategicMapCanvas({
     const nx = (node.x / LOGIC_W) * displayW;
     const ny = (node.y / LOGIC_H) * displayH;
     return clampPan(
-      view.w * 0.55 - (view.w / 2 - displayW / 2 + nx),
-      view.h * 0.48 - (view.h / 2 - displayH / 2 + ny),
+      view.w * 0.58 - (view.w / 2 - displayW / 2 + nx),
+      view.h * 0.56 - (view.h / 2 - displayH / 2 + ny),
       displayW,
       displayH,
       view.w,
