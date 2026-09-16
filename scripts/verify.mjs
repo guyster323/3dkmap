@@ -288,7 +288,7 @@ async function run(viewport, label) {
   }
   await check(`${label} command keys pick`, /\/episodes\//.test(page.url()), page.url());
 
-  await goto(page, "/world/xuchang");
+  await goto(page, "/world/zhongmou");
   await check(`${label} approx terrain`, await seen(page, page.getByText("약식 지형")));
 
   await goto(page, "/me");
